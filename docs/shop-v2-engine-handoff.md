@@ -51,7 +51,8 @@ shop.ts：`COUNTER_TOP`（純 row3 cols0–7）、`counterBlocked`（rows2–4 c
 - **port**：5273 是美術 session 的 dev server（你停不掉）；引擎用 `.claude/launch.json` 的 `nihongo-engine`（5281, autoPort）。launch.json 不進版控。
 - vite HMR 常殘留舊錯——hard reload／`npm run build` 為準。
 - dev `/api/shop` 是記憶體假資料，重啟即清空；可直接 `fetch POST /api/shop` 塞測試 layout/sign/board（本輪就這樣 seed 的）。
-- 進店要狀態：console 貼 `s=JSON.parse(localStorage['nng:state:jj']||'{}'); Object.assign(s,{user:'jj',lastDoneDate:new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Taipei'}),xp:1e5,coins:99999}); localStorage['nng:user']='jj'; localStorage['nng:state:jj']=JSON.stringify(s); localStorage['nng:shop-intro3']='1'; location.reload()`。
+- 進店要狀態：**別手拼 state**（缺 cards 炸 xp.ts、缺 known 炸 session.ts……無底洞，症狀＝root 空白且 console 無錯，要自掛 error listener 才看得到）。console 貼：
+  `import('/src/lib/store.ts').then(m=>{const s=m.initState('jj',{hira:false,kata:false});Object.assign(s,{lastDoneDate:new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Taipei'}),xp:1e5,coins:99999});localStorage['nng:user']='jj';localStorage['nng:state:jj']=JSON.stringify(s);localStorage['nng:shop-intro3']='1';location.reload()})`
 - 深度 review（2026-07-09、dfde109..HEAD）已做完且 10/10 已修——別重跑同範圍。
 - 沒進榜可順手的小點還剩：泡泡夾店長肩膀（G4 cosmetic）、sent-toast 計時器換 `onAnimationEnd`、isRug 謂詞重複、黑板座標魔術數字提常數。
 

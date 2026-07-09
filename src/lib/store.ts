@@ -50,6 +50,7 @@ export function initState(user: UserId, known: { hira: boolean; kata: boolean },
 /** 舊版狀態補齊新欄位（P0 沒有 vocab、R2 前沒有 xp/成就/對決） */
 export function normalize(s: UserState | null): UserState | null {
   if (!s) return s;
+  s.cards ??= {}; // 缺 cards 的壞檔／手工 seed 會讓成就計算白屏整站（xp.ts Object.keys）
   s.vocab ??= {};
   s.xp ??= 0;
   s.sprintBest ??= 0;
