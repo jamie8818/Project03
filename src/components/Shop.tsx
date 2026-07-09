@@ -713,6 +713,7 @@ function ShopPanel({ me, lv, shop, update, commitShop }: { me: UserState; lv: nu
                 <div className="ci-preview"><img src={item.sprite} alt="" draggable={false} /></div>
                 <div className="ci-body">
                   <b>{item.name}</b>
+                  {item.flavor && <small className="ci-flavor">{item.flavor}</small>}
                   <small>{item.w}×{item.h} 格{owned > 0 ? `　庫存 ×${owned}` : ''}</small>
                 </div>
                 {locked ? (
@@ -897,7 +898,7 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop }: { me: UserState; 
             <p className="hint">這個分類托盤是空的，換一個分頁籤看看。</p>
           ) : null}
           {trayItems.map(({ it, avail }) => (
-            <button key={it.id} className={`tray-item ${placing === it.id ? 'on' : ''}`} onClick={() => select(placing === it.id ? null : it.id)}>
+            <button key={it.id} className={`tray-item ${placing === it.id ? 'on' : ''}`} title={it.flavor || undefined} onClick={() => select(placing === it.id ? null : it.id)}>
               {avail > 1 && <span className="tray-qty">×{avail}</span>}
               <img src={it.sprite} alt="" draggable={false} />
               <small>{it.name}</small>

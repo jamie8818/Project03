@@ -2478,6 +2478,21 @@ img.buddy {
   color: var(--ink-soft);
 }
 
+/* flavor 一句話文案（E13）：小字低對比、單行截斷，全站同一視覺語言 */
+.ci-flavor {
+  font-size: 10px;
+  opacity: 0.75;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.pud-desc {
+  font-size: 9px;
+  opacity: 0.7;
+  line-height: 1.2;
+}
+
 .ci-buy {
   background: var(--pudding);
   color: var(--pudding-deep);

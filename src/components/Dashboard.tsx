@@ -245,6 +245,7 @@ export default function Dashboard({
                   🍮
                 </span>
                 <small>{n > 0 ? p.name.replace('布丁', '') : '？？？'}</small>
+                {n > 0 && p.desc && <small className="pud-desc">{p.desc}</small>}
                 {n > 1 && <i className="pud-count">×{n}</i>}
               </div>
             );
