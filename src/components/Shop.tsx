@@ -7,6 +7,7 @@ import { PUDDING_BY_ID, PUDDINGS } from '../data/fun.ts';
 import {
   CAFE,
   CAFE_ITEMS,
+  CATEGORY_LABELS,
   PLACE,
   SHOP_ITEMS,
   Z_TOP_ROW,
@@ -377,7 +378,7 @@ function Stage({ shop, attend, meDone, talk, variant = 'full', editing, placing,
           </button>
         )}
 
-        {talk && <span className="shop-bubble" key={line.n}>{line.t}</span>}
+        {talk && <span className="shop-bubble" key={line.n}>{line.t.text}</span>}
         {!meDone && !editing && <span className="shop-closed-sign">準備中</span>}
       </div>
     </div>
@@ -609,19 +610,12 @@ function ViewPanel({ me, peer, today, lv, shop }: { me: UserState; peer: UserSta
   );
 }
 
-// ── 商店面板：依 z 層分類購買 ──
-const SHOP_TABS: { z: Z層; label: string }[] = [
-  { z: 'furniture', label: '家具' },
-  { z: 'rug', label: '地毯' },
-  { z: 'surface', label: '擺件' },
-  { z: 'wall', label: '壁飾' },
-];
-
+// ── 商店面板：依 category 分類購買（E6，中文名見 CATEGORY_LABELS）──
 function ShopPanel({ me, lv, shop, update, commitShop }: { me: UserState; lv: number; shop: ShopState; update: (fn: (s: UserState) => UserState) => void; commitShop: (s: ShopState) => Promise<void> }) {
   const [tab, setTab] = useState(0);
   const [msg, setMsg] = useState('');
   const [buying, setBuying] = useState(false);
-  const items = SHOP_ITEMS.filter((it) => it.z === SHOP_TABS[tab].z);
+  const items = SHOP_ITEMS.filter((it) => it.category === CATEGORY_LABELS[tab][0]);
 
   const buy = async (item: CafeItem) => {
     if (buying) return;
@@ -650,8 +644,8 @@ function ShopPanel({ me, lv, shop, update, commitShop }: { me: UserState; lv: nu
     <>
       <div className="coin-bar"><span className="coin-chip">🪙 {me.coins}</span></div>
       <div className="seg">
-        {SHOP_TABS.map((t, i) => (
-          <button key={t.label} className={tab === i ? 'on' : ''} onClick={() => { setTab(i); setMsg(''); }}>{t.label}</button>
+        {CATEGORY_LABELS.map(([key, label], i) => (
+          <button key={key} className={tab === i ? 'on' : ''} onClick={() => { setTab(i); setMsg(''); }}>{label}</button>
         ))}
       </div>
       {msg && <p className="hint">{msg}</p>}
@@ -689,6 +683,7 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop }: { me: UserState; 
   const [facing, setFacing] = useState<Facing>('front'); // 正在放的朝向（旋轉鍵）
   const [selected, setSelected] = useState<number | null>(null); // 選取的「已擺」家具 index（就地旋轉/收回）
   const [sub, setSub] = useState<'furn' | 'sign'>('furn');
+  const [catTab, setCatTab] = useState(0); // 托盤 category 分頁籤（E6）
 
   const select = (id: string | null) => { setPlacing(id); setFacing('front'); setSelected(null); };
   const placingItem = placing ? itemById(placing) : undefined;
@@ -711,10 +706,11 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop }: { me: UserState; 
     sfx.correct(1);
   };
 
-  // 托盤：已購但還沒擺出的，可用份數 = 庫存 − 已擺（可同款多件）
-  const trayItems = CAFE_ITEMS
+  // 托盤：已購但還沒擺出的，可用份數 = 庫存 − 已擺（可同款多件）；按 category 分頁籤（E6）
+  const allTrayItems = CAFE_ITEMS
     .map((it) => ({ it, avail: stockAvailable(shop, it.id) }))
     .filter((x) => x.avail > 0);
+  const trayItems = allTrayItems.filter((x) => x.it.category === CATEGORY_LABELS[catTab][0]);
 
   const placeAt = (gx: number, gy: number) => {
     if (!placing) return;
@@ -779,8 +775,18 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop }: { me: UserState; 
       </div>
 
       {sub === 'furn' && (
-        <div className="deco-tray">
-          {trayItems.length === 0 && <p className="hint">托盤空了——去🛍商店買家具，或店裡的家具都擺好了。</p>}
+        <>
+          <div className="seg" style={{ marginTop: 8 }}>
+            {CATEGORY_LABELS.map(([key, label], i) => (
+              <button key={key} className={catTab === i ? 'on' : ''} onClick={() => setCatTab(i)}>{label}</button>
+            ))}
+          </div>
+          <div className="deco-tray">
+          {allTrayItems.length === 0 ? (
+            <p className="hint">托盤空了——去🛍商店買家具，或店裡的家具都擺好了。</p>
+          ) : trayItems.length === 0 ? (
+            <p className="hint">這個分類托盤是空的，換一個分頁籤看看。</p>
+          ) : null}
           {trayItems.map(({ it, avail }) => (
             <button key={it.id} className={`tray-item ${placing === it.id ? 'on' : ''}`} onClick={() => select(placing === it.id ? null : it.id)}>
               {avail > 1 && <span className="tray-qty">×{avail}</span>}
@@ -788,7 +794,8 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop }: { me: UserState; 
               <small>{it.name}</small>
             </button>
           ))}
-        </div>
+          </div>
+        </>
       )}
       {sub === 'sign' && (
         <div className="deco-tray">

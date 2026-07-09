@@ -97,7 +97,7 @@ base → 地毯(L0) → 店長 → counter_front(.cafe-counter-fg) → 地板家
 3. `COUNTER_TOP` 已簡化成純 row3 cols0–7（row2 兩格翹角特例已刪，連帶 Shop.tsx 的抬格計算移除）；`counterBlocked`、`COUNTER_SURFACE_Y=124` 不變。
 4. **輪到美術**：補內側小家電家具＋在 catalog 標 `hostType: 'counter-inside'` 即可直接生效（引擎端用結構型別讀這個欄位，manifest/`cafe.gen.ts` 的 `CafeItem` 加欄位後不用改引擎）。`col8` 維持不開放。
 
-## E5. 店長台詞資料管線＋新增 500 句（`docs/shop-lines.json` → `src/data/shop-lines.gen.ts`）— 內容 session 已交付，等引擎接線
+## E5. 店長台詞資料管線＋新增 500 句（`docs/shop-lines.json` → `src/data/shop-lines.gen.ts`）— 內容 session 已交付，引擎已接線
 
 **背景**：`src/lib/shop.ts` 目前 `SHOP_LINES`（closed/solo/full/idle 四池，硬編陣列）＋`poseForLine`（`POSE_KEYWORDS` 關鍵字表猜姿勢、猜不到 hash 輪播）是手寫、不好擴充。這條把台詞資料改走「JSON 來源 → 腳本產生 TS」的管線，並把台詞從 102 句擴到 702 句（含遷移的原句），順便讓每句台詞**自帶姿勢**（不用再靠關鍵字猜）。
 
@@ -124,7 +124,14 @@ base → 地毯(L0) → 店長 → counter_front(.cafe-counter-fg) → 地板家
 
 **備註**：500 句新增內容分 4 批寫、每批都過 codex review（人設漂移／日文正確性／姿勢扣合／重複度＋長度）後修正定案；16 姿勢每種 ≥33 句、closed/solo/full 專屬各 ≥60/80/80、日語教學梗（假名讀音／N5-N4 詞彙）130 句，單句 8–28 字（含泡泡邊界）。
 
-## E6. 家具目錄分類 taxonomy＋購買清單/裝潢托盤分頁籤（`docs/cafe-catalog.json` → `src/data/cafe.gen.ts`）— 美術已交付，等引擎接 UI
+**✅ 引擎已接手完成（2026-07-09，本輪引擎 session）**：
+1. `pickShopLine` 改吃 `SHOP_LINES_GEN[pool]`，回傳型別改成 `ShopLine`（`{text, pose}`）；`pool` 判斷邏輯（`!meDone→closed`、`attend>=2→full`、否則 `solo`）不變。
+2. `poseForLine` 簽名改吃 `string | ShopLine`：傳 `ShopLine` 直接回它的 `pose`；傳裸字串才走原本關鍵字表＋情境池 hash fallback（`POSE_KEYWORDS`／`CLOSED_POSES`／`SOLO_POSES`／`FULL_POSES` 都留著沒刪）。
+3. `Shop.tsx` 的 `line` state 現在存 `ShopLine`（`line.t.text` 顯示泡泡、`line.t.pose` 或直接傳整個 `line.t` 給 `poseForLine`）。
+4. 舊手編 `SHOP_LINES` 陣列已整塊刪除；`docs/shop-lines.json` → `shop-lines.gen.ts` 現在是唯一 source of truth。`tests/shop.test.ts` 對應改吃 `SHOP_LINES_GEN`。
+5. `npm test`（97 條）全過、`tsc -b` 過、preview 實測：closed 狀態下抽到新句（含日語教學梗），姿勢跟語意扣合（例如趴睡文案配 cozy／eat 布丁文案配 eat）。
+
+## E6. 家具目錄分類 taxonomy＋購買清單/裝潢托盤分頁籤（`docs/cafe-catalog.json` → `src/data/cafe.gen.ts`）— 美術已交付，引擎已接線
 
 **背景**：catalog 到 73 件，遊戲的購買清單／裝潢家具托盤目前平鋪列全部項目，找東西要滾很久。美術這條交付「分類定義」（manifest 加 `category` 欄＋中文顯示名對照表），引擎接手把 UI 做成分頁籤。
 
@@ -165,5 +172,12 @@ base → 地毯(L0) → 店長 → counter_front(.cafe-counter-fg) → 地板家
 2. 篩選邏輯：`CAFE_ITEMS.filter(it => it.category === activeKey)`。目前每類都非空，不需要處理「空分類」的 UI 情境；但 `seasonal` 只有 1 件時頁籤仍要顯示（不要因為件數少就隱藏或合併，之後會加更多季節件）。
 3. 分頁籤是否要顯示「全部」總覽籤、預設選中哪一類、行動版排版怎麼收，由引擎自行決定，美術沒有硬性要求。
 4. **未接之前的行為保證**：`category` 欄位是新增欄位，`CafeItem` 型別新增必填屬性但既有引擎程式碼（`Shop.tsx`／`shop.ts` 等）目前沒有讀取它，多這個欄位純粹無害——不會改變任何現有渲染／購買/放置邏輯、`tsc --noEmit` 已驗證整包無型別錯誤。UI 分頁籤何時接、要不要接完全是引擎的排程，接之前遊戲行為不變。
+
+**✅ 引擎已接手完成（2026-07-09，本輪引擎 session）**：
+1. `shop.ts` re-export `CATEGORY_LABELS`（來自 `cafe.gen.ts`），供 `Shop.tsx` 直接 import。
+2. `ShopPanel`（商店／購買清單）：分頁籤從舊的 z 層 4 籤（家具/地毯/擺件/壁飾）改成 `CATEGORY_LABELS` 的 6 籤，`items` 過濾條件從 `it.z === ...` 改成 `it.category === ...`；`for (const [key, label] of CATEGORY_LABELS)` 產籤，沒有另外手刻中文字串。
+3. `DecoratePanel`（裝潢托盤）：新增 `catTab` state，托盤（`sub === 'furn'`）也加上同一套 `CATEGORY_LABELS` 分頁籤，過濾 `trayItems`；托盤整體是空的／該分類托盤剛好空的兩種情況分開提示文字。
+4. 沒做「全部」總覽籤，預設選中第一類（`seating`）；件數最少的 `seasonal`（1 件）頁籤仍照常顯示，沒有隱藏或合併。
+5. `npm test`（97 條）全過、`tsc -b` 過；preview 實測商店 6 個分頁籤（座席・桌椅／吧檯・沖煮・展示／燈・牆飾／地毯・地面／桌上擺件・小物／擺飾雜貨・季節）都能正確過濾出對應家具，裝潢托盤同步可切。
 
 **驗收**：`python3 scripts/build-cafe-ts.py` 重跑應為 no-op（re-run 產出內容不變）；`npx tsc --noEmit` 過；`grep -c "category:" src/data/cafe.gen.ts` 73 件家具都有值，且 6 個 key 分佈為 seating16／counter19／wall14／rug7／tabletop16／seasonal1。

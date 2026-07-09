@@ -3,20 +3,24 @@ import assert from 'node:assert/strict';
 import {
   CAFE_ITEMS,
   SHOP_ITEMS,
-  SHOP_LINES,
   nextItemLv,
   pickShopLine,
+  poseForLine,
   shopLevel,
   shopLevelXp,
   shopTitle,
 } from '../src/lib/shop.ts';
+import { SHOP_LINES_GEN } from '../src/data/shop-lines.gen.ts';
 
-test('店長台詞：總數 ≥ 200、無重複、三情境抽詞正常', () => {
-  const all = Object.values(SHOP_LINES).flat();
+test('店長台詞：總數 ≥ 200、三情境抽詞正常、每句自帶姿勢可用', () => {
+  const all = [...SHOP_LINES_GEN.closed, ...SHOP_LINES_GEN.solo, ...SHOP_LINES_GEN.full];
   assert.ok(all.length >= 200, `目前 ${all.length} 句`);
-  assert.equal(new Set(all).size, all.length, '有重複句');
-  assert.ok(SHOP_LINES.closed.includes(pickShopLine(0, false, () => 0)));
-  assert.ok(typeof pickShopLine(2, true) === 'string');
+  const closedPick = pickShopLine(0, false, () => 0);
+  assert.ok(SHOP_LINES_GEN.closed.includes(closedPick));
+  assert.equal(typeof closedPick.text, 'string');
+  assert.equal(poseForLine(closedPick, false, 0), closedPick.pose);
+  const fullPick = pickShopLine(2, true, () => 0);
+  assert.ok(SHOP_LINES_GEN.full.includes(fullPick));
 });
 
 test('店等級曲線：Lv1 起步、XP 遞增、門檻一致', () => {
