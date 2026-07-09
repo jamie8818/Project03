@@ -56,7 +56,7 @@ const BOARD_BTN = { left: 243, top: 12, width: 70, height: 50 };
 // E10 前牆掛件的渲染錨（base-fg 實測座標）：門面槽錨門頂、門旁牆槽錨前牆頂緣
 const FRONT_DOOR_TOP_Y = 341;
 const FRONT_WALL_TOP_Y = 373;
-const GUEST_FEET_Y = 226; // Q 版客人腳底 baseline（窗邊站位＋家具深度排序鍵；CSS .cafe-guest bottom 對應 416−226）
+const GUEST_FEET_Y = 215; // Q 版客人腳底 baseline（吧檯前點餐站位＝JJ 追加；家具深度排序鍵；CSS .cafe-guest bottom 對應 416−215）
 
 // 店長熊貓站在吧檯「裡面」（檯後工作區）：上半身露在檯面上、下半身被 counter_front.png 正面板遮住。
 // 中心底部錨定；PANDA_TOP 拉高到檯後 → feet 落檯面前緣、頭露在檯面上（E2，preview 實測值，可微調）。

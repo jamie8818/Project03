@@ -2133,7 +2133,7 @@ img.buddy {
   position: absolute;
   width: 120px; /* 331:320 @ h116 */
   height: 116px; /* JJ 部署回報①：92px 比店長小一號，拉到與店長視覺量感相當（Q 版全身 vs 店長圓胖同高吃虧） */
-  bottom: 190px; /* 腳 y=226（窗邊帶 190–240）＝深度排序 baseline（Shop.tsx GUEST_FEET_Y 同值） */
+  bottom: 201px; /* 腳 y=215（吧檯前點餐帶 205–225）＝深度排序 baseline（Shop.tsx GUEST_FEET_Y 同值） */
   pointer-events: none;
   animation: guest-bob 3s ease-in-out infinite;
 }
@@ -2145,8 +2145,8 @@ img.buddy {
   object-fit: contain;
   image-rendering: auto;
 }
-.guest-me { left: 352px; } /* 圖心 x≈412（畫布含大片透明邊，角色本體 ~43px @h116） */
-.guest-peer { left: 404px; animation-delay: 1.3s; } /* 圖心 x≈464，本體間距等比放寬 ~52px */
+.guest-me { left: 98px; } /* 圖心 x≈158＝左/中綠凳之間（吧檯前點餐帶 130–230；畫布含大片透明邊，本體 ~43px） */
+.guest-peer { left: 150px; animation-delay: 1.3s; } /* 圖心 x≈210＝右綠凳附近，本體間距 ~52px、離門欄 x257 有餘裕 */
 @keyframes guest-bob {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-2px); }
