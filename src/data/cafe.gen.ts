@@ -287,6 +287,9 @@ export const CAFE_ITEMS: CafeItem[] = [
   { id: 'pajama_rack_blue', category: 'personal', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.56, name: '藍色睡褲掛架', sprite: '/cafe/catalog/pajama_rack_blue.png', price: 45, lv: 2, starter: false, flavor: '睡衣掛好，戰袍留到明天' },
   { id: 'retro_computer_desk', category: 'personal', z: 'furniture', w: 2, h: 1, surface: false, spriteHeightTiles: 1.53, name: '復古電腦桌', sprite: '/cafe/catalog/retro_computer_desk.png', price: 120, lv: 3, starter: false, flavor: '電腦桌，還在等撥接連線' },
   { id: 'tesla_floor', category: 'personal', z: 'furniture', w: 2, h: 1, surface: false, spriteHeightTiles: 0.75, name: '落地特斯拉', sprite: '/cafe/catalog/tesla_floor.png', price: 150, lv: 4, starter: false, flavor: '地墊寫著特斯拉，電費另計' },
+  { id: 'barber_pole', category: 'wall', z: 'wall', w: 1, h: 1, surface: false, spriteHeightTiles: 1.0, name: '理髮廳旋轉燈', sprite: '/cafe/catalog/barber_pole.png', price: 62, lv: 2, starter: false, flavor: '紅白藍旋轉燈，跟理髮無關' },
+  { id: 'rug_zebra_crossing', category: 'rug', z: 'rug', w: 4, h: 1, surface: false, spriteHeightTiles: 1.0, name: '斑馬線地毯', sprite: '/cafe/catalog/rug_zebra_crossing.png', price: 68, lv: 2, starter: false, flavor: '斑馬線鋪室內，還是想左右看' },
+  { id: 'standee_shopkeeper', category: 'personal', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.59, name: '店長立牌', sprite: '/cafe/catalog/standee_shopkeeper.png', price: 88, lv: 3, starter: false, flavor: '等身立牌，店長不在，氣勢先到' },
 ];
 
 // 開局免費擺好的家具

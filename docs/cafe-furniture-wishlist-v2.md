@@ -61,6 +61,7 @@
 | 候選 | 琺瑯廣告鐵牌 | wall_tobacco_sign | 1×1 | wall | false | 復古琺瑯鐵皮廣告牌，媒材區隔紙質海報 |
 | 有 | 組子細工窗花 | wall_kumiko | 2×2 | wall | false | 大幅簡化的粗格組子窗花（非精細密網），媒材區隔彩繪玻璃窗（無色玻璃） |
 | 候選 | 壁掛小層架 | wall_shelf_decor | 1×1 | wall | true | 牆上小浮板層架，可擺小盆栽或相框 |
+| 有 | 理髮廳旋轉燈 | barber_pole | 1×1 | wall | false | 紅白藍三色螺旋斜紋圓柱，上下黃銅/黑色金屬帽座（台式惡搞批，中斷重生後補產） |
 
 ## 燈具（8）
 
@@ -91,6 +92,7 @@
 | 有 | 菱格紋地毯 | rug_diamond | 2×1 | rug | false | 菱格車縫紋地毯（v2 第三波） |
 | 候選 | 碎花地毯 | rug_floral | 2×2 | rug | false | 小碎花印花地毯，區隔大膽幾何毯 |
 | 有 | 窄版走廊毯 | rug_runner_narrow | 4×1 | rug | false | 窄版長走廊毯，區隔既有寬版長毯（4×2） |
+| 有 | 斑馬線地毯 | rug_zebra_crossing | 4×1 | rug | false | 白色斑馬線條紋窄長毯，深灰瀝青底（台式惡搞批，中斷重生後補產） |
 
 ## 桌面小物・食物（14）
 

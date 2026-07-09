@@ -2106,6 +2106,51 @@
       "starter": false,
       "sheet": "custom6",
       "desc": "展示間尺度大型模型車：霧銀暖灰、黑窗帶、白輪"
+    },
+    {
+      "id": "barber_pole",
+      "category": "wall",
+      "z": "wall",
+      "w": 1,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 1.0,
+      "name": "理髮廳旋轉燈",
+      "price": 62,
+      "lv": 2,
+      "starter": false,
+      "sheet": "wall6",
+      "desc": "紅白藍三色螺旋斜紋圓柱旋轉燈，上下各一圈黃銅／黑色金屬帽座收邊（黃銅沿用本店色票），圓柱本體垂直細長、貼牆平面視角，螺旋色帶角度需清楚可辨（非模糊漸層暈染），E10 前牆候選（生產後由監工決定是否補 frontWall 旗標）"
+    },
+    {
+      "id": "rug_zebra_crossing",
+      "category": "rug",
+      "z": "rug",
+      "w": 4,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 1.0,
+      "name": "斑馬線地毯",
+      "price": 68,
+      "lv": 2,
+      "starter": false,
+      "sheet": "rug6",
+      "desc": "純白色斑馬線條紋窄長地毯，深灰／近黑瀝青底色與白色粗條紋橫向交錯排列（條紋要粗而清楚，64px 縮圖仍可辨識，非細碎紋理），俯視平鋪填滿佔格，新比例 4×1 窄長條區隔既有款式"
+    },
+    {
+      "id": "standee_shopkeeper",
+      "category": "personal",
+      "z": "furniture",
+      "w": 1,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 1.59,
+      "name": "店長立牌",
+      "price": 88,
+      "lv": 3,
+      "starter": false,
+      "sheet": "pil:standee",
+      "desc": "紙板等身立牌：店長熊貓 happy 表情剪影（取自 public/cafe/shopkeeper/happy.png 既有插畫合成，不重繪角色本體），剪影外緣加一圈白色描邊營造印刷紙板剪裁感，背面下方露出一支簡單支撐架撐住立牌站立不倒，PIL 組裝生成、不經 codex 綠幕流程"
     }
   ]
 }
