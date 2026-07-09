@@ -2916,6 +2916,21 @@
       "starter": false,
       "sheet": "gag2",
       "desc": "綠色逃生燈指錯方向"
+    },
+    {
+      "id": "traffic_cone",
+      "category": "seating",
+      "z": "furniture",
+      "w": 1,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 1.19,
+      "name": "施工交通錐",
+      "price": 32,
+      "lv": 1,
+      "starter": false,
+      "sheet": "pil:cone",
+      "desc": "橘色交通錐＋白反光帶，店內施工中（沒有在施工）"
     }
   ]
 }
