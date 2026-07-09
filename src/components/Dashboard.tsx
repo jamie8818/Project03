@@ -3,7 +3,8 @@ import { USERS, displayStreak } from '../lib/store.ts';
 import { GACHA_COST, PUDDINGS, gachaRoll, luckOf, type Pudding } from '../data/fun.ts';
 import { sfx } from '../lib/sounds.ts';
 import { useState } from 'react';
-import { GOAL, paceStatus } from '../lib/goal.ts';
+import { DEFAULT_GOAL, lessonPace, type GoalLevel } from '../lib/goal.ts';
+import { inKanaPhase } from '../lib/course.ts';
 import { HIRAGANA, KATAKANA } from '../data/kana.ts';
 import { isMastered } from '../lib/srs.ts';
 import { ACHIEVEMENTS, levelInfo } from '../lib/xp.ts';
@@ -71,7 +72,10 @@ export default function Dashboard({
 }) {
   const [gachaGot, setGachaGot] = useState<Pudding[] | null>(null);
   const [shopOpen, setShopOpen] = useState(false);
-  const pace = paceStatus(me.totalMinutes, today);
+  const goal = me.goal ?? DEFAULT_GOAL;
+  // 目標編輯（等級 N5/N4＋達成日）；null＝非編輯中
+  const [goalDraft, setGoalDraft] = useState<{ level: GoalLevel; date: string } | null>(null);
+  const pace = lessonPace(me, today);
   if (shopOpen) {
     return (
       <div className="dashboard">
@@ -79,9 +83,9 @@ export default function Dashboard({
       </div>
     );
   }
-  const behind = pace.deltaH < -1;
-  const pct = Math.min(100, Math.round((pace.actualH / GOAL.n4.hours) * 100));
-  const expectedPct = Math.min(100, Math.round((pace.expectedH / GOAL.n4.hours) * 100));
+  const pct = pace.total > 0 ? Math.min(100, Math.round((pace.done / pace.total) * 100)) : 0;
+  const fmtDate = (d: string) => { const [y, m, dd] = d.split('-'); return `${y}/${+m}/${+dd}`; };
+  const overdue = pace.daysLeft === 0 && pace.remaining > 0;
 
   return (
     <div className="dashboard">
@@ -95,26 +99,54 @@ export default function Dashboard({
 
       <div className="goal-card">
         <div className="goal-head">
-          <span>目標：{GOAL.n4.label}</span>
+          {goalDraft ? (
+            <span style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+              目標：
+              <select value={goalDraft.level} onChange={(e) => setGoalDraft({ ...goalDraft, level: e.target.value as GoalLevel })}>
+                <option value="N5">JLPT N5</option>
+                <option value="N4">JLPT N4</option>
+              </select>
+              <input type="date" value={goalDraft.date} min={today} onChange={(e) => setGoalDraft({ ...goalDraft, date: e.target.value })} />
+              <button
+                className="linkish"
+                style={{ display: 'inline' }}
+                onClick={() => {
+                  if (!goalDraft.date) return;
+                  update((s) => ({ ...s, goal: { ...goalDraft } }));
+                  setGoalDraft(null);
+                }}
+              >
+                儲存
+              </button>
+              <button className="linkish" style={{ display: 'inline' }} onClick={() => setGoalDraft(null)}>取消</button>
+            </span>
+          ) : (
+            <span>
+              目標：JLPT {goal.level}（{fmtDate(goal.date)}）{' '}
+              <button className="linkish" style={{ display: 'inline' }} onClick={() => setGoalDraft({ ...goal })}>改目標</button>
+            </span>
+          )}
           <span className="exam-count">
-            {pace.nextExam.label.split('（')[0]} 倒數 <b>{pace.nextExam.daysLeft}</b> 天
+            {overdue ? '已到期' : <>倒數 <b>{pace.daysLeft}</b> 天</>}
           </span>
         </div>
         <div className="goal-bar">
-          <div className="goal-expected" style={{ left: `calc(${expectedPct}% - 1px)` }} title="照進度應到這裡" />
           <div className="goal-fill" style={{ width: `${pct}%` }} />
         </div>
         <div className="goal-nums">
           <span>
-            我的累計 <b>{pace.actualH.toFixed(1)}h</b> / {GOAL.n4.hours}h
+            已完成 <b>{pace.done}</b> / {pace.total} 課
           </span>
-          <span className={behind ? 'behind' : 'ahead'}>
-            {pace.deltaH >= 0 ? `超前 ${pace.deltaH.toFixed(1)}h` : `落後 ${(-pace.deltaH).toFixed(1)}h`}
+          <span className={pace.remaining > 0 ? 'behind' : 'ahead'}>
+            {pace.remaining > 0 ? `還差 ${pace.remaining} 課` : '課程全部完成 🎉'}
           </span>
         </div>
         <p className="goal-note">
-          要在 2027/7 考過 N4，接下來每週約需 <b>{pace.weeklyNeededH.toFixed(1)} 小時</b>
-          {behind && '。落後太多的話，先把目標調成 N5 也完全 OK，重點是不斷鏈。'}
+          {pace.remaining === 0
+            ? `目標 ${goal.level} 的課都上完了，保持複習就好。`
+            : overdue
+              ? '目標日已經過了——按「改目標」訂個新日期吧，重點是不斷鏈。'
+              : <>要在 {fmtDate(goal.date)} 前完成 {goal.level}，接下來每週約 <b>{pace.weeklyNeeded.toFixed(1)} 課</b>{inKanaPhase(me) && '（五十音先修中，學完假名就開始上課）'}{goal.level === 'N4' && pace.weeklyNeeded > 3 && '。壓力太大的話，先把目標改成 N5 也完全 OK。'}</>}
         </p>
       </div>
 

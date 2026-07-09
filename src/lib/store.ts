@@ -36,6 +36,7 @@ export function initState(user: UserId, known: { hira: boolean; kata: boolean },
     minigames: { dictBest: 0, pairsBest: 0, clozeBest: 0 },
     claimedStreaks: [],
     shiftBest: 0,
+    goal: { level: 'N4', date: '2027-07-04' },
   };
   // 已熟的字系當作背過，到期日錯開兩週輪一遍驗證，不用從頭學
   for (const script of ['hira', 'kata'] as const) {
@@ -64,6 +65,7 @@ export function normalize(s: UserState | null): UserState | null {
   s.minigames ??= { dictBest: 0, pairsBest: 0, clozeBest: 0 };
   s.claimedStreaks ??= [];
   s.lessonsPassed ??= [];
+  s.goal ??= { level: 'N4', date: '2027-07-04' }; // 舊檔沿用原寫死目標（JJ 2026/7 拍板 N4）
   // 數值欄位一律 coerce 非有限值→0（治好早期壞掉的 NaN 存檔）
   s.shiftBest = Number.isFinite(s.shiftBest) ? s.shiftBest : 0;
   s.coins = Number.isFinite(s.coins) ? s.coins : 0;

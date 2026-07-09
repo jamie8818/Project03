@@ -1,39 +1,38 @@
+// 學習目標：等級（N5/N4，課綱目前只有這兩級）＋達成日，存 UserState.goal、儀表板可改。
+// 配速以「課」計算（不用時數——時數會被掛機/發呆污染，課程完成數才是真進度）。
+// 預設 N4 2027-07-04（JJ 2026/7 拍板：N5 不報名省報名費，當里程碑）。
+import type { UserState } from '../types.ts';
 import { daysBetween } from './dates.ts';
+import { LESSONS } from '../data/curriculum.ts';
+import { courseProgress } from './course.ts';
 
-// 主目標：2027/7/4 JLPT N4。N5 不報名（JJ 2026/7 拍板：省報名費），
-// 但 2026/12 仍作為「N5 程度」學習里程碑檢查點。
-// 時數假設含台灣人漢字優勢：N5 程度累計 120h、N4 累計 320h
-export const GOAL = {
-  start: '2026-07-06',
-  n5: { date: '2026-12-06', hours: 120, label: 'N5 里程碑（2026/12）' },
-  n4: { date: '2027-07-04', hours: 320, label: 'N4（2027/7/4）' },
-};
-
-/** 到今天為止「照進度應累積」的時數（線性配速，分兩段） */
-export function expectedHours(today: string): number {
-  const total5 = daysBetween(GOAL.start, GOAL.n5.date);
-  const d = daysBetween(GOAL.start, today);
-  if (d <= 0) return 0;
-  if (d <= total5) return (d / total5) * GOAL.n5.hours;
-  const total4 = daysBetween(GOAL.n5.date, GOAL.n4.date);
-  const d2 = Math.min(d - total5, total4);
-  return GOAL.n5.hours + (d2 / total4) * (GOAL.n4.hours - GOAL.n5.hours);
+export type GoalLevel = 'N5' | 'N4';
+export interface Goal {
+  level: GoalLevel;
+  date: string; // YYYY-MM-DD
 }
 
-export interface PaceStatus {
-  actualH: number;
-  expectedH: number;
-  deltaH: number; // 正=超前，負=落後
-  weeklyNeededH: number; // 從今天到 N4 考試，每週需要的時數
-  nextExam: { label: string; daysLeft: number };
+export const DEFAULT_GOAL: Goal = { level: 'N4', date: '2027-07-04' };
+
+/** 該目標等級要完成的課數：N5＝N5 課；N4＝全部（N5 是 N4 的前置，一路上完）。 */
+export function goalTotalLessons(level: GoalLevel): number {
+  return level === 'N5' ? LESSONS.filter((l) => l.level === 'N5').length : LESSONS.length;
 }
 
-export function paceStatus(totalMinutes: number, today: string): PaceStatus {
-  const actualH = totalMinutes / 60;
-  const expectedH = expectedHours(today);
-  const toN5 = daysBetween(today, GOAL.n5.date);
-  const next = toN5 >= 0 ? { label: GOAL.n5.label, daysLeft: toN5 } : { label: GOAL.n4.label, daysLeft: Math.max(0, daysBetween(today, GOAL.n4.date)) };
-  const daysToN4 = Math.max(1, daysBetween(today, GOAL.n4.date));
-  const weeklyNeededH = Math.max(0, ((GOAL.n4.hours - actualH) / daysToN4) * 7);
-  return { actualH, expectedH, deltaH: actualH - expectedH, weeklyNeededH, nextExam: next };
+export interface LessonPace {
+  done: number; // 已完成課數（連續完成，見 courseProgress）
+  total: number; // 目標等級總課數
+  remaining: number; // 還差幾課
+  daysLeft: number; // 距離達成日幾天（過期＝0）
+  weeklyNeeded: number; // 接下來每週要完成幾課才趕得上（全完成＝0）
+}
+
+export function lessonPace(state: UserState, today: string): LessonPace {
+  const goal = state.goal ?? DEFAULT_GOAL;
+  const total = goalTotalLessons(goal.level);
+  const done = Math.min(courseProgress(state).done, total);
+  const remaining = total - done;
+  const daysLeft = Math.max(0, daysBetween(today, goal.date));
+  const weeklyNeeded = remaining === 0 ? 0 : (remaining / Math.max(1, daysLeft)) * 7;
+  return { done, total, remaining, daysLeft, weeklyNeeded };
 }
