@@ -1944,7 +1944,7 @@
     },
     {
       "id": "claw_machine_onion",
-      "category": "personal",
+      "category": "counter",
       "z": "furniture",
       "w": 1,
       "h": 1,
@@ -1959,7 +1959,7 @@
     },
     {
       "id": "trophy_second_best",
-      "category": "personal",
+      "category": "tabletop",
       "z": "surface",
       "w": 1,
       "h": 1,
@@ -1974,7 +1974,7 @@
     },
     {
       "id": "barbell_coffee",
-      "category": "personal",
+      "category": "seating",
       "z": "furniture",
       "w": 1,
       "h": 1,
@@ -1989,7 +1989,7 @@
     },
     {
       "id": "gacha_capsule_giant",
-      "category": "personal",
+      "category": "seating",
       "z": "furniture",
       "w": 1,
       "h": 1,
@@ -2004,7 +2004,7 @@
     },
     {
       "id": "shark_plush",
-      "category": "personal",
+      "category": "seating",
       "z": "furniture",
       "w": 1,
       "h": 1,
@@ -2139,7 +2139,7 @@
     },
     {
       "id": "standee_shopkeeper",
-      "category": "personal",
+      "category": "seating",
       "z": "furniture",
       "w": 1,
       "h": 1,
