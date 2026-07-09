@@ -266,6 +266,8 @@ JJ 看 preview 判定吧檯檯沿太窄破圖，拍板改門口展示櫃。**互
 **槽位（base-fg 實測座標）**：門面槽＝門欄 x257–331、頂緣 y341（暖簾/花圈錨門頂）；門旁牆槽＝底牆帶 y373 起、門左 x40–250 與門右 x340–560（燈牌/掛曆/海報/壁燈錨牆頂緣下）。layout 座標編碼（特殊 row 或獨立欄位）由引擎定。
 **渲染**：新層在 `.cafe-fg` 之上；裝潢模式不隨 fg 淡化。
 
+**✅ 引擎已接手完成（2026-07-10）**：layout 座標編碼＝**虛擬前牆列 `FRONT_WALL_ROW=12`**（格系最後一列，一般放置最深 maxRow=11 不衝突）；`canPlace` 加法分支＝frontWall 件落 row12 走一維橫帶碰撞（只跟其他前牆件比、cols 1–16），後牆照舊可掛。渲染 `frontWallOrder` 新層畫在 `.cafe-fg` 之後（恆亮不隨 fg 淡化）；門面槽（cols8–10）錨門頂 y341、門旁牆槽錨牆頂 y373，超出舞台底自然裁切＝近端牆透視。放置格線對 frontWall 件多畫 row12 一列。npm test 108/108；preview 實掛暖簾（門頂）＋コーヒー燈牌（門右牆）對圖、DOM 序在 fg 之後、裝潢模式全亮。
+
 ## E11. 檯面放置權統一（JJ 需求 2026-07-09）— manifest 已交付
 
 z=furniture 的咖啡器材/小型展示，現實中本來就擺吧檯上，開放檯面格：manifest 已標 `counterTop: true`（9 件：cold_drip_tower/siphon_rack/grinder/register/pourover_stand/copper_kettle_set/sandwich_case/pudding_mold_shelf/fruit_shelf），**加法**——地板照舊可放。
@@ -338,6 +340,8 @@ z=furniture 的咖啡器材/小型展示，現實中本來就擺吧檯上，開�
 
 本輪美術 session 只交付 `public/cafe/gacha/` 五個素材檔＋這份草稿，**沒有動 `docs/`、`src/`、`cafe-catalog.json`、其他 `public/cafe/` 目錄**，也沒有執行任何 git 指令。上述「引擎待做」1–9 點全部是引擎的活；美術這邊在素材定案（codex 三審通過）後即完工。
 
+**✅ 引擎已接手完成（2026-07-10）**：商店 personal 分頁改渲染轉蛋機（機台＋knob 同畫布旋轉層 transform-origin (50,99)＋完売掛牌＋收藏格）。一轉 `PERSONAL_GACHA_COST=80`（shop.ts），比照購買「先 commitShop 成功才扣金幣」；抽池動態 filter（personal 且 stock=0，新增件自動入池、抽中離池保底不重複）；等級鎖天然不適用（不走 buy 路徑，需求 8 確認成立）。動畫：shake 0.4s→膠囊掉落彈跳（可點）→開蛋→出貨卡（名＋sprite＋flavor＝E13②）。全收集掛完売御礼＋旋鈕鎖；金幣不足 locked＋tooltip。preview 實測 11 連轉 11 個不重複、15/15 收齊鎖機、金幣精確 −880。
+
 ## E13. 家具 flavor 文案顯示＋布丁圖鑑補說明（JJ 需求 2026-07-09）— 內容與管線已交付
 
 # E13 草稿：家具一句話 flavor 文案顯示
@@ -381,3 +385,5 @@ z=furniture 的咖啡器材/小型展示，現實中本來就擺吧檯上，開�
 | 扭蛋出貨卡（家具） | 同上，`CafeItem.flavor` |
 | 裝潢托盤 tooltip | 同上，`CafeItem.flavor` |
 | 布丁圖鑑 | `PUDDINGS[].desc`（`src/data/fun.ts`，既有資料，只差 UI 渲染） |
+
+**✅ 引擎已接手完成（2026-07-10）**：①商店購買卡名稱下加 `.ci-flavor` 小字（10px 低對比單行截斷）②扭蛋出貨卡帶 flavor（E12 落地時一併）③裝潢托盤 tray-item 加 title tooltip④布丁圖鑑擁有格補 `.pud-desc` 一行（PUDDINGS.desc 純 UI 補渲染）。四處共用「空字串完全不渲染」規則。preview 驗商店卡/出貨卡實文案。

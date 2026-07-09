@@ -19,8 +19,10 @@ import {
   guestIndicesOf,
   hostIndexOf,
   isCounterTop,
+  isFrontWallPlaced,
   itemAtCell,
   itemById,
+  FRONT_DOOR_COLS,
   nextFacing,
   nextItemLv,
   ownedKinds,
@@ -51,6 +53,9 @@ const COUNTER_SURFACE_Y = 124; // 吧檯檯面小物落點的 stage y（吧檯�
 const COUNTER_INSIDE_Y = 145; // 內側小家電底錨 stage y（檯後工作區＝店長腳邊；落在 counter_front y118–202 內＝下半被正面板遮，E4）
 // 牆上伝言板黑板熱區（dengon-board-spec.md 座標，見 docs/dengon-board-spec.md）
 const BOARD_BTN = { left: 243, top: 12, width: 70, height: 50 };
+// E10 前牆掛件的渲染錨（base-fg 實測座標）：門面槽錨門頂、門旁牆槽錨前牆頂緣
+const FRONT_DOOR_TOP_Y = 341;
+const FRONT_WALL_TOP_Y = 373;
 
 // 店長熊貓站在吧檯「裡面」（檯後工作區）：上半身露在檯面上、下半身被 counter_front.png 正面板遮住。
 // 中心底部錨定；PANDA_TOP 拉高到檯後 → feet 落檯面前緣、頭露在檯面上（E2，preview 實測值，可微調）。
@@ -192,6 +197,22 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
     const dims = footprintDims(it, p.facing);
     const isDragged = drag != null && i === drag.index;
     const cls = `cafe-furn z-${it.z} ${editing ? 'editable' : ''} ${editing && i === selectedIndex ? 'selected' : ''} ${isDragged ? (dragOk ? 'dragging' : 'dragging invalid') : ''}`;
+    if (isFrontWallPlaced(p)) {
+      // E10 前牆掛件：門面槽（cols8–10）錨門頂 y341、門旁牆槽錨牆頂 y373；一律 front sprite（前牆不轉向）。
+      // 高度照 footprint 自然長，超出舞台底緣自然裁切＝掛在近端牆上的透視感
+      const door = p.gx >= FRONT_DOOR_COLS.min && p.gx <= FRONT_DOOR_COLS.max;
+      return (
+        <img
+          key={`f${i}`}
+          data-i={i}
+          className={cls}
+          src={it.sprite}
+          alt={it.name}
+          draggable={false}
+          style={{ left: p.gx * CELL, top: door ? FRONT_DOOR_TOP_Y : FRONT_WALL_TOP_Y, width: dims.w * CELL, height: dims.h * CELL }}
+        />
+      );
+    }
     if (it.z === 'furniture') {
       // 底邊釘在 footprint 前緣、寬=佔地寬、高依素材自然比例往上長（overhang）；
       // facing 決定用哪張 sprite（左右對稱件用 _right 鏡像＝scaleX(-1)）。
@@ -264,9 +285,11 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
   const wallOrder: number[] = [];
   const insideOrder: number[] = [];
   const aboveCounterOrder: number[] = [];
+  const frontWallOrder: number[] = []; // E10：前牆掛件（base-fg 之上、恆亮）
   for (const i of order) {
     const it = itemById(displayLayout[i].id);
-    if (it?.z === 'rug') rugOrder.push(i);
+    if (isFrontWallPlaced(displayLayout[i])) frontWallOrder.push(i);
+    else if (it?.z === 'rug') rugOrder.push(i);
     else if (it?.z === 'wall') wallOrder.push(i);
     else if (rendersInside(displayLayout[i])) insideOrder.push(i); // 依實際落點/變體分流（E7），不是依 hostType 一刀切
     else aboveCounterOrder.push(i);
@@ -385,15 +408,20 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
           />
         )}
 
+        {/* 前牆掛件層（E10）：暖簾掛門上、燈牌釘門旁牆——畫在 base-fg 之上（掛在最前面的牆表面，
+            永不被遮）；裝潢模式牆淡化時掛件維持全亮、更好點選 */}
+        {frontWallOrder.map(renderFurn)}
+
         {/* 裝潢格線（純視覺，pointer-events 由 CSS 關掉；放置或拖曳時顯示）。
             檯面小物含吧檯左右端翹角（col 0/17），格線用整排寬度；其餘家具只到牆內 minCol..maxCol。 */}
         {editing && gId && gZ && (() => {
           // 格線整排（col 0..最右）：最左/最右是地板、壁飾貼側牆、檯面翹角都在邊欄；合法性交給 canPlace
           const colStart = 0;
           const colEnd = CAFE.cols - 1;
+          const extraRows = gItem?.frontWall ? 1 : 0; // E10：frontWall 件多畫虛擬前牆列 row12
           return (
           <div className="grid-overlay">
-            {Array.from({ length: PLACE.maxRow - Z_TOP_ROW[gZ] + 1 }).map((_, ry) =>
+            {Array.from({ length: PLACE.maxRow - Z_TOP_ROW[gZ] + 1 + extraRows }).map((_, ry) =>
               Array.from({ length: colEnd - colStart + 1 }).map((_, cx) => {
                 const gx = cx + colStart;
                 const gy = ry + Z_TOP_ROW[gZ];

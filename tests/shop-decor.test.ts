@@ -5,6 +5,8 @@ import {
   availableFacings,
   canPlace,
   canToggleInside,
+  FRONT_WALL_ROW,
+  isFrontWallPlaced,
   findSpot,
   footprintDims,
   frontRowOf,
@@ -142,6 +144,26 @@ test('canPlace／rendersOnCounter：counterTop 家具可放檯面格（E11 加�
   assert.ok(rendersOnCounter({ id: G, gx: 3, gy: 3 }), '檯面上 → 檯面錨變體');
   assert.ok(!rendersOnCounter({ id: G, gx: 10, gy: 8 }), '地板上 → 一般家具錨');
   assert.ok(!rendersOnCounter({ id: CHAIR, gx: 3, gy: 3 }), '非 counterTop 件永不走檯面錨');
+});
+
+test('canPlace／isFrontWallPlaced：frontWall 掛件可掛前牆虛擬列 row12（E10 加法）', () => {
+  const NOREN = 'noren_curtain';
+  assert.ok(itemById(NOREN)?.frontWall, '前置：noren_curtain 應標 frontWall');
+  assert.ok(itemById(WALL)?.frontWall, '前置：poster 應標 frontWall');
+  assert.ok(canPlace([], NOREN, 8, FRONT_WALL_ROW), '門面槽 → 可');
+  assert.ok(canPlace([], WALL, 3, FRONT_WALL_ROW), '門左牆 → 可');
+  assert.ok(canPlace([], WALL, 12, FRONT_WALL_ROW), '門右牆 → 可');
+  assert.ok(canPlace([], WALL, 5, 0), '後牆照舊可掛（加法）');
+  assert.ok(!canPlace([], CHAIR, 5, FRONT_WALL_ROW), '非 frontWall 件不可上前牆');
+  assert.ok(!canPlace([], WALL, 0, FRONT_WALL_ROW), '出左界（minCol=1）');
+  // 橫帶碰撞：只跟其他前牆件比
+  const hung: PlacedItem[] = [{ id: NOREN, gx: 8, gy: FRONT_WALL_ROW }];
+  const norenW = footprintDims(itemById(NOREN)!).w;
+  assert.ok(!canPlace(hung, WALL, 8, FRONT_WALL_ROW), '同位重疊 → 擋');
+  assert.ok(canPlace(hung, WALL, 8 + norenW, FRONT_WALL_ROW), '錯開 → 可');
+  assert.ok(isFrontWallPlaced({ id: NOREN, gx: 8, gy: FRONT_WALL_ROW }));
+  assert.ok(!isFrontWallPlaced({ id: WALL, gx: 5, gy: 0 }), '後牆的 poster 不算前牆件');
+  assert.ok(!isFrontWallPlaced({ id: CHAIR, gx: 5, gy: FRONT_WALL_ROW }), '非 frontWall 件永不算');
 });
 
 test('footprintDims：left/right 旋轉時 w↔h 對調（①）', () => {

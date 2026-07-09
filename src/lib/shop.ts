@@ -147,6 +147,14 @@ export function rendersOnCounter(p: PlacedItem): boolean {
   return !!ITEM_BY_ID[p.id]?.counterTop && isCounterTop(p.gx, p.gy);
 }
 
+// E10：前牆裝潢（門＋門旁牆掛件，frontWall:true 的 7 件）。座標編碼＝虛擬列 row 12
+// （格系最後一列，一般放置最深到 maxRow=11 不衝突）；渲染畫在 base-fg 之上、恆亮。
+export const FRONT_WALL_ROW = 12;
+export const FRONT_DOOR_COLS = { min: 8, max: 10 } as const; // 門面槽（門欄 x257–331 ≈ cols 8–10）
+/** 該已擺件是否掛在前牆（渲染走門頂/牆頂錨、畫在 base-fg 之上） */
+export const isFrontWallPlaced = (p: PlacedItem): boolean =>
+  !!ITEM_BY_ID[p.id]?.frontWall && p.gy === FRONT_WALL_ROW;
+
 // 吧檯檯面格（虛擬 host）：純 row3 cols0–7＝吧檯唯一攤平可見的檯面（E4 拆層確認 row2 是矮櫃抽屜排
 // ＋內角柱、非平面，舊的兩格「翹角」特例已刪）。內側小家電（counter-inside）也用同一排格。
 export const COUNTER_TOP: ReadonlyArray<readonly [number, number]> = [
@@ -277,6 +285,20 @@ export function canPlace(layout: PlacedItem[], id: string, gx: number, gy: numbe
       if (!hostCells.has(`${cx},${cy}`) && !isCounterTop(cx, cy)) return false; // 必須有檯面
       // counter-inside 件同樣走這條一般規則（E7 加法）：吧檯格/桌面都可放，嵌入與否是渲染變體（rendersInside）
     }
+    return true;
+  }
+
+  // E10 加法：frontWall 掛件落虛擬前牆列（row 12）＝一維橫帶，只跟其他前牆件比碰撞；
+  // 後牆（一般 wall 路徑）照舊可掛
+  if (it.frontWall && gy === FRONT_WALL_ROW) {
+    if (gx < PLACE.minCol || gx + w - 1 > PLACE.maxCol) return false;
+    const taken = new Set<number>();
+    layout.forEach((p, i) => {
+      if (i === ignoreIndex || !isFrontWallPlaced(p)) return;
+      const pw = footprintDims(ITEM_BY_ID[p.id]!).w;
+      for (let x = p.gx; x < p.gx + pw; x++) taken.add(x);
+    });
+    for (let x = gx; x < gx + w; x++) if (taken.has(x)) return false;
     return true;
   }
 
