@@ -33,6 +33,12 @@ GRID = {
     'personal': (3, 3),
     # 重生批：furniture5 三件畫風/比例修正、personal 四件（公仔單體化＋snowboard 比例）
     'furniture5b': (3, 1), 'personalfix': (2, 2), 'furniture5c': (2, 1), 'furniture5d': (1, 1),
+    # 台式復古 8 件＋無厘頭惡搞 7 件（JJ 圈選批，standee_shopkeeper 除外＝PIL 手工合成不進 codex）
+    'furniture6': (3, 2), 'furniture7': (3, 2), 'wall6': (1, 1), 'rug6': (1, 1),
+    # claw_machine_onion 重生：codex 審核判定蔥不夠像蔥（太像白棒/蠟燭），單件重生強化蔥綠比例
+    'furniture7fix': (1, 1),
+    # JJ 追加 6 件（楓之谷公仔3隻＋睡褲展示架＋復古電腦桌組＋落地版特斯拉），各自獨立 sheet
+    'qfig3': (3, 1), 'pajama1': (1, 1), 'retrodesk1': (1, 1), 'teslafloor1': (1, 1),
 }
 
 DATA = json.load(open(MANIFEST))

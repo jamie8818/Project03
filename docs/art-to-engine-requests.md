@@ -236,3 +236,142 @@ base → 地毯(L0) → 店長 → counter_front(.cafe-counter-fg) → 地板家
 2. 互動：talk 模式 hover 出口味名 tooltip（title）＋點擊 → 店長切 `love` 姿勢＋台詞「本日の看板プリン：〈口味名〉！」（注入動態 ShopLine，8s 輪播自然接回一般池）；editing/banner 不可點（pointer-events 依 talk 開關）。`sign===''` 三層全隱藏。✨ sparkle（可選 3）未做。
 3. 裝潢「招牌」分頁縮圖從 🍮 換 `pudding.png` 套色（不疊 stand/dome）。
 4. 驗收實測（preview）：matcha 綠／taro 紫即時換色、托盤六口味縮圖色相分明無變灰；點擊 love+台詞原子驗證過；`sign===''` 隱藏／設回正常；tsc、npm test 101/101、console 乾淨。
+
+
+### E8 修訂（2026-07-09 深夜定版）：吧檯版 → 門口「食品サンプル展示櫃」
+
+JJ 看 preview 判定吧檯檯沿太窄破圖，拍板改門口展示櫃。**互動邏輯全部沿用你在 `0663fee` 已實作的版本**（hover 口味名、點擊→love+動態台詞、sign='' 隱藏、托盤縮圖套色），只改三件事：
+1. **素材換**：`public/cafe/sign/case_body.png`（88×?木框立櫃）→ `pudding.png`（沿用、縮放至櫃內展示台上，顯示 ~20-24px 高）→ `case_glass.png`（半透明前板 overlay）。舊 stand/dome 棄用但檔案保留（JJ 反悔可切回）。三層 offset 依素材比例 preview 微調（原 agent 中斷、無 mockup 數值，抓「布丁置於櫃內中層、玻璃蓋住展示區」即可）。
+2. **錨點**：門口右側 x 中心 ≈360–380、櫃腳底 y≈370（preview 微調），不再避店長區。
+3. **繪序＋透明度裁定（美術拍板）**：畫在 `base-fg` **之下**、**不恆亮**——正常模式底緣被前景牆遮（正確景深）；裝潢模式 base-fg 淡到 0.3 時展示櫃跟其他靠牆家具一樣透出，行為一致、不做特例。
+⚠️ 註：此修訂的 codex 場景審在 agent 中斷前未完成，接線後 preview 若覺得比例/融入怪，回報美術補審重修。
+
+
+## E9. Q 版客人「有開店就出現」＋眨眼（JJ 需求 2026-07-09）— 主圖已交付、眨眼幀待補
+
+**素材**：`public/cafe/guests/jj.png`、`yaxuan.png`（331×320、著地線 y=314、與店長 shopkeeper 同規格同尺度）。⚠️ 眨眼幀（`jj_blink/yaxuan_blink.png`）製作 agent 中斷、**尚未交付**——引擎先接靜態版，眨眼層留接口。
+**顯示邏輯**：`meDone`→顯示我方 Q 版；對方今日完成（attend 的 peer 判定）→顯示對方；身分對應 jj/yaxuan。都沒完成不顯示。
+**站位建議**：開放地板區，避開吧檯（rows2–4 cols0–7）、店長（x102–198）、門（x257–331 底部）；建議窗邊 x≈400–470、y≈190–240，兩人同框並肩間距 ~40px（preview 微調）。顯示高 ~88–96px、底部錨定，繪序依 y 深度進一般家具排序或跟店長同批（引擎選省的）。
+**動畫**：idle 上下浮動 2px/3s ease。眨眼（幀到貨後）：疊第二張 img、keyframes 每 4–7 秒 `steps(1)` 硬切閉眼 0.12–0.18s，兩人 animation-delay/週期錯開（如 4.3s/5.1s）。
+**可選加分（JJ 挑選中、不擋 v1）**：①點擊互動（點自己 sfx＋小跳；點對方→店長台詞「〈名字〉今天也有來喔」）②連續天數徽章（streak≥7 頭上☕、≥30 👑）。
+
+## E10. 前牆裝潢區：門＆門旁牆可掛（JJ 需求 2026-07-09）— manifest 已交付
+
+**概念**＝E4 的前牆版：暖簾掛門上、燈牌釘門旁牆，畫在 `base-fg` **之上**（掛在最前面的牆表面，永不被遮；裝潢模式牆淡化時掛件維持全亮、更好點選）。
+**manifest**：合格件已標 `frontWall: true`（7 件：noren_curtain/neon_coffee_sign/xmas_wreath/vintage_calendar/poster/wall_sconce/menu_board），為**加法**——原本掛後牆照舊。
+**槽位（base-fg 實測座標）**：門面槽＝門欄 x257–331、頂緣 y341（暖簾/花圈錨門頂）；門旁牆槽＝底牆帶 y373 起、門左 x40–250 與門右 x340–560（燈牌/掛曆/海報/壁燈錨牆頂緣下）。layout 座標編碼（特殊 row 或獨立欄位）由引擎定。
+**渲染**：新層在 `.cafe-fg` 之上；裝潢模式不隨 fg 淡化。
+
+## E11. 檯面放置權統一（JJ 需求 2026-07-09）— manifest 已交付
+
+z=furniture 的咖啡器材/小型展示，現實中本來就擺吧檯上，開放檯面格：manifest 已標 `counterTop: true`（9 件：cold_drip_tower/siphon_rack/grinder/register/pourover_stand/copper_kettle_set/sandwich_case/pudding_mold_shelf/fruit_shelf），**加法**——地板照舊可放。
+**引擎**：placement 對這 9 件開放 COUNTER_TOP（row3 cols0–7），底錨 `COUNTER_SURFACE_Y=124`，繪序走現有檯面小物路徑（counter_front 之後、全露）。E7 的 6 件小家電已涵蓋、不用動。
+
+## E12. 珍藏・私物轉蛋系統（JJ 需求 2026-07-09）— 素材已交付（commit 553c077）
+
+# E12. 「珍藏・私物」轉蛋機（ガチャガチャ）系統 — 美術已交付素材，待引擎接線
+
+> ⚠️ 這是美術 session 寫的**草稿**，供監工（Fable）稍後統一併入 `docs/art-to-engine-requests.md`。格式比照既有 E4–E8 條目。本文件本身不動 docs/，也不影響其他 agent 正在編輯的需求單。
+
+**背景**：JJ 拍板，商店「珍藏・私物」（`category: 'personal'`）頁籤改成扭蛋機制——玩家投 80 金幣，隨機開出該分類裡「尚未擁有」的家具，直到全部收集完畢掛「完売御礼」，機台旋鈕鎖住。這是**商店面板 UI 素材**（顯示尺寸較大，比照 `public/cafe/board/` 伝言板的做法），不是場景家具，不佔用 `cafe-catalog.json` 的任何欄位（`personal` 9 件現有家具本身不改動，只是取得方式從「商店購買」改成「抽轉蛋」）。
+
+## 交付素材（新目錄 `public/cafe/gacha/`，已完成，codex 三輪審過定案）
+
+源圖＝引擎顯示的約 2 倍尺度（沿用 `public/cafe/sign/` 的「顯示減半」慣例）。色票沿用鎖定的 `docs/cafe-art-handoff.md` 六色（胡桃木/喫茶綠/酒紅/黃銅/奶油/描邊）。
+
+| 檔案 | 尺寸 | 用途 |
+|---|---|---|
+| `machine.png` | 200×280 | 機台主體（昭和紅×奶油機身、玻璃蛋倉透出 6 顆膠囊、投幣口「80」字樣、旋鈕**基座**（不含可轉動旋鈕本體）、出蛋口翻蓋、機頂「ガチャ」招牌）。 |
+| `knob.png` | 200×280（同畫布，僅旋鈕本體不透明，其餘全透明） | 疊在 `machine.png` 之上、跟機台同錨點的獨立旋鈕層，供引擎 CSS `transform: rotate(...)` 做轉動動畫；旋鈕中心點＝畫布座標 `(100, 198)` 附近（machine 源圖裡旋鈕基座圓心，見下方「錨點」）。 |
+| `capsule_closed.png` | 48×48 | 掉出的膠囊（合起狀態，湖水綠上／奶油下雙色）。 |
+| `capsule_open.png` | 48×48 | 膠囊打開狀態（上下兩瓣分開，中間露出暗色縫隙），點擊後換這張。 |
+| `kanban_soldout.png` | 104×62 | 「完売御礼」小木牌 overlay，全收集後掛在機台上（吊繩造型，建議掛在機台右上角或蛋倉上緣，非固定疊在旋鈕/投幣口上）。 |
+
+**錨點資訊（引擎排版用，皆為 machine.png 源圖 200×280 座標系）**：
+- 旋鈕基座圓心：約 `(100, 198)`，半徑 15px（源圖尺度）；`knob.png` 的旋鈕本體同心，直接疊圖再整體 rotate 即可，不需另外裁切對位。
+- 投幣口「80」字樣：約 y=158–175 一帶（面板上緣）。
+- 出蛋口翻蓋：面板底緣，約 y=228–252。
+- 蛋倉玻璃圓心：約 `(100, 86)`，半徑 60×54（供未來若要做「膠囊在玻璃裡彈跳」等動畫效果參考，非必須）。
+- 建議整體顯示尺寸：源圖÷2（即 100×140 顯示），比照 `public/cafe/sign` 系列的慣例；實際擺進商店面板後如果 JJ 覺得比例跟其他 UI 元素不搭，美術可重生調整，**不需要重新設計整組構圖**（旋鈕/投幣口/出蛋口/蛋倉的相對位置已经过 codex 三輪審定案，只有整體縮放比例可能需要微調）。
+
+**codex 審查結論摘要**（三輪，供引擎/監工參考，不用重審美術面）：一審抓出玻璃倉太重、膠囊太平均、「80」字樣過小、出蛋口翻蓋存在感弱、木牌文字吃力五點；二審確認機身加高/玻璃倉縮小/前景膠囊放大重疊/coin字放大描邊/木牌加粗都有效，但玻璃陰影稍重、木牌仍偏小；三輪修正（玻璃陰影降強度、木牌整體放大 8%）後 codex 判定**「能定案」**。全套素材已过風格一致性檢查（跟 `board/panel.png`、`assets_src/cafe/anchor-furniture.png` 同色票、同柔邊像素材質，並做了輕度 RGB posterize 收斂插畫感漸層）。
+
+## 需求細節（引擎待做，美術這邊到此為止）
+
+1. **personal 頁籤改渲染機台**：`ShopPanel`（或未來的 `DecoratePanel` 對應分頁）裡 `category==='personal'` 這個分頁的內容，從現有的「家具列表」UI 換成「機台＋收藏格」版面。建議布局：機台置中（比照 mockup：機台佔上半，下方是收藏進度網格，一格一件、擁有的顯示全彩圖示，未擁有的顯示灰階剪影＋`？`）。素材清單見上表，機台/膠囊/木牌都已就緒；收藏格直接複用各件 `sprite` 縮圖即可，不需要新素材。
+
+2. **一轉 80 金幣**：新增常數 `GACHA_COST = 80`（建議放 `shop.ts` 或 `shopstate.ts`，跟現有 `coins` 扣款邏輯同檔）。點擊旋鈕 → 檢查 `coins >= GACHA_COST` → 扣款 → 觸發抽獎。
+
+3. **抽池規則**：抽池 = `CAFE_ITEMS.filter(it => it.category === 'personal')` 裡「**該玩家 stock（已擁有）為 0 且尚未抽過**」的件。均勻隨機抽取（不用權重），**保底不重複**——即同一件抽中後從抽池移除，不會重複抽到已擁有的。目前 `personal` 共 9 件（`vest_yaxuan`/`signboard_yaxuan`/`golf_bag`/`snowboard`/`camera_retro_digital`/`tesla_model`/`figure_chiikawa`/`figure_hachiware`/`figure_usagi`），新加的 personal 件會自動加入池子（見第 7 點）。
+
+4. **中獎動畫序列**：
+   - 機身 shake 動畫 0.4s（CSS keyframe，機身左右輕微搖晃，模擬扭蛋機出蛋前的震動）。
+   - `capsule_closed.png` 從出蛋口位置掉出、落到收藏格上方（簡單的落下+輕微彈跳 CSS transition 即可，不需要物理引擎）。
+   - 玩家點擊掉落的膠囊 → 圖片換成 `capsule_open.png`。
+   - 顯示「出貨卡」（一張小卡片，顯示中獎家具的 `name` + `sprite` 縮圖），確認/關閉後該件计入玩家 `stock`。
+
+5. **入 stock**：中獎家具比照現有「購買」邏輯 `stock += 1`（或現有欄位名稱，需引擎核對 `store.ts` 现有 stock 資料結構），使其可以被拿去裝潢面板放置。
+
+6. **全收集判定**：當玩家在 `personal` 分類的 9 件（含未來新增件）全部 `stock >= 1` → 機台掛 `kanban_soldout.png`（overlay，建議掛機台右上角或蛋倉上緣，非硬性疊在旋鈕上）、旋鈕變 disabled（不可再點擊/不再觸發抽獎、CSS 视觉上可以加灰階濾鏡表示鎖定）。
+
+7. **新 personal 件自動入池**：抽池的 filter 條件是動態算的（`category==='personal' && stock===0`），只要美術之後在 `cafe-catalog.json` 新增 `category:'personal'` 的家具並跑過 `build-cafe-ts.py`，該件會自動出現在池子裡，**引擎不需要為新增 personal 件另外加程式碼**（沿用第 3 點的 filter 邏輯即可）。
+
+8. **personal 分類免等級鎖**：現有商店家具多半有 `lv` 等級限制（`lv:1/2/3`），但 personal 分類的 9 件目前 `lv` 欄位仍照舊填了數字（1-3，见 `cafe.gen.ts`）。**改成轉蛋制後，personal 分類應整體跳過等級檢查**——玩家不論店等級多少，只要有 80 金幣就能抽，不受 `lv` 限制。引擎需要在判斷「這個分類/這件家具是否鎖等級」的地方，對 `category==='personal'` 的件加一個例外（或者其實更簡單：既然 personal 已經不走「購買」路徑而是走「抽獎」路徑，`lv` 欄位對它們可能整個不再適用，等級檢查邏輯本來就不會經過抽獎這條路，需要引擎確認現有 `lv` check 是否只掛在「購買」流程上，如果是，這點可能自動滿足、不需要額外改動）。
+
+9. **金幣不足**：`coins < GACHA_COST` 時旋鈕視覺上 disabled（灰階/降低不透明度）＋ hover 顯示 tooltip（例如「金幣不足（80）」），不可點擊觸發抽獎。
+
+## 驗收建議
+
+- `personal` 頁籤能看到機台＋收藏格，9 格初始依玩家現有 `stock` 顯示彩色/灰階。
+- 金幣≥80 時點旋鈕 → 扣 80 金幣 → shake → 掉膠囊 → 點膠囊開蛋 → 出貨卡顯示家具名+圖 → 該格從灰階變彩色、`stock+1`。
+- 抽到已擁有的件不應該發生（保底不重複邏輯）；9 件抽完後機台掛完売御礼、旋鈕 disabled。
+- 金幣<80 時旋鈕 disabled＋tooltip，點擊無反應、不扣款。
+- 之後美術若新增 personal 分類家具，重跑 `build-cafe-ts.py` 後應自動出現在抽池，不需要引擎再改程式碼。
+
+## 界線說明（供監工併入時參考）
+
+本輪美術 session 只交付 `public/cafe/gacha/` 五個素材檔＋這份草稿，**沒有動 `docs/`、`src/`、`cafe-catalog.json`、其他 `public/cafe/` 目錄**，也沒有執行任何 git 指令。上述「引擎待做」1–9 點全部是引擎的活；美術這邊在素材定案（codex 三審通過）後即完工。
+
+## E13. 家具 flavor 文案顯示＋布丁圖鑑補說明（JJ 需求 2026-07-09）— 內容與管線已交付
+
+# E13 草稿：家具一句話 flavor 文案顯示
+
+⚠️ 這是 scratchpad 草稿，未同步進 `docs/art-to-engine-requests.md`（依任務界線不可動那份文件，由監工彙整時手動搬過去）。
+
+## 背景
+
+新增 `docs/cafe-flavor.json`（133 件家具的一句話 flavor 文案）＋ `scripts/build-cafe-ts.py` 已接線：`CafeItem` 介面新增 `flavor: string` 欄位，`CAFE_ITEMS` 每筆資料已帶入對應文案（查無 id 時為空字串 `''`）。語氣為「一本正經講幹話」：平靜陳述事實或荒謬情境，不加語氣詞、不自己笑。少量句子是「俗語結尾劫持」型諧音（例：`goldfish_bowl`「金魚缸，年年有魚，布丁沒有」），其餘皆一般深句。
+
+## 待辦（E13，供引擎端排入）
+
+### ① 商店購買卡：卡名下方 flavor 小字
+- 位置：商店家具購買卡（card），家具名稱正下方加一行小字顯示 `item.flavor`。
+- 樣式建議：比家具名字級小（約 60–70%）、低對比色（不搶名稱），單行截斷即可（文案已控制在 4–16 字，不會太長）。
+- 條件：`flavor === ''` 時該行**完全不渲染**（不留空白佔位，避免卡片高度不一致或出現空行）。
+
+### ② 扭蛋出貨卡（E12）：家具名下方顯示 flavor
+- 沿用 E12 扭蛋出貨卡既有版式：布丁出貨卡已經在家具名下方顯示 `desc`（一句話）的位置與樣式，直接比照套用在「家具」出貨卡，改讀 `item.flavor` 而非布丁的 `desc`。
+- 即：家具開箱卡片視覺上應該跟布丁卡一致（同一套排版元件最好），只是資料來源換成 `CAFE_ITEMS[id].flavor`。
+- 條件同上：`flavor === ''` 不渲染該行。
+
+### ③ 裝潢托盤（家具擺放/庫存 tray）：hover tooltip
+- 玩家在裝潢模式把家具擺進房間、或在托盤/庫存列表 hover 家具圖示時，tooltip 內加一行 flavor 文案（可以放在家具名稱下方，或現有 tooltip 內容的最後一行）。
+- 條件同上：`flavor === ''` 不顯示這一行（tooltip 其餘資訊如常顯示）。
+
+### ④ 布丁圖鑑：補顯示既有 `desc`
+- 這條**不是新資料**，布丁的一句話說明資料本來就在 `src/data/fun.ts` 的 `PUDDINGS[].desc`（如 `chestnut: '秋天限定的心情'`），純粹是布丁圖鑑 UI 目前沒有把這個欄位渲染出來。
+- 待辦：布丁圖鑑頁面/ 元件，補一行顯示 `PUDDING_BY_ID[id].desc`（或等效存取方式），不用改資料層，只是 UI 補渲染。
+- 建議樣式與①②③ 一致（小字、低對比），維持全站一致的「flavor 小字」視覺語言。
+
+### ⑤ 通用：flavor 為空字串時的處理
+- 全部 4 個顯示點（①②③④）共用同一條規則：`flavor`（或布丁的 `desc`）為空字串時，該行不渲染，不佔版面、不留空隙。
+- `CafeItem.flavor` 目前應該不會有查無資料的情況（133 件全數覆蓋，含 6 件在途家具），但未來 catalog 新增家具、`cafe-flavor.json` 還沒跟上時會 fallback 為空字串，這條規則是保險。
+
+## 資料來源速查
+
+| 顯示點 | 資料欄位 |
+|---|---|
+| 商店購買卡 | `CafeItem.flavor`（`src/data/cafe.gen.ts`，由 `docs/cafe-flavor.json` 產生） |
+| 扭蛋出貨卡（家具） | 同上，`CafeItem.flavor` |
+| 裝潢托盤 tooltip | 同上，`CafeItem.flavor` |
+| 布丁圖鑑 | `PUDDINGS[].desc`（`src/data/fun.ts`，既有資料，只差 UI 渲染） |

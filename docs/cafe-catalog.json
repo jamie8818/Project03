@@ -218,7 +218,8 @@
         "front",
         "back",
         "right"
-      ]
+      ],
+      "counterTop": true
     },
     {
       "id": "bottle_shelf",
@@ -258,7 +259,8 @@
         "front",
         "back",
         "right"
-      ]
+      ],
+      "counterTop": true
     },
     {
       "id": "register",
@@ -278,7 +280,8 @@
         "front",
         "back",
         "right"
-      ]
+      ],
+      "counterTop": true
     },
     {
       "id": "pendant_lamp",
@@ -323,7 +326,8 @@
       "lv": 1,
       "starter": true,
       "sheet": "lightwall",
-      "desc": "泛黃昭和咖啡廣告老海報，裱木框掛牆"
+      "desc": "泛黃昭和咖啡廣告老海報，裱木框掛牆",
+      "frontWall": true
     },
     {
       "id": "menu_board",
@@ -338,7 +342,8 @@
       "lv": 2,
       "starter": false,
       "sheet": "lightwall",
-      "desc": "黑底白粉筆手寫日文菜單木牌，掛牆"
+      "desc": "黑底白粉筆手寫日文菜單木牌，掛牆",
+      "frontWall": true
     },
     {
       "id": "wall_clock",
@@ -633,7 +638,8 @@
         "front",
         "back",
         "right"
-      ]
+      ],
+      "counterTop": true
     },
     {
       "id": "copper_kettle_set",
@@ -653,7 +659,8 @@
         "front",
         "back",
         "right"
-      ]
+      ],
+      "counterTop": true
     },
     {
       "id": "cup_display_shelf",
@@ -708,7 +715,8 @@
       "lv": 2,
       "starter": false,
       "sheet": "wall2",
-      "desc": "牆上黃銅壁燈，發出暖黃光，貼牆"
+      "desc": "牆上黃銅壁燈，發出暖黃光，貼牆",
+      "frontWall": true
     },
     {
       "id": "landscape_painting",
@@ -738,7 +746,8 @@
       "lv": 2,
       "starter": false,
       "sheet": "wall2",
-      "desc": "門口垂掛的暖簾布簾，墨綠底染白字，日式喫茶常見"
+      "desc": "門口垂掛的暖簾布簾，墨綠底染白字，日式喫茶常見",
+      "frontWall": true
     },
     {
       "id": "neon_coffee_sign",
@@ -753,7 +762,8 @@
       "lv": 5,
       "starter": false,
       "sheet": "wall2",
-      "desc": "『コーヒー』字樣霓虹燈牌，暖色調發光，掛牆"
+      "desc": "『コーヒー』字樣霓虹燈牌，暖色調發光，掛牆",
+      "frontWall": true
     },
     {
       "id": "vintage_calendar",
@@ -768,7 +778,8 @@
       "lv": 1,
       "starter": false,
       "sheet": "wall2",
-      "desc": "昭和風掛牆月曆，泛黃紙面，胡桃木夾板"
+      "desc": "昭和風掛牆月曆，泛黃紙面，胡桃木夾板",
+      "frontWall": true
     },
     {
       "id": "rug_geometric",
@@ -983,7 +994,8 @@
         "front",
         "back",
         "right"
-      ]
+      ],
+      "counterTop": true
     },
     {
       "id": "vintage_fridge",
@@ -1309,7 +1321,8 @@
       "lv": 3,
       "starter": false,
       "sheet": "furniture4",
-      "desc": "鹹食三明治展示櫃，與甜點櫃內容區隔（不放蛋糕布丁）"
+      "desc": "鹹食三明治展示櫃，與甜點櫃內容區隔（不放蛋糕布丁）",
+      "counterTop": true
     },
     {
       "id": "pudding_mold_shelf",
@@ -1324,7 +1337,8 @@
       "lv": 2,
       "starter": false,
       "sheet": "furniture4",
-      "desc": "一排空布丁模具展示，區隔已完成的布丁百匯"
+      "desc": "一排空布丁模具展示，區隔已完成的布丁百匯",
+      "counterTop": true
     },
     {
       "id": "fruit_shelf",
@@ -1339,7 +1353,8 @@
       "lv": 3,
       "starter": false,
       "sheet": "furniture4",
-      "desc": "新鮮水果原料開放層架，區隔桌上的水果盤成品"
+      "desc": "新鮮水果原料開放層架，區隔桌上的水果盤成品",
+      "counterTop": true
     },
     {
       "id": "floor_lamp",
@@ -1429,7 +1444,8 @@
       "lv": 2,
       "starter": false,
       "sheet": "wall4",
-      "desc": "門口聖誕花圈"
+      "desc": "門口聖誕花圈",
+      "frontWall": true
     },
     {
       "id": "rug_checker",
@@ -1820,6 +1836,276 @@
       "starter": false,
       "sheet": "personalfix",
       "desc": "只畫一隻、單獨一隻兔兔公仔（格內不可出現其他角色）：黃白配色兔子、兩隻長耳朵直立、嘴巴張開開心表情，站姿配矮圓木底座（此件配色為特例，用角色原本黃白配色而非本店主色票），整格只有這一隻公仔"
+    },
+    {
+      "id": "rice_cooker_tatung",
+      "category": "tabletop",
+      "z": "surface",
+      "w": 1,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 0.91,
+      "name": "大同電鍋",
+      "price": 48,
+      "lv": 2,
+      "starter": false,
+      "sheet": "furniture6",
+      "desc": "復古大同電鍋致敬造型：厚實圓柱機身、墨綠色琺瑯機身（用悶綠色調同本店喫茶絨色系#35503F、不可用鮮豔chroma綠），白色圓弧機蓋，機蓋頂中央一個圓形黑色把手鈕，機身側邊一個黑色扳鍵開關，不畫任何商標文字或品牌字樣，只致敬經典輪廓"
+    },
+    {
+      "id": "figure_tatung_baby",
+      "category": "tabletop",
+      "z": "surface",
+      "w": 1,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 1.41,
+      "name": "大同寶寶公仔",
+      "price": 45,
+      "lv": 2,
+      "starter": false,
+      "sheet": "furniture6",
+      "desc": "大同寶寶致敬公仔：圓潤Q版小男孩人偶，頭戴藍色棒球帽、身穿藍色運動衫（此件配色為特例，用經典藍色而非本店主色票），雙手張開像抱球姿勢，站在一個矮圓木底座上，不畫任何商標文字或數字"
+    },
+    {
+      "id": "candy_cabinet",
+      "category": "counter",
+      "z": "furniture",
+      "w": 2,
+      "h": 1,
+      "surface": true,
+      "spriteHeightTiles": 1.33,
+      "name": "柑仔店糖果櫃",
+      "price": 98,
+      "lv": 4,
+      "starter": false,
+      "sheet": "furniture6",
+      "desc": "老式柑仔店木框玻璃展示櫃：深胡桃木外框（沿用本店胡桃木色票）＋大片透明玻璃門，櫃內兩排開放層架擺滿圓形玻璃糖果罐，罐內糖果用小圓點簡化表現、顏色鮮豔繽紛（彈珠糖的紅黃綠、金柑糖的橘黃），櫃頂平面留白可再放小物"
+    },
+    {
+      "id": "chair_red_plastic",
+      "category": "seating",
+      "z": "furniture",
+      "w": 1,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 1.53,
+      "name": "紅色塑膠辦桌椅",
+      "price": 42,
+      "lv": 1,
+      "starter": false,
+      "sheet": "furniture6",
+      "desc": "經典台式紅色塑膠椅：一體成形塑膠椅身、四支細金屬椅腳，椅背有幾道橫向溝紋線條，亮紅色椅面（此件配色為特例，用鮮豔正紅而非本店酒紅色票），畫成疊放兩張堆疊的樣子更傳神（上面一張稍微錯位疊在下面一張上）"
+    },
+    {
+      "id": "pinball_machine_small",
+      "category": "counter",
+      "z": "furniture",
+      "w": 1,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 1.53,
+      "name": "柑仔店彈珠檯",
+      "price": 88,
+      "lv": 4,
+      "starter": false,
+      "sheet": "furniture6",
+      "desc": "直立小型木框彈珠台：深胡桃木外框（沿用本店色票）、傾斜檯面上滿佈金屬釘板與彩色計分格（此件檯面彩色格為特例），檯面下方一格投幣口與彈珠出口，整體修長直立、像柑仔店角落的老式彈珠台"
+    },
+    {
+      "id": "soda_crate",
+      "category": "counter",
+      "z": "furniture",
+      "w": 1,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 0.78,
+      "name": "沙士木箱",
+      "price": 46,
+      "lv": 2,
+      "starter": false,
+      "sheet": "furniture6",
+      "desc": "木棧箱裝滿深色玻璃瓶：淺胡桃木格柵箱（沿用本店色票），箱內整齊排列深綠棕色玻璃瓶（黑松沙士既視感，用悶綠棕色調不可用鮮豔chroma綠），每瓶頸部一圈墨綠色標籤色帶示意，不寫任何文字"
+    },
+    {
+      "id": "altar_lamp_mini",
+      "category": "tabletop",
+      "z": "surface",
+      "w": 1,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 1.3,
+      "name": "神明桌小紅燈",
+      "price": 32,
+      "lv": 1,
+      "starter": false,
+      "sheet": "furniture7",
+      "desc": "迷你紅色蓮花燈座：矮胖蓮花瓣造型燈座、暖橘黃光暈從燈罩內透出（沿用本店酒紅/黃銅色票），底座小巧穩重，桌面擺件尺度"
+    },
+    {
+      "id": "claw_machine_onion",
+      "category": "personal",
+      "z": "furniture",
+      "w": 1,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 1.3,
+      "name": "UFO抓娃娃機",
+      "price": 78,
+      "lv": 3,
+      "starter": false,
+      "sheet": "furniture7fix",
+      "desc": "復古夾娃娃機：黃銅金屬邊框（沿用本店色票）＋大片透明玻璃展示艙，艙內塞滿一整艙青蔥段：每一根蔥都要清楚分成上下兩截——下半段細長白色蔥根（占比約35%）、上半段是飽和鮮明的悶綠色蔥葉（占比約65%、顏色要夠綠不能發白發灰，但避開最鮮豔的chroma綠#00B140、用偏深偏悶的蔥綠），蔥白蔥綠交界線要銳利清楚，多根蔥交錯束狀堆疊塞滿整個玻璃艙、蔥葉部分要佔畫面主要視覺份量而不是被玻璃反光或夾爪蓋過，機身上方一個機械爪造型，下方一個小小取物口（呼應店長熊貓的『抱蔥』招牌姿勢，蔥的視覺重點在於一眼就認出是青蔥而非白色棒狀物或蠟燭）"
+    },
+    {
+      "id": "trophy_second_best",
+      "category": "personal",
+      "z": "surface",
+      "w": 1,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 1.16,
+      "name": "世界第二好喝咖啡獎盃",
+      "price": 36,
+      "lv": 1,
+      "starter": false,
+      "sheet": "furniture7",
+      "desc": "金色獎盃：雙耳高腳金杯造型（沿用本店黃銅金色票），胸前一條斜綴緞帶清楚印一個大大的數字『2』（緞帶色自由、字要大而清楚64px縮圖仍可讀），底座小巧"
+    },
+    {
+      "id": "barbell_coffee",
+      "category": "personal",
+      "z": "furniture",
+      "w": 1,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 0.45,
+      "name": "咖啡豆槓鈴",
+      "price": 52,
+      "lv": 2,
+      "starter": false,
+      "sheet": "furniture7",
+      "desc": "槓鈴造型健身器材：黑色槓鈴桿，兩端槓片替換成兩袋鼓脹的麻布咖啡豆袋（淺卡其麻布色、袋口綁繩清楚），整體左右對稱躺放在地上"
+    },
+    {
+      "id": "gacha_capsule_giant",
+      "category": "personal",
+      "z": "furniture",
+      "w": 1,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 1.19,
+      "name": "巨大扭蛋膠囊",
+      "price": 68,
+      "lv": 3,
+      "starter": false,
+      "sheet": "furniture7",
+      "desc": "及腰高的巨大扭蛋膠囊殼：上半湖水綠、下半奶油色兩色分色（配色呼應店內既有扭蛋機膠囊，此為特例配色不受本店主色票限制），膠囊接縫處微微開一條縫透出內部暖光，整體渾圓直立站在地上"
+    },
+    {
+      "id": "shark_plush",
+      "category": "personal",
+      "z": "furniture",
+      "w": 1,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 0.48,
+      "name": "鯊魚娃娃",
+      "price": 40,
+      "lv": 1,
+      "starter": false,
+      "sheet": "furniture7",
+      "desc": "IKEA風藍灰色鯊魚娃娃：柔軟填充玩偶癱軟趴在地上，矮寬比例（寬大於高）、圓潤鈍狀鯊魚頭與小三角背鰭、灰藍色布料質感（此件配色為特例，用灰藍色而非本店主色票），趴姿慵懶攤平"
+    },
+    {
+      "id": "figure_slime",
+      "category": "personal",
+      "z": "furniture",
+      "w": 1,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 0.94,
+      "name": "綠水靈",
+      "price": 38,
+      "lv": 1,
+      "starter": false,
+      "sheet": "custom6",
+      "desc": "楓之谷綠色史萊姆擺地公仔：果凍水滴身、頭頂小葉芽、瞇眼微笑"
+    },
+    {
+      "id": "figure_ribbon_pig",
+      "category": "personal",
+      "z": "furniture",
+      "w": 1,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 1.0,
+      "name": "緞帶肥肥",
+      "price": 38,
+      "lv": 1,
+      "starter": false,
+      "sheet": "custom6",
+      "desc": "楓之谷粉紅小豬擺地公仔：藍緞帶、圓滾四足站姿"
+    },
+    {
+      "id": "figure_orange_mushroom",
+      "category": "personal",
+      "z": "furniture",
+      "w": 1,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 0.95,
+      "name": "菇菇寶貝",
+      "price": 38,
+      "lv": 1,
+      "starter": false,
+      "sheet": "custom6",
+      "desc": "楓之谷橘菇擺地公仔：橘色斑點大菇帽＋奶油色小身"
+    },
+    {
+      "id": "pajama_rack_blue",
+      "category": "personal",
+      "z": "furniture",
+      "w": 1,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 1.56,
+      "name": "藍色睡褲掛架",
+      "price": 45,
+      "lv": 2,
+      "starter": false,
+      "sheet": "custom6",
+      "desc": "深胡桃木立式掛架，木衣架掛藍色居家短褲、後層深藍第二件"
+    },
+    {
+      "id": "retro_computer_desk",
+      "category": "personal",
+      "z": "furniture",
+      "w": 2,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 1.53,
+      "name": "復古電腦桌",
+      "price": 120,
+      "lv": 3,
+      "starter": false,
+      "sheet": "custom6",
+      "desc": "米白CRT亮綠字畫面＋厚鍵盤＋木桌木椅一體組"
+    },
+    {
+      "id": "tesla_floor",
+      "category": "personal",
+      "z": "furniture",
+      "w": 2,
+      "h": 1,
+      "surface": false,
+      "spriteHeightTiles": 0.75,
+      "name": "落地特斯拉",
+      "price": 150,
+      "lv": 4,
+      "starter": false,
+      "sheet": "custom6",
+      "desc": "展示間尺度大型模型車：霧銀暖灰、黑窗帶、白輪"
     }
   ]
 }

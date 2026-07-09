@@ -86,6 +86,8 @@ def main():
     L.append('  spriteHeightTiles: number; // 視覺高度（格）＝footprint_w × naturalH/naturalW；引擎算桌面高度用（spriteH = spriteHeightTiles × CELL）')
     L.append('  facings?: Facing[]; // 實際畫了哪些向；省略＝front 單向（旋轉 no-op）。back/right 加檔 <id>_back/_right.png，left 缺則引擎鏡像 right')
     L.append("  hostType?: 'counter-inside'; // E4：吧檯內側小家電（嵌吧檯裡、下半身被 counter_front 遮）；省略＝一般家具/小物")
+    L.append("  frontWall?: boolean; // E10：可掛門/門旁前牆（畫在 base-fg 之上）；省略＝只能掛後牆")
+    L.append("  counterTop?: boolean; // E11：z=furniture 但可放吧檯檯面格（加法，地板照舊可放）")
     L.append('  flavor: string; // 一句話 flavor 文案（docs/cafe-flavor.json 來源，查無 id 則為空字串；引擎端空字串該行不渲染）')
     L.append('}')
     L.append('')
@@ -117,6 +119,8 @@ def main():
         if it.get('facings'):
             fac = ", facings: [" + ", ".join(f"'{f}'" for f in it['facings']) + "]"
         host = f", hostType: '{it['hostType']}'" if it.get('hostType') else ''
+        host += ', frontWall: true' if it.get('frontWall') else ''
+        host += ', counterTop: true' if it.get('counterTop') else ''
         flavor = flavor_map.get(it['id'], '').replace("\\", "\\\\").replace("'", "\\'")
         L.append(
             f"  {{ id: '{it['id']}', category: '{it['category']}', z: '{it['z']}', w: {it['w']}, h: {it['h']}, "
