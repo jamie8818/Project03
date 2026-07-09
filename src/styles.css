@@ -3010,10 +3010,14 @@ img.buddy {
 .serve3-tray {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  /* minmax(0,1fr)：拿掉 1fr 的 min-content 下限——餐卡圖不然會撐爆格子、
+     溢出托盤疊到垃圾桶（JJ 回報手機上最右欄被蓋半張，2026-07-09） */
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 6px;
 }
 .serve3-food {
+  min-width: 0;
+  min-height: 0;
   aspect-ratio: 1;
   background: rgba(255, 250, 240, 0.84);
   border: 2px solid var(--line-strong);
