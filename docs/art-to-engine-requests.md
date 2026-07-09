@@ -230,3 +230,9 @@ base → 地毯(L0) → 店長 → counter_front(.cafe-counter-fg) → 地板家
 1. **顯示尺寸不要放大到 64px**——51–52px 的「小型展示物」比例正確，64px 會像主互動物件壓過吧檯；要微調上限 ~56px（推翻上文「可 1.2× 放大」的建議）。
 2. 深色口味（深紫/深綠/咖啡）hue-rotate 後可能與罩內陰影相近——布丁素材已有高光與焦糖頂深色層，引擎端不要再對招牌整體加暗色 filter。
 3. polish 級可選（不擋定案、之後有空再說）：玻璃罩底緣加 1-2px 冷色亮邊。
+
+**✅ 引擎已接手完成（2026-07-09，本輪引擎 session）**：
+1. `.cafe-sign` 從 28px 🍮 emoji 換成三層疊圖（stand → pudding 套 `PUDDING_BY_ID` hue/sat → dome 無 filter），源圖÷2 顯示、依 mockup 比例疊（頂盤線 22%／布丁接地 12%／罩裙 10%），總高 ~52px、底錨 `COUNTER_SURFACE_Y=124`、left 216 沿用；**沒放大到 64px**（遵 codex 定案 ≤56px），也沒對整體加暗 filter。繪序移到店長之後、`counter_front` 之前（依規格）。
+2. 互動：talk 模式 hover 出口味名 tooltip（title）＋點擊 → 店長切 `love` 姿勢＋台詞「本日の看板プリン：〈口味名〉！」（注入動態 ShopLine，8s 輪播自然接回一般池）；editing/banner 不可點（pointer-events 依 talk 開關）。`sign===''` 三層全隱藏。✨ sparkle（可選 3）未做。
+3. 裝潢「招牌」分頁縮圖從 🍮 換 `pudding.png` 套色（不疊 stand/dome）。
+4. 驗收實測（preview）：matcha 綠／taro 紫即時換色、托盤六口味縮圖色相分明無變灰；點擊 love+台詞原子驗證過；`sign===''` 隱藏／設回正常；tsc、npm test 101/101、console 乾淨。

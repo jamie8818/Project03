@@ -88,6 +88,12 @@ function Stage({ shop, attend, meDone, talk, variant = 'full', editing, placing,
   // 台詞帶序號 n：同句被連抽兩次時 key 仍變、泡泡動畫照樣重播（泡泡＝顯示幾秒自動淡出）
   const [line, setLine] = useState(() => ({ t: pickShopLine(attend, meDone), n: 0 }));
   const nextLine = () => setLine((l) => ({ t: pickShopLine(attend, meDone), n: l.n + 1 }));
+  // E8：點招牌布丁展示座 → 店長切 love 姿勢＋動態台詞（下一輪 interval 自然換回一般池）
+  const saySignLine = () => {
+    const pud = PUDDING_BY_ID[shop.sign];
+    if (!pud) return;
+    setLine((l) => ({ t: { text: `本日の看板プリン：${pud.name}！`, pose: 'love' as const }, n: l.n + 1 }));
+  };
   // sprite 長寬比快取（naturalH/naturalW）：只給「非 front 向」的 host 算視覺高度用——
   // manifest 的 spriteHeightTiles 只定義 front 圖（§A 實測：table_square 右向 0.73 vs manifest 1.47），
   // 旋轉向仍得等實圖載入校正；front 向直接吃 manifest、決定性免等圖。
@@ -276,11 +282,6 @@ function Stage({ shop, attend, meDone, talk, variant = 'full', editing, placing,
         <img className="cafe-base" src="/cafe/base_nocounter.png" width={STAGE_W} height={STAGE_H} alt="" draggable={false} />
         <img className="cafe-counter-body" src="/cafe/counter_body.png" width={STAGE_W} height={STAGE_H} alt="" draggable={false} />
 
-        {/* 招牌布丁（掛在櫃檯上） */}
-        {shop.sign && PUDDING_BY_ID[shop.sign] && (
-          <span className="cafe-sign" style={{ filter: `hue-rotate(${PUDDING_BY_ID[shop.sign].hue}deg) saturate(${PUDDING_BY_ID[shop.sign].sat ?? 1})` }}>🍮</span>
-        )}
-
         {/* 接地陰影層：只有地板家具在 footprint 前緣畫柔邊橢圓（檯面小物在桌上、不投地影） */}
         {displayLayout.map((p, i) => {
           const it = itemById(p.id);
@@ -313,6 +314,26 @@ function Stage({ shop, attend, meDone, talk, variant = 'full', editing, placing,
             onClick={talk ? () => { sfx.correct(1); nextLine(); } : undefined}
           />
         </div>
+
+        {/* 招牌布丁展示座（E8）：台座→像素布丁（套口味 hue/sat，換色機制同舊 emoji）→半透明玻璃罩，
+            底錨檯面 y=COUNTER_SURFACE_Y、畫在店長之後 counter_front 之前；talk 模式 hover 看口味、點了店長放閃 */}
+        {shop.sign && PUDDING_BY_ID[shop.sign] && (
+          <div
+            className={`cafe-sign ${talk ? 'sign-hit' : ''}`}
+            title={PUDDING_BY_ID[shop.sign].name}
+            onClick={talk ? () => { sfx.correct(1); saySignLine(); } : undefined}
+          >
+            <img className="sign-stand" src="/cafe/sign/stand.png" alt="" draggable={false} />
+            <img
+              className="sign-pudding"
+              src="/cafe/sign/pudding.png"
+              alt={PUDDING_BY_ID[shop.sign].name}
+              draggable={false}
+              style={{ filter: `hue-rotate(${PUDDING_BY_ID[shop.sign].hue}deg) saturate(${PUDDING_BY_ID[shop.sign].sat ?? 1})` }}
+            />
+            <img className="sign-dome" src="/cafe/sign/dome.png" alt="" draggable={false} />
+          </div>
+        )}
 
         {/* 內側小家電（E4）：畫在店長之後、counter_front 之前＝下半身被正面板遮＝嵌在吧檯裡 */}
         {insideOrder.map(renderFurn)}
@@ -821,7 +842,8 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop }: { me: UserState; 
           {ownedPuddings.length === 0 && <p className="hint">還沒收集到布丁——每天完成練習會掉布丁。</p>}
           {ownedPuddings.map((p) => (
             <button key={p.id} className={`tray-item ${shop.sign === p.id ? 'on' : ''}`} onClick={() => saveShop({ ...shop, sign: p.id })}>
-              <span className="pud" style={{ filter: `hue-rotate(${p.hue}deg) saturate(${p.sat ?? 1})` }}>🍮</span>
+              {/* 縮圖比照正式渲染用 pudding.png 套色（E8 需求 5；不疊 stand/dome，小圖示意即可） */}
+              <img className="tray-pud" src="/cafe/sign/pudding.png" alt="" draggable={false} style={{ filter: `hue-rotate(${p.hue}deg) saturate(${p.sat ?? 1})` }} />
               <small>{p.name.replace('布丁', '')}</small>
             </button>
           ))}
