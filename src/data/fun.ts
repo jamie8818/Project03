@@ -177,7 +177,7 @@ export const COINS = {
   minigame: 3, // 聽寫/翻牌/挖空 過關
   achievement: 20, // 每解一個成就
   bossClaim: 20,
-} as const; // 衝刺另計 score/50、打工另計小費、里程碑另計
+} as const; // 衝刺另計 score/50、打工另計營業額÷5（Games.tsx SHIFT_COIN_DIVISOR）、里程碑另計、背單字另計（lib/cram.ts）
 
 // 連續天數里程碑一次性獎金（達到當天結算，防重複由 store 記 claimedStreaks）
 export const STREAK_MILESTONES: { day: number; coins: number }[] = [

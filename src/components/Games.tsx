@@ -282,6 +282,7 @@ const DRAIN = 1.2; // 每 tick 掉的耐心（≈6/秒 → 約 16 秒見底）
 const IMPATIENT = 35; // 耐心低於此，客人露出等待/不安表情
 const COST_WRONG = 15; // 給錯客人：扣成本＋降星
 const COST_TRASH = 5; // 丟垃圾桶：純食材浪費，不降星
+const SHIFT_COIN_DIVISOR = 5; // 營業額（¥）→ 金幣匯率：÷5（1:1 太肥、一場頂三天背單字上限，JJ 2026-07-09 拍板打折）
 const STAR_WINDOW = 10; // Google 星＝最近 N 位滑動平均
 const BASE_STAR = 3; // 還沒有評價時的預設星（決定開場來客速度）
 const ITEM_RELIEF = 30; // 複數訂單：每上對一樣，耐心回補（讓多品項客人有喘息）
@@ -321,7 +322,8 @@ interface FloatFx {
   star: number;
 }
 interface Summary {
-  cash: number;
+  cash: number; // 營業額（¥）
+  coins: number; // 實際入帳金幣（cash÷SHIFT_COIN_DIVISOR）
   served: number;
   best: number;
   avgStar: number;
@@ -387,7 +389,7 @@ export function Shift({ state, update, onExit }: { state: UserState; update: Upd
         </div>
         <div>
           <b>¥{s.cash}</b>
-          <span>營業額 🪙</span>
+          <span>營業額（+{s.coins} 🪙）</span>
         </div>
         <div>
           <b>★{s.avgStar.toFixed(1)}</b>
@@ -401,7 +403,7 @@ export function Shift({ state, update, onExit }: { state: UserState; update: Upd
         </div>
       </div>
       <button className="primary" onClick={onExit}>回對戰場</button>
-      <p className="hint">營業額換金幣拿去商店添家具，常客會再回來坐坐！</p>
+      <p className="hint">營業額 ÷5 換金幣拿去商店添家具，常客會再回來坐坐！</p>
     </div>
   );
 }
@@ -533,7 +535,8 @@ function ShiftPlay({
     if (doneRef.current) return;
     doneRef.current = true;
     sfx.clear();
-    const earned = Math.max(0, Math.round(cashRef.current));
+    const earned = Math.max(0, Math.round(cashRef.current)); // 營業額（¥，顯示/最佳紀錄用）
+    const coinsEarned = Math.round(earned / SHIFT_COIN_DIVISOR); // 入帳金幣＝營業額÷5
     const reg = regularsRef.current;
     const mast = masteryRef.current;
     const prevBest = Number.isFinite(state.shiftBest) ? state.shiftBest : 0;
@@ -544,13 +547,13 @@ function ShiftPlay({
       for (const k of Object.keys(mast)) foodMastery[k] = (foodMastery[k] ?? 0) + mast[k];
       return {
         ...s,
-        coins: s.coins + earned,
+        coins: s.coins + coinsEarned,
         shiftBest: Math.max(Number.isFinite(s.shiftBest) ? s.shiftBest : 0, earned),
         regulars,
         foodMastery,
       };
     });
-    onFinish({ cash: earned, served: servedRef.current, best: Math.max(prevBest, earned), avgStar: avgOf(starsRef.current) });
+    onFinish({ cash: earned, coins: coinsEarned, served: servedRef.current, best: Math.max(prevBest, earned), avgStar: avgOf(starsRef.current) });
   };
 
   // 主迴圈：計時、耐心遞減、逾時翻臉、來客排程
