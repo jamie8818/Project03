@@ -70,6 +70,7 @@ def main():
     L.append('  surface: boolean; // 可放小物（surface 寄生）：桌/櫃頂/開放層架 true；椅凳沙發卡座/其餘 false')
     L.append('  spriteHeightTiles: number; // 視覺高度（格）＝footprint_w × naturalH/naturalW；引擎算桌面高度用（spriteH = spriteHeightTiles × CELL）')
     L.append('  facings?: Facing[]; // 實際畫了哪些向；省略＝front 單向（旋轉 no-op）。back/right 加檔 <id>_back/_right.png，left 缺則引擎鏡像 right')
+    L.append("  hostType?: 'counter-inside'; // E4：吧檯內側小家電（嵌吧檯裡、下半身被 counter_front 遮）；省略＝一般家具/小物")
     L.append('}')
     L.append('')
     L.append(f'export const CAFE = {{ w: {COLS * CELL}, h: {ROWS * CELL}, cols: {COLS}, rows: {ROWS}, cell: {CELL} }} as const;')
@@ -93,11 +94,12 @@ def main():
         fac = ''
         if it.get('facings'):
             fac = ", facings: [" + ", ".join(f"'{f}'" for f in it['facings']) + "]"
+        host = f", hostType: '{it['hostType']}'" if it.get('hostType') else ''
         L.append(
             f"  {{ id: '{it['id']}', z: '{it['z']}', w: {it['w']}, h: {it['h']}, "
             f"surface: {str(it['surface']).lower()}, spriteHeightTiles: {it['spriteHeightTiles']}, "
             f"name: '{it['name']}', sprite: '/cafe/catalog/{it['id']}.png', price: {it['price']}, "
-            f"lv: {it['lv']}, starter: {str(it['starter']).lower()}{fac} }},"
+            f"lv: {it['lv']}, starter: {str(it['starter']).lower()}{fac}{host} }},"
         )
     L.append('];')
     L.append('')

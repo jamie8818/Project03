@@ -1,7 +1,8 @@
-# 日々喫茶 家具願望清單（策展 66 種）
+# 日々喫茶 家具願望清單（策展 72 種）
 
 > 昭和喫茶風家具策展。**有**＝已生在 catalog、**新**＝待生。要生某件：加進 `cafe-catalog.json`（含 z/w/h/facings）→ gen-cafe-furniture → slice → build-cafe-ts。
-> 66 件全數已生（原 29＋第二輪 22＋wishlist v2 首波 15）。v2 首波 15 件只做 front（未宣告 facings）；四向補完見 `docs/cafe-art-handoff.md` §D。
+> 72 件全數已生（原 29＋第二輪 22＋wishlist v2 首波 15＋吧檯內側小家電 6）。v2 首波 15 件只做 front（未宣告 facings）；四向補完見 `docs/cafe-art-handoff.md` §D。
+> 吧檯內側小家電 6 件（E4，`hostType:'counter-inside'`）front only、不上桌，只嵌吧檯 row3 cols0–7（硬性排除 col4/5 店長位）。
 
 ## 座席・桌椅（16）
 
@@ -24,7 +25,7 @@
 | 有 | 黑皮雙人沙發 | 3×1 | furniture | Chesterfield 扣釦黑皮（v2） |
 | 有 | 吧檯高腳圓桌 | 1×1 | furniture | 站立飲用小圓桌（v2） |
 
-## 吧檯・沖煮・展示（13）
+## 吧檯・沖煮・展示（19）
 
 | 狀態 | 名稱 | 佔格 | 層 | 說明 |
 |---|---|---|---|---|
@@ -41,6 +42,12 @@
 | 有 | 高腳杯吊掛架 | 2×1 | furniture | 3 只高腳杯倒掛頂架（v2） |
 | 有 | 手沖濾杯架 | 1×1 | furniture | 錐形濾杯＋玻璃壺（v2） |
 | 有 | 復古電冰箱 | 1×1 | furniture | 圓角大型復古冰箱（v2） |
+| 有 | 保溫熱水瓶架 | 1×1 | surface | 三支不鏽鋼保溫瓶，吧檯內側小家電（v2·E4·counter-inside） |
+| 有 | 雪克杯調飲站 | 1×1 | surface | 銀色雪克杯＋量杯，吧檯內側小家電（v2·E4·counter-inside） |
+| 有 | 老式製冰機 | 1×1 | surface | 掀蓋碎冰復古製冰機，吧檯內側小家電（v2·E4·counter-inside） |
+| 有 | 老式咖啡秤 | 1×1 | surface | 圓錶盤秤＋量匙，吧檯內側小家電（v2·E4·counter-inside） |
+| 有 | 業務用咖啡機 | 1×1 | surface | 雙孔義式咖啡機，吧檯內側小家電（新增·E4·counter-inside） |
+| 有 | 復古烤吐司機 | 1×1 | surface | 雙片式電烤吐司機，吧檯內側小家電（新增·E4·counter-inside） |
 
 ## 燈・牆飾（13）
 

@@ -17,6 +17,7 @@ export interface CafeItem {
   surface: boolean; // 可放小物（surface 寄生）：桌/櫃頂/開放層架 true；椅凳沙發卡座/其餘 false
   spriteHeightTiles: number; // 視覺高度（格）＝footprint_w × naturalH/naturalW；引擎算桌面高度用（spriteH = spriteHeightTiles × CELL）
   facings?: Facing[]; // 實際畫了哪些向；省略＝front 單向（旋轉 no-op）。back/right 加檔 <id>_back/_right.png，left 缺則引擎鏡像 right
+  hostType?: 'counter-inside'; // E4：吧檯內側小家電（嵌吧檯裡、下半身被 counter_front 遮）；省略＝一般家具/小物
 }
 
 export const CAFE = { w: 576, h: 416, cols: 18, rows: 13, cell: 32 } as const;
@@ -208,6 +209,12 @@ export const CAFE_ITEMS: CafeItem[] = [
   { id: 'wall_kumiko', z: 'wall', w: 2, h: 2, surface: false, spriteHeightTiles: 2.0, name: '組子細工窗花', sprite: '/cafe/catalog/wall_kumiko.png', price: 108, lv: 4, starter: false },
   { id: 'wall_train_map', z: 'wall', w: 2, h: 1, surface: false, spriteHeightTiles: 1.0, name: '老鐵道路線圖', sprite: '/cafe/catalog/wall_train_map.png', price: 80, lv: 2, starter: false },
   { id: 'furin_wind_chime', z: 'wall', w: 1, h: 1, surface: false, spriteHeightTiles: 1.0, name: '夏祭風鈴', sprite: '/cafe/catalog/furin_wind_chime.png', price: 45, lv: 1, starter: false },
+  { id: 'thermos_rack', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 1.91, name: '保溫熱水瓶架', sprite: '/cafe/catalog/thermos_rack.png', price: 68, lv: 3, starter: false, hostType: 'counter-inside' },
+  { id: 'shaker_station', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 1.91, name: '雪克杯調飲站', sprite: '/cafe/catalog/shaker_station.png', price: 58, lv: 2, starter: false, hostType: 'counter-inside' },
+  { id: 'ice_machine', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 1.91, name: '老式製冰機', sprite: '/cafe/catalog/ice_machine.png', price: 96, lv: 5, starter: false, hostType: 'counter-inside' },
+  { id: 'coffee_scale', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 1.91, name: '老式咖啡秤', sprite: '/cafe/catalog/coffee_scale.png', price: 52, lv: 2, starter: false, hostType: 'counter-inside' },
+  { id: 'espresso_machine', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 1.91, name: '業務用咖啡機', sprite: '/cafe/catalog/espresso_machine.png', price: 120, lv: 6, starter: false, hostType: 'counter-inside' },
+  { id: 'toaster', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 1.83, name: '復古烤吐司機', sprite: '/cafe/catalog/toaster.png', price: 62, lv: 3, starter: false, hostType: 'counter-inside' },
 ];
 
 // 開局免費擺好的家具

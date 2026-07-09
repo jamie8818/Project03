@@ -85,6 +85,13 @@
 
     {"id": "wall_kumiko", "z": "wall", "w": 2, "h": 2, "surface": false, "spriteHeightTiles": 2.0, "name": "組子細工窗花", "price": 108, "lv": 4, "starter": false, "sheet": "wall3", "desc": "大幅簡化的粗格組子窗花（非精細密網），媒材區隔彩繪玻璃窗（無色玻璃）"},
     {"id": "wall_train_map", "z": "wall", "w": 2, "h": 1, "surface": false, "spriteHeightTiles": 1.0, "name": "老鐵道路線圖", "price": 80, "lv": 2, "starter": false, "sheet": "wall3", "desc": "大色塊路線圖僅少量粗線標示（非精細鐵道網），車站旁喫茶店常見"},
-    {"id": "furin_wind_chime", "z": "wall", "w": 1, "h": 1, "surface": false, "spriteHeightTiles": 1.0, "name": "夏祭風鈴", "price": 45, "lv": 1, "starter": false, "sheet": "wall3", "desc": "玻璃／南部鐵器風鈴，掛窗邊消暑"}
+    {"id": "furin_wind_chime", "z": "wall", "w": 1, "h": 1, "surface": false, "spriteHeightTiles": 1.0, "name": "夏祭風鈴", "price": 45, "lv": 1, "starter": false, "sheet": "wall3", "desc": "玻璃／南部鐵器風鈴，掛窗邊消暑"},
+
+    {"id": "thermos_rack", "z": "surface", "w": 1, "h": 1, "surface": false, "spriteHeightTiles": 1.91, "hostType": "counter-inside", "name": "保溫熱水瓶架", "price": 68, "lv": 3, "starter": false, "sheet": "counterinside", "desc": "三支不鏽鋼保溫熱水瓶並排立在吧檯內層架上，瓶身修長、頂部按壓式瓶蓋清楚可見，構圖重點放上半部瓶蓋與瓶頸，下半瓶身簡化處理（會被吧檯正面板遮住）"},
+    {"id": "shaker_station", "z": "surface", "w": 1, "h": 1, "surface": false, "spriteHeightTiles": 1.91, "hostType": "counter-inside", "name": "雪克杯調飲站", "price": 58, "lv": 2, "starter": false, "sheet": "counterinside", "desc": "銀色雞尾酒雪克杯配兩個量杯立在吧檯內小台面，雪克杯上寬下窄、頂蓋反光明顯，構圖重點放上半部杯身與蓋，下半台面簡化處理（會被吧檯正面板遮住）"},
+    {"id": "ice_machine", "z": "surface", "w": 1, "h": 1, "surface": false, "spriteHeightTiles": 1.91, "hostType": "counter-inside", "name": "老式製冰機", "price": 96, "lv": 5, "starter": false, "sheet": "counterinside", "desc": "圓角復古製冰機，白色琺瑯機身，機頂掀蓋露出少量碎冰，構圖重點放機頂掀蓋與冰塊，下半機身簡化處理（會被吧檯正面板遮住）"},
+    {"id": "coffee_scale", "z": "surface", "w": 1, "h": 1, "surface": false, "spriteHeightTiles": 1.91, "hostType": "counter-inside", "name": "老式咖啡秤", "price": 52, "lv": 2, "starter": false, "sheet": "counterinside", "desc": "圓錶盤咖啡秤立在小木座上，秤面刻度清楚、旁邊插一支量匙，構圖重點放上半部圓錶盤，下半木座簡化處理（會被吧檯正面板遮住）"},
+    {"id": "espresso_machine", "z": "surface", "w": 1, "h": 1, "surface": false, "spriteHeightTiles": 1.91, "hostType": "counter-inside", "name": "業務用咖啡機", "price": 120, "lv": 6, "starter": false, "sheet": "counterinside", "desc": "黃銅色業務用雙孔義式咖啡機，機頂圓形壓力錶與彎曲蒸氣管明顯，沖煮握把插在機身前緣，構圖重點放機頂錶盤與蒸氣管，下半機身簡化處理（會被吧檯正面板遮住）"},
+    {"id": "toaster", "z": "surface", "w": 1, "h": 1, "surface": false, "spriteHeightTiles": 1.83, "hostType": "counter-inside", "name": "復古烤吐司機", "price": 62, "lv": 3, "starter": false, "sheet": "counterinside", "desc": "復古雙片式電烤吐司機，鉻亮圓潤機身，頂端插著兩片微冒煙吐司，構圖重點放機頂吐司與蒸氣，下半機身簡化處理（會被吧檯正面板遮住）"}
   ]
 }

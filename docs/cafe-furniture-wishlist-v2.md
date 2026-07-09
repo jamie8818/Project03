@@ -32,14 +32,14 @@
 |---|---|---|---|---|---|---|
 | 有 | 手沖濾杯架 | pourover_stand | 1×1 | furniture | false | 錐形濾杯＋玻璃壺，尖錐剪影明顯區隔虹吸的玻璃球形與銅壺的壺身輪廓 |
 | 候選 | 咖啡豆麻布袋堆 | coffee_bean_sacks | 1×1 | furniture | false | 角落堆疊麻布咖啡豆袋，氛圍道具 |
-| 候選 | 保溫熱水瓶架 | thermos_rack | 1×1 | furniture | true | 一排不鏽鋼保溫熱水瓶，區隔銅壺咖啡組 |
-| 候選 | 雪克杯調飲站 | shaker_station | 1×1 | furniture | false | 銀色雪克杯與量杯站，冷飲調製道具 |
+| 有 | 保溫熱水瓶架 | thermos_rack | 1×1 | surface | false | 一排不鏽鋼保溫熱水瓶，區隔銅壺咖啡組（E4：吧檯內側小家電，`hostType:'counter-inside'`，改窄高構圖） |
+| 有 | 雪克杯調飲站 | shaker_station | 1×1 | surface | false | 銀色雪克杯與量杯站，冷飲調製道具（E4：吧檯內側小家電，`hostType:'counter-inside'`，改窄高構圖） |
 | 候選 | 三明治玻璃展示盒 | sandwich_case | 1×1 | furniture | true | 鹹食三明治展示櫃，與甜點櫃內容區隔（不放蛋糕布丁） |
 | 候選 | 布丁模型展示架 | pudding_mold_shelf | 1×1 | furniture | true | 一排空布丁模具展示，區隔已完成的布丁百匯 |
 | 候選 | 吧檯內水槽 | bar_sink | 1×1 | furniture | false | 不鏽鋼小水槽，吧檯內務細節 |
 | 有 | 高腳杯吊掛架 | glass_hanging_rack | 2×1 | furniture | false | 3 只大剪影高腳杯倒掛頂架（非成排細線杯腳），經典吧檯視覺重點 |
-| 候選 | 老式咖啡秤 | coffee_scale | 1×1 | furniture | false | 圓錶盤秤搭配量匙，區隔磨豆機／收銀機 |
-| 候選 | 老式製冰機 | ice_machine | 1×1 | furniture | false | 圓角復古製冰機，吧檯後方家電 |
+| 有 | 老式咖啡秤 | coffee_scale | 1×1 | surface | false | 圓錶盤秤搭配量匙，區隔磨豆機／收銀機（E4：吧檯內側小家電，`hostType:'counter-inside'`，改窄高構圖） |
+| 有 | 老式製冰機 | ice_machine | 1×1 | surface | false | 圓角復古製冰機，吧檯後方家電（E4：吧檯內側小家電，`hostType:'counter-inside'`，改窄高構圖） |
 | 有 | 復古電冰箱 | vintage_fridge | 1×1 | furniture | false | 圓角大型復古冰箱，吧檯後方大型家電 |
 | 候選 | 水果聖代備料架 | fruit_shelf | 1×1 | furniture | true | 新鮮水果原料開放層架，區隔桌上的水果盤成品 |
 
