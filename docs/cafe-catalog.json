@@ -70,6 +70,7 @@
     {"id": "vintage_radio", "category": "tabletop", "z": "surface", "w": 1, "h": 1, "surface": false, "spriteHeightTiles": 0.83, "name": "復古收音機", "price": 55, "lv": 4, "starter": false, "sheet": "surface2", "desc": "木殼復古收音機/唱片機，桌上擺件"},
 
     {"id": "booth_crescent", "category": "seating", "z": "furniture", "w": 3, "h": 2, "surface": false, "spriteHeightTiles": 2.41, "name": "半月形絨布卡座", "price": 165, "lv": 6, "starter": false, "sheet": "furniture3", "desc": "弧形軟包卡座營造獨立包廂感，弧線輪廓明顯區隔既有直角／L 形卡座"},
+    {"id": "booth_round", "category": "seating", "z": "furniture", "w": 3, "h": 3, "surface": false, "spriteHeightTiles": 2.16, "name": "圓形環繞卡座", "price": 195, "lv": 6, "starter": false, "sheet": "furniture3", "desc": "大型圓桌環繞式絨布卡座，入口缺口朝正面、環繞座位＋中央圓桌，多人聚會用旗艦座位"},
     {"id": "sofa_leather", "category": "seating", "z": "furniture", "w": 3, "h": 1, "surface": false, "spriteHeightTiles": 1.58, "name": "黑皮雙人沙發", "price": 145, "lv": 5, "starter": false, "sheet": "furniture3", "desc": "Chesterfield 車縫扣釦黑皮雙人沙發，扣釦紋理與光澤明顯區隔既有墨綠絨沙發"},
     {"id": "table_bar_round", "category": "seating", "z": "furniture", "w": 1, "h": 1, "surface": true, "spriteHeightTiles": 1.53, "name": "吧檯高腳圓桌", "price": 85, "lv": 2, "starter": false, "sheet": "furniture3", "desc": "站立飲用高度的小圓桌，非座椅用桌"},
     {"id": "glass_hanging_rack", "category": "counter", "z": "furniture", "w": 2, "h": 1, "surface": false, "spriteHeightTiles": 1.19, "name": "高腳杯吊掛架", "price": 95, "lv": 3, "starter": false, "sheet": "furniture3", "desc": "3 只大剪影高腳杯倒掛頂架（非成排細線杯腳），經典吧檯視覺重點"},

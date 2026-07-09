@@ -11,7 +11,7 @@
 | 狀態 | 中文名 | 建議 id | 佔格 w×h | 層 | surface | 說明 |
 |---|---|---|---|---|---|---|
 | 有 | 半月形絨布卡座 | booth_crescent | 3×2 | furniture | false | 弧形軟包卡座營造獨立包廂感，弧線輪廓明顯區隔既有直角／L 形卡座 |
-| 候選 | 圓形環繞卡座 | booth_round | 3×3 | furniture | false | 大型圓桌環繞式卡座，多人聚會用旗艦座位 |
+| 有 | 圓形環繞卡座 | booth_round | 3×3 | furniture | false | 大型圓桌環繞式卡座，多人聚會用旗艦座位（2026-07-09 補生：前兩版因俯視等角被 codex 退稿，改「入口缺口朝鏡頭＋薄橢圓圓桌」正面構圖三修後過審入庫，只做 front） |
 | 有 | 吧檯高腳圓桌 | table_bar_round | 1×1 | furniture | true | 站立飲用高度的小圓桌，非座椅用桌 |
 | 候選 | 玻璃面圓桌 | table_glass_round | 1×1 | furniture | true | 細黑鐵蜘蛛腳＋透明玻璃桌面，鏤空穿透感區隔既有厚重大理石／實木圓桌 |
 | 候選 | 皮革圓矮凳 | stool_leather | 1×1 | furniture | false | 黑皮圓形矮凳無靠背，區隔吧檯高腳椅 |

@@ -206,6 +206,7 @@ export const CAFE_ITEMS: CafeItem[] = [
   { id: 'potted_plant', category: 'tabletop', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 1.17, name: '桌上小盆栽', sprite: '/cafe/catalog/potted_plant.png', price: 32, lv: 1, starter: false },
   { id: 'vintage_radio', category: 'tabletop', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.83, name: '復古收音機', sprite: '/cafe/catalog/vintage_radio.png', price: 55, lv: 4, starter: false },
   { id: 'booth_crescent', category: 'seating', z: 'furniture', w: 3, h: 2, surface: false, spriteHeightTiles: 2.41, name: '半月形絨布卡座', sprite: '/cafe/catalog/booth_crescent.png', price: 165, lv: 6, starter: false },
+  { id: 'booth_round', category: 'seating', z: 'furniture', w: 3, h: 3, surface: false, spriteHeightTiles: 2.16, name: '圓形環繞卡座', sprite: '/cafe/catalog/booth_round.png', price: 195, lv: 6, starter: false },
   { id: 'sofa_leather', category: 'seating', z: 'furniture', w: 3, h: 1, surface: false, spriteHeightTiles: 1.58, name: '黑皮雙人沙發', sprite: '/cafe/catalog/sofa_leather.png', price: 145, lv: 5, starter: false },
   { id: 'table_bar_round', category: 'seating', z: 'furniture', w: 1, h: 1, surface: true, spriteHeightTiles: 1.53, name: '吧檯高腳圓桌', sprite: '/cafe/catalog/table_bar_round.png', price: 85, lv: 2, starter: false },
   { id: 'glass_hanging_rack', category: 'counter', z: 'furniture', w: 2, h: 1, surface: false, spriteHeightTiles: 1.19, name: '高腳杯吊掛架', sprite: '/cafe/catalog/glass_hanging_rack.png', price: 95, lv: 3, starter: false },
