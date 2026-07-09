@@ -181,3 +181,14 @@ base → 地毯(L0) → 店長 → counter_front(.cafe-counter-fg) → 地板家
 5. `npm test`（97 條）全過、`tsc -b` 過；preview 實測商店 6 個分頁籤（座席・桌椅／吧檯・沖煮・展示／燈・牆飾／地毯・地面／桌上擺件・小物／擺飾雜貨・季節）都能正確過濾出對應家具，裝潢托盤同步可切。
 
 **驗收**：`python3 scripts/build-cafe-ts.py` 重跑應為 no-op（re-run 產出內容不變）；`npx tsc --noEmit` 過；`grep -c "category:" src/data/cafe.gen.ts` 73 件家具都有值，且 6 個 key 分佈為 seating16／counter19／wall14／rug7／tabletop16／seasonal1。
+
+## E7. counter-inside 小家電放寬放置範圍（JJ 需求 2026-07-09）— 純引擎改，美術無交付物
+
+**需求**：`hostType:'counter-inside'` 的 6 件小家電（thermos_rack/shaker_station/ice_machine/coffee_scale/espresso_machine/toaster）目前**只能**放吧檯內側。JJ 要求語義改成「**加法**」：這些是 `z:'surface'` 小物，應該同時可以——
+1. **吧檯內側**（現行 E4 路徑，畫在 counter_front 之前、下半被面板遮）——維持不變；
+2. **吧檯檯面格**（COUNTER_TOP row3 cols0–7，跟現有檯面小物同機制、畫在 counter_front 之後全露）；
+3. **任何 `surface:true` 的 host 桌櫃上**（跟布丁/冰咖啡同機制）。
+
+**引擎改法建議**：放置合法性判斷把 `hostType==='counter-inside'` 從「排他限定」改成「額外允許」——即 canPlace 對這 6 件走一般 surface 規則 ∪ counter-inside 格；渲染分流依「實際落點」決定（落在內側格→E4 路徑、其他→一般 surface 路徑），不是依 hostType 一刀切。
+
+**美術側**：素材/manifest 不用動（sprite 底錨與現有 surface 小物一致）。sHT 1.83–1.91 擺一般桌上會偏大件，屬合理（同 vase 2.36 前例）；若引擎接完 JJ 嫌大再回報、美術重生縮版。
