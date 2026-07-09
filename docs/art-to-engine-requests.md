@@ -398,3 +398,33 @@ z=furniture 的咖啡器材/小型展示，現實中本來就擺吧檯上，開�
 3. 氣泡錨在該客人頭上、寬度上限比店長氣泡窄（~180px）、貼近畫面右緣時自動左翻。
 **儲存**：每人一句、跟裝潢同等級的同步需求——建議走 `/api/shop/board` 同款 KV 模式（或 shop state 加欄位），新舊客戶端相容比照 finding #1 的遷移手法。worker 有改就要記得 `wrangler deploy`。
 **美術**：無新素材（💬 指示點用 CSS/emoji 即可；要像素版再開單）。
+
+## E16. 成就大擴充：+30 店鋪型成就＋徽章像素化重做（JJ 拍板「越多越好」，2026-07-10）
+
+**現況**：`src/lib/xp.ts` ACHIEVEMENTS 13 個學習型、emoji icon。**引擎要做**：①check 簽名擴充成可讀 ShopState（layout/stock/coins/扭蛋收集）與新計數器 ②新增 30 成就 ③icon 從 emoji 換像素徽章（素材見下、美術另批交付）④成就頁 grid 對應更新。
+
+**Tier A（現有狀態直接判定，先做）**：
+| id | 名 | 條件 |
+|---|---|---|
+| shark-keeper | 鯊魚飼育員 | layout 同時 3 隻 shark_plush |
+| gacha-complete | 完売御礼 | personal 扭蛋池全收集 |
+| pudding-tycoon | 布丁大亨 | 布丁圖鑑集滿 |
+| miser | 守財奴 | 金幣 ≥1000 |
+| pudding-freedom | 布丁自由 | 金幣 ≥2000 |
+| interior-designer | 室內設計師 | layout ≥30 件 |
+| onion-gravity | 蔥有引力 | 擁有 claw_machine_onion＋green_onion_pot |
+| this-is-taiwan | 這裡是台灣 | 擺出 5 件台式件（id 清單：rice_cooker_tatung/figure_tatung_baby/candy_cabinet/chair_red_plastic/barber_pole/pinball_machine_small/soda_crate/altar_lamp_mini/mesh_cupboard/soda_fridge_glass/round_table_lazy_susan/tv_wooden_retro/karaoke_jukebox/mailbox_green/lantern_pair_temple/bus_stop_sign/thermos_flower/fan_standing_retro/poke_lottery_box/marble_jar/snack_box_crate/ring_toss_stall/bento_stack_steel/fortune_stick_tube/jiaobei_pair/spring_couplet/daily_calendar_tear/payphone_orange/guangming_lamp_tower/betel_neon_pole/rolling_shutter_half/utility_pole/school_desk_chair/papaya_milk/mango_shaved_ice） |
+| second-best | 第二名的男人 | 擁有 trophy_second_best |
+| under-construction | 施工中 | 擺出 traffic_cone＋cement_bag＋tire_stack |
+| first-deco | 初擺設 | 第一次擺任何家具 |
+| full-course | 滿漢全席 | 同時擺 6 樣食物小物（napolitan_spaghetti/thick_omelette_sandwich/hot_cake/cream_soda/pudding_parfait/iced_coffee/lemon_soda/papaya_milk/mango_shaved_ice/香蕉船類） |
+| green-thumb | 綠手指 | 同時擺 5 件植物（potted_plant/monstera_floor/green_onion_pot/inflatable_palm/kadomatsu/tanabata_bamboo） |
+| zoo-keeper | 動物園 | 同時擺出 shark_plush＋standee_shopkeeper＋吉伊卡哇三隻任一 |
+| couch-potato | 沙發馬鈴薯 | 同時擺 pudding_sofa＋米飯抱枕(rice_pillow？未做→改 tv_wooden_retro) |
+| regular-100 | 老主顧 | sessionsDone ≥100 |
+| double-perfect | 完食 | 布丁圖鑑＋扭蛋雙滿貫 |
+
+**Tier B（要加輕量計數器，次做）**：panda-clicks-50 查水表（點店長50次）／night-owl 凌晨的執念（0-4點完成任務，記完成時戳）／big-spender 一擲千金（單日花費500，日花費計數）／minimalist 極簡主義（連3天開店且 layout 空）／duo-streak-7 雙人全勤（兩人同天完成連續7天）／line-fan-100 熊貓的頭號粉絲（台詞輪播100句）／gacha-addict 扭蛋沼（單日轉5次）／cat-person 貓奴認證（點粉圓20次，依賴E15）／jetlag 時差經營（清晨6-9與深夜23-24各完成過）
+**Tier C（複雜，可延後）**：已讀不回（對方留言10則未回）／過馬路請牽手（斑馬線毯＋兩人同日出席）
+
+**徽章素材**（美術另批交付 `public/cafe/badges/<id>.png`，含既有 13 個重做）：40×40 像素圓章，統一黃銅環＋奶油底＋中心 icon；未解鎖顯示灰階（引擎 CSS filter 即可，不用出灰版）。素材到貨前新成就先用 emoji 頂著上線，不互卡。
