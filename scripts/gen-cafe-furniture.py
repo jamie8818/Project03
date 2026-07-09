@@ -25,6 +25,8 @@ GRID = {
     'seating2': (3, 2), 'counter2': (2, 2), 'wall2': (3, 2), 'rug2': (2, 1), 'surface2': (3, 2),
     # wishlist v2 首波 15 件，各自獨立 sheet
     'furniture3': (4, 2), 'surface3': (3, 2), 'wall3': (3, 1),
+    # wishlist v2 第二波 20 件，各自獨立 sheet（依 z 分組：furniture/wall/rug/surface）
+    'furniture4': (3, 3), 'wall4': (2, 2), 'rug4': (3, 1), 'surface4': (2, 2),
 }
 
 DATA = json.load(open(MANIFEST))
