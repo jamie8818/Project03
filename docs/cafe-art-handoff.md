@@ -59,7 +59,7 @@
 
 **本輪十線全完工（監工 Fable＋Sonnet workers 並行，全過 codex 審）：**
 - ✅ **§C 吧檯拆層**（見 §0.7）＋**引擎 E4 已接**＋**內側小家電 6 件已入庫**（`hostType:'counter-inside'`：thermos_rack/shaker_station/ice_machine/coffee_scale/espresso_machine/toaster，sHT 1.83–1.91，E4 渲染路徑首批住客）。
-- ✅ **家具擴充**：22 件（wishlist v1 補齊）＋ wishlist v2 首波 15 件＋小家電 6 件 → **catalog 現 73 件**。`docs/cafe-furniture-wishlist-v2.md` 還有 ~81 件候選待 JJ 圈第二波（25 件/波）。
+- ✅ **家具擴充**：22 件（wishlist v1 補齊）＋ v2 首波 15 件＋小家電 6 件＋**第二波 20 件** → **catalog 現 93 件**（seasonal 頁籤 4 件）。v2 還有 ~60 件候選可圈下一波。wave-1 六件已補向（§D-3，有向家具 23 件）；shock/no 領結轉紅、welcome 換 cheer 同源圖。**E5/E6 引擎接完＋preview 煙霧測試全過**（台詞↔pose 精確對應、六分頁籤、小家電入目錄）。
 - ✅ **§D/§D-2 四向**：18 件有向（wall/rug/surface/徑向對稱件判定免補有紀錄；cold_drip_tower 生成不穩主動放棄）。**側背視高度歸一**：引擎 aspect 渲染規則下 9 件修到 front/side 內容高比 1.00（`scripts/normalize-facing-height.py`，含 vstretch 路徑）。
 - ✅ **base-fg 空氣牆重剪**（門欄 x257–331/y341、牆基 y373，以 JJ 標的淺色方形定位）；✅ **cozy 姿勢切邊重出**（`scripts/fix-shopkeeper-pose.py` 可重用）。
 - ✅ **店長台詞資料管線**：`docs/shop-lines.json`（702 句＝遷移 202＋新增 500，每句帶 pose/states 標籤）→ `scripts/build-shop-lines.py` → `src/data/shop-lines.gen.ts`。**引擎待接 E5**（`art-to-engine-requests.md`）。
