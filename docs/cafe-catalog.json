@@ -75,7 +75,7 @@
     {"id": "glass_hanging_rack", "z": "furniture", "w": 2, "h": 1, "surface": false, "spriteHeightTiles": 1.19, "name": "高腳杯吊掛架", "price": 95, "lv": 3, "starter": false, "sheet": "furniture3", "desc": "3 只大剪影高腳杯倒掛頂架（非成排細線杯腳），經典吧檯視覺重點"},
     {"id": "pourover_stand", "z": "furniture", "w": 1, "h": 1, "surface": false, "spriteHeightTiles": 1.47, "name": "手沖濾杯架", "price": 75, "lv": 3, "starter": false, "sheet": "furniture3", "desc": "錐形濾杯＋玻璃壺，尖錐剪影明顯區隔虹吸的玻璃球形與銅壺的壺身輪廓"},
     {"id": "vintage_fridge", "z": "furniture", "w": 1, "h": 1, "surface": false, "spriteHeightTiles": 1.92, "name": "復古電冰箱", "price": 110, "lv": 5, "starter": false, "sheet": "furniture3", "desc": "圓角大型復古冰箱，吧檯後方大型家電"},
-    {"id": "kadomatsu", "z": "furniture", "w": 1, "h": 1, "surface": false, "spriteHeightTiles": 1.72, "name": "正月門松", "price": 60, "lv": 2, "starter": false, "sheet": "furniture3", "desc": "竹松正月門飾，店門口迎新年"},
+    {"id": "kadomatsu", "z": "furniture", "w": 1, "h": 1, "surface": false, "spriteHeightTiles": 1.97, "name": "正月門松", "price": 60, "lv": 2, "starter": false, "sheet": "furniture3", "desc": "竹松正月門飾，店門口迎新年"},
 
     {"id": "napolitan_spaghetti", "z": "surface", "w": 1, "h": 1, "surface": false, "spriteHeightTiles": 0.69, "name": "拿坡里義大利麵", "price": 29, "lv": 2, "starter": false, "sheet": "surface3", "desc": "番茄醬紅色義大利麵佐香腸青椒，經典喫茶餐點"},
     {"id": "thick_omelette_sandwich", "z": "surface", "w": 1, "h": 1, "surface": false, "spriteHeightTiles": 0.8, "name": "厚蛋三明治", "price": 27, "lv": 1, "starter": false, "sheet": "surface3", "desc": "昭和喫茶招牌たまごサンド，堆疊厚蛋"},

@@ -199,7 +199,7 @@ export const CAFE_ITEMS: CafeItem[] = [
   { id: 'glass_hanging_rack', z: 'furniture', w: 2, h: 1, surface: false, spriteHeightTiles: 1.19, name: '高腳杯吊掛架', sprite: '/cafe/catalog/glass_hanging_rack.png', price: 95, lv: 3, starter: false },
   { id: 'pourover_stand', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.47, name: '手沖濾杯架', sprite: '/cafe/catalog/pourover_stand.png', price: 75, lv: 3, starter: false },
   { id: 'vintage_fridge', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.92, name: '復古電冰箱', sprite: '/cafe/catalog/vintage_fridge.png', price: 110, lv: 5, starter: false },
-  { id: 'kadomatsu', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.72, name: '正月門松', sprite: '/cafe/catalog/kadomatsu.png', price: 60, lv: 2, starter: false },
+  { id: 'kadomatsu', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.97, name: '正月門松', sprite: '/cafe/catalog/kadomatsu.png', price: 60, lv: 2, starter: false },
   { id: 'napolitan_spaghetti', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.69, name: '拿坡里義大利麵', sprite: '/cafe/catalog/napolitan_spaghetti.png', price: 29, lv: 2, starter: false },
   { id: 'thick_omelette_sandwich', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.8, name: '厚蛋三明治', sprite: '/cafe/catalog/thick_omelette_sandwich.png', price: 27, lv: 1, starter: false },
   { id: 'hot_cake', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.88, name: '熱蛋糕鬆餅', sprite: '/cafe/catalog/hot_cake.png', price: 29, lv: 2, starter: false },
