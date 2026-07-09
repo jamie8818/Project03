@@ -374,6 +374,9 @@ export function poseForLine(line: string | ShopLine, meDone: boolean, attend: nu
   return pool[h % pool.length];
 }
 
+// E12：珍藏・私物（category:'personal'）不走購買、走轉蛋機——一轉的金幣價
+export const PERSONAL_GACHA_COST = 80;
+
 // ── 庫存查詢（買了進托盤、擺出消耗庫存）──
 /** 某家具目前擺在店裡的份數 */
 export function placedCount(layout: PlacedItem[], id: string): number {

@@ -24,6 +24,7 @@ import {
   nextFacing,
   nextItemLv,
   ownedKinds,
+  PERSONAL_GACHA_COST,
   pickShopLine,
   poseForLine,
   renderOrder,
@@ -630,6 +631,96 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
   );
 }
 
+// ── 珍藏・私物轉蛋機（E12）：80 金幣一轉、抽池＝personal 未擁有件（動態、不重複）、
+//    全收集掛完売御礼鎖旋鈕。素材 public/cafe/gacha/（源圖 2 倍、顯示減半）。──
+function GachaCorner({ me, shop, update, commitShop }: { me: UserState; shop: ShopState; update: (fn: (s: UserState) => UserState) => void; commitShop: (s: ShopState) => Promise<void> }) {
+  const personal = CAFE_ITEMS.filter((it) => it.category === 'personal');
+  const pool = personal.filter((it) => (shop.stock[it.id] ?? 0) === 0); // 新增 personal 件自動入池（動態 filter）
+  const soldOut = pool.length === 0;
+  const [phase, setPhase] = useState<'idle' | 'shake' | 'drop' | 'open'>('idle');
+  const [prize, setPrize] = useState<CafeItem | null>(null);
+  const [spin, setSpin] = useState(0); // 旋鈕累計角度（每轉 +180°）
+  const [msg, setMsg] = useState('');
+  const busy = phase === 'shake' || phase === 'drop' || phase === 'open';
+  const poor = me.coins < PERSONAL_GACHA_COST;
+  const locked = soldOut || poor || busy;
+
+  const pull = async () => {
+    if (locked) return;
+    const pick = pool[Math.floor(Math.random() * pool.length)]; // 均勻隨機；抽中即離池＝保底不重複
+    const next: ShopState = { ...shop, stock: { ...shop.stock, [pick.id]: (shop.stock[pick.id] ?? 0) + 1 } };
+    setMsg('');
+    setSpin((d) => d + 180);
+    setPhase('shake');
+    // 比照購買：先確定共有 KV 寫入成功才扣金幣（連線失敗＝金幣不扣、機台歸位）
+    try {
+      await commitShop(next);
+    } catch {
+      setPhase('idle');
+      setMsg('沒轉成：連線失敗，金幣沒扣，等等再試一次');
+      return;
+    }
+    update((s) => ({ ...s, coins: s.coins - PERSONAL_GACHA_COST }));
+    setPrize(pick);
+    sfx.correct(1);
+    window.setTimeout(() => setPhase('drop'), 450); // shake 0.4s 播完掉蛋
+  };
+
+  const openCapsule = () => {
+    if (phase !== 'drop') return;
+    sfx.win();
+    setPhase('open');
+  };
+
+  return (
+    <div className="gacha-corner">
+      <div
+        className={`gacha-machine ${phase === 'shake' ? 'shaking' : ''} ${locked && phase === 'idle' ? 'locked' : ''}`}
+        title={soldOut ? '完売御礼——全部收齊了！' : poor ? `金幣不足（${PERSONAL_GACHA_COST}）` : `轉一次 ${PERSONAL_GACHA_COST} 金幣`}
+        role="button"
+        aria-disabled={locked}
+        onClick={pull}
+      >
+        <img className="gm-body" src="/cafe/gacha/machine.png" alt="轉蛋機" draggable={false} />
+        <img className="gm-knob" src="/cafe/gacha/knob.png" alt="" draggable={false} style={{ transform: `rotate(${spin}deg)` }} />
+        {soldOut && <img className="gm-soldout" src="/cafe/gacha/kanban_soldout.png" alt="完売御礼" draggable={false} />}
+        {phase === 'drop' && (
+          <img className="gm-capsule" src="/cafe/gacha/capsule_closed.png" alt="膠囊（點我打開）" draggable={false} onClick={(e) => { e.stopPropagation(); openCapsule(); }} />
+        )}
+      </div>
+      {msg && <p className="hint">{msg}</p>}
+      {phase === 'open' && prize ? (
+        <div className="gacha-card">
+          <img className="gc-capsule" src="/cafe/gacha/capsule_open.png" alt="" draggable={false} />
+          <img className="gc-prize" src={prize.sprite} alt={prize.name} draggable={false} />
+          <b>{prize.name}</b>
+          {prize.flavor && <small className="ci-flavor">{prize.flavor}</small>}
+          <button className="primary" onClick={() => { setPhase('idle'); setPrize(null); }}>收下！已放進裝潢托盤 →</button>
+        </div>
+      ) : (
+        <p className="hint" style={{ margin: '6px 0' }}>
+          {soldOut
+            ? '完売御礼——珍藏全數收齊！'
+            : phase === 'drop'
+              ? '出貨了！點膠囊打開 →'
+              : `點機台轉一次（🪙 ${PERSONAL_GACHA_COST}）：${personal.length - pool.length}/${personal.length} 已收藏，轉到的直接進裝潢托盤`}
+        </p>
+      )}
+      <div className="gacha-grid">
+        {personal.map((it) => {
+          const owned = (shop.stock[it.id] ?? 0) > 0;
+          return (
+            <div key={it.id} className={`gacha-cell ${owned ? 'owned' : ''}`} title={owned ? `${it.name}${it.flavor ? `：${it.flavor}` : ''}` : '？？？'}>
+              <img src={it.sprite} alt="" draggable={false} />
+              <small>{owned ? it.name : '？？？'}</small>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // ── 檢視面板：成長＋收藏 ──
 function ViewPanel({ me, peer, today, lv, shop }: { me: UserState; peer: UserState | null; today: string; lv: number; shop: ShopState }) {
   const xp = me.xp + (peer?.xp ?? 0);
@@ -701,7 +792,10 @@ function ShopPanel({ me, lv, shop, update, commitShop }: { me: UserState; lv: nu
         ))}
       </div>
       {msg && <p className="hint">{msg}</p>}
-      {items.length === 0 ? (
+      {CATEGORY_LABELS[tab][0] === 'personal' ? (
+        // E12：珍藏・私物不賣、用轉的（ガチャガチャ）
+        <GachaCorner me={me} shop={shop} update={update} commitShop={commitShop} />
+      ) : items.length === 0 ? (
         <p className="hint">這個分類目前沒有貨（之後會補上）。</p>
       ) : (
         <div className="catalog">
