@@ -8,8 +8,8 @@
 ## 1. 目前狀態（交接當下）
 
 - branch `nihongo-teaching-injection`、`tsc -b` 零錯、`npm test` **97/97**、`npm run build` 過、preview 對圖過。
-- 本輪引擎 commits：`7725ab3` board.ts 三端合一（#6/#10/#7）／`3266f9c` #2/#3／`12b3598` #4/#5/#8/#9／`5e33acf` E4＋§A／finding #1 方案B（本檔 commit 之後）。
-- 深度 review 10 條 findings：**全修完**（#1 方案B 見 §3）。⚠️ worker 有新端點，**要 `npx wrangler deploy` 才生效**（JJ 部署）。
+- ⚠️ **2026-07-09 iCloud 事故後 git 歷史重生**（Desktop 開「桌面與文件」同步、.git 物件被逐出損毀）：舊 commit hash 全部失效，本輪與過往全部成果都收在重生 root（見 `docs/git-history-recovered.md` 的訊息清單）。**強烈建議：專案搬離 Desktop（脫離 iCloud 管轄）＋上 GitHub private remote。**
+- 深度 review 10 條 findings：**全修完**（#1 方案B 見 §3）。⚠️ worker 有新端點（`/api/shop/board`），**要 `npx wrangler deploy` 才生效**（JJ 部署）。
 
 ## 2. 本輪引擎做了什麼（已驗證、已 commit）
 
