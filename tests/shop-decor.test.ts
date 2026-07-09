@@ -4,6 +4,7 @@ import {
   ITEM_BY_ID,
   availableFacings,
   canPlace,
+  canToggleInside,
   findSpot,
   footprintDims,
   frontRowOf,
@@ -15,6 +16,7 @@ import {
   nextFacing,
   placedCount,
   renderOrder,
+  rendersInside,
   rotateHost,
   spriteFor,
   stockAvailable,
@@ -93,21 +95,35 @@ test('canPlace：檯面小物不互相疊、吧檯檯面可放（④ 檯面上�
   assert.ok(!canPlace([], GUEST, 0, 2)); // row2 舊「翹角」已除名（E4 拆層確認是抽屜排非平面）
 });
 
-test('canPlace：內側小家電（counter-inside）只嵌吧檯、避開店長 col4/5（E4）', () => {
-  // catalog 目前沒有內側件（美術後補 hostType 旗標），注入假 item 驗管線規則
+test('canPlace／變體：counter-inside 小家電加法放置（E7）——吧檯格/桌面都可，嵌入是渲染變體', () => {
+  // catalog 沒有的假 item 注入驗管線規則（同 E4 手法）
   const FAKE = 'test_coffee_machine';
   ITEM_BY_ID[FAKE] = {
     id: FAKE, z: 'surface', w: 1, h: 1, name: '測試咖啡機', sprite: '/cafe/x.png',
     price: 0, lv: 1, starter: false, surface: false, spriteHeightTiles: 2, hostType: 'counter-inside',
   } as unknown as CafeItem;
   try {
+    // 放置＝一般 surface 規則（加法）：吧檯格全開放（含店長區 col4/5）、桌面也可
     assert.ok(canPlace([], FAKE, 3, 3)); // 吧檯格 → 可
     assert.ok(canPlace([], FAKE, 0, 3)); // 吧檯最左格 → 可
-    assert.ok(!canPlace([], FAKE, 4, 3)); // 店長視覺區 col4 → 擋
-    assert.ok(!canPlace([], FAKE, 5, 3)); // 店長視覺區 col5 → 擋
-    assert.ok(!canPlace([{ id: TABLE, gx: 10, gy: 8 }], FAKE, 10, 8)); // 桌上 → 不可（只嵌吧檯不上桌）
-    assert.ok(!canPlace([{ id: FAKE, gx: 3, gy: 3 }], GUEST, 3, 3)); // 同格已有內側件 → 檯面小物擋
+    assert.ok(canPlace([], FAKE, 4, 3)); // 店長視覺區 col4 → 可放（只是不能嵌，見下）
+    assert.ok(canPlace([{ id: TABLE, gx: 10, gy: 8 }], FAKE, 10, 8)); // 桌上 → 可（E7 放寬）
+    assert.ok(!canPlace([], FAKE, 10, 8)); // 空地板 → 仍不可（沒檯面）
+    assert.ok(!canPlace([{ id: FAKE, gx: 3, gy: 3 }], GUEST, 3, 3)); // 同格已有小家電 → 檯面小物擋
     assert.ok(!canPlace([{ id: GUEST, gx: 3, gy: 3 }], FAKE, 3, 3)); // 反向同理
+
+    // 渲染變體：吧檯格預設嵌內側、top=true 切檯面；col4/5／桌面一律檯面路徑
+    assert.ok(rendersInside({ id: FAKE, gx: 3, gy: 3 })); // 吧檯格＋無旗標 → 嵌
+    assert.ok(!rendersInside({ id: FAKE, gx: 3, gy: 3, top: true })); // 切檯面 → 不嵌
+    assert.ok(!rendersInside({ id: FAKE, gx: 4, gy: 3 })); // 店長區 col4 → 強制檯面
+    assert.ok(!rendersInside({ id: FAKE, gx: 10, gy: 8 })); // 桌上 → 一般 surface
+    assert.ok(!rendersInside({ id: GUEST, gx: 3, gy: 3 })); // 非 counter-inside 件 → 永不嵌
+
+    // 切換鈕條件：吧檯格非 col4/5 才有兩種變體可切
+    assert.ok(canToggleInside({ id: FAKE, gx: 3, gy: 3 }));
+    assert.ok(!canToggleInside({ id: FAKE, gx: 4, gy: 3 })); // col4 只能檯面 → 不給切
+    assert.ok(!canToggleInside({ id: FAKE, gx: 10, gy: 8 })); // 桌上 → 不給切
+    assert.ok(!canToggleInside({ id: GUEST, gx: 3, gy: 3 })); // 一般小物 → 不給切
   } finally {
     delete ITEM_BY_ID[FAKE];
   }

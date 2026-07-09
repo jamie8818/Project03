@@ -125,9 +125,22 @@ export const isSurfaceHost = (id: string): boolean => ITEM_BY_ID[id]?.surface ==
 export const isSurfaceGuest = (id: string): boolean => ITEM_BY_ID[id]?.z === 'surface';
 
 // E4：內側小家電（嵌吧檯裡、下半身被 counter_front 遮）＝surface 件掛 hostType:'counter-inside'。
+// E7 放寬成「加法」：放置走一般 surface 規則（吧檯格＋任何 surface host 桌面都可），
+// 「嵌內側」降級成吧檯格上的渲染變體（預設嵌入、PlacedItem.top=true 切檯面全露）。
 export const isCounterInside = (it: CafeItem | undefined): boolean => it?.hostType === 'counter-inside';
-// 內側件建議避開店長視覺區（店長固定 cx=150≈col4.7，佔 col4/5）；見 art-to-engine-requests E4
+// 嵌內側變體避開店長視覺區（店長固定 cx=150≈col4.7，佔 col4/5）；放檯面（top）不受限
 const COUNTER_INSIDE_EXCLUDED_COLS = new Set([4, 5]);
+
+/** 該已擺件是否以「嵌吧檯內側」變體渲染（畫在店長後、counter_front 前，下半被面板遮）。
+ *  條件＝counter-inside 件＋落在吧檯格＋非店長區 col4/5＋沒切成檯面（top）。其餘一律走一般 surface 路徑。 */
+export function rendersInside(p: PlacedItem): boolean {
+  return isCounterInside(ITEM_BY_ID[p.id]) && !p.top && isCounterTop(p.gx, p.gy) && !COUNTER_INSIDE_EXCLUDED_COLS.has(p.gx);
+}
+
+/** 該已擺件可否切換嵌入⇄檯面（兩種變體都合法＝吧檯格上、非 col4/5 的 counter-inside 件） */
+export function canToggleInside(p: PlacedItem): boolean {
+  return isCounterInside(ITEM_BY_ID[p.id]) && isCounterTop(p.gx, p.gy) && !COUNTER_INSIDE_EXCLUDED_COLS.has(p.gx);
+}
 
 // 吧檯檯面格（虛擬 host）：純 row3 cols0–7＝吧檯唯一攤平可見的檯面（E4 拆層確認 row2 是矮櫃抽屜排
 // ＋內角柱、非平面，舊的兩格「翹角」特例已刪）。內側小家電（counter-inside）也用同一排格。
@@ -250,14 +263,11 @@ export function canPlace(layout: PlacedItem[], id: string, gx: number, gy: numbe
       if (isSurfaceGuest(p.id)) footprint(p.id, p.gx, p.gy, p.facing).forEach(([x, y]) => guestCells.add(`${x},${y}`));
       if (isSurfaceHost(p.id)) footprint(p.id, p.gx, p.gy, p.facing).forEach(([x, y]) => hostCells.add(`${x},${y}`));
     });
-    const inside = isCounterInside(it);
     for (const [cx, cy] of cells) {
       if (cy > PLACE.maxRow) return false;
       if (guestCells.has(`${cx},${cy}`)) return false;            // 別疊小物
-      if (inside) {
-        // 內側小家電只嵌吧檯（不上桌），且避開店長視覺區 col4/5（E4）
-        if (!isCounterTop(cx, cy) || COUNTER_INSIDE_EXCLUDED_COLS.has(cx)) return false;
-      } else if (!hostCells.has(`${cx},${cy}`) && !isCounterTop(cx, cy)) return false; // 必須有檯面
+      if (!hostCells.has(`${cx},${cy}`) && !isCounterTop(cx, cy)) return false; // 必須有檯面
+      // counter-inside 件同樣走這條一般規則（E7 加法）：吧檯格/桌面都可放，嵌入與否是渲染變體（rendersInside）
     }
     return true;
   }

@@ -13,11 +13,11 @@ import {
   Z_TOP_ROW,
   availableFacings,
   canPlace,
+  canToggleInside,
   footprintDims,
   frontRowOf,
   guestIndicesOf,
   hostIndexOf,
-  isCounterInside,
   isCounterTop,
   itemAtCell,
   itemById,
@@ -27,6 +27,7 @@ import {
   pickShopLine,
   poseForLine,
   renderOrder,
+  rendersInside,
   rotateHost,
   shopLevel,
   shopLevelXp,
@@ -205,8 +206,8 @@ function Stage({ shop, attend, meDone, talk, variant = 'full', editing, placing,
       // 吧檯檯面用固定檯面 y；孤兒（舊存檔落地板）退回地板錨定不消失。
       const host = hostIndexOf(displayLayout, i);
       let bottom: number;
-      if (isCounterInside(it)) {
-        // 內側小家電：底錨檯後工作區（跟店長同進深），下半身被 counter_front 遮＝嵌在吧檯裡（E4）
+      if (rendersInside(p)) {
+        // 嵌內側變體：底錨檯後工作區（跟店長同進深），下半身被 counter_front 遮＝嵌在吧檯裡（E4/E7）
         bottom = STAGE_H - COUNTER_INSIDE_Y;
       } else if (host >= 0) {
         const hp = displayLayout[host], hit = itemById(hp.id)!;
@@ -256,7 +257,7 @@ function Stage({ shop, attend, meDone, talk, variant = 'full', editing, placing,
     const it = itemById(displayLayout[i].id);
     if (it?.z === 'rug') rugOrder.push(i);
     else if (it?.z === 'wall') wallOrder.push(i);
-    else if (isCounterInside(it)) insideOrder.push(i);
+    else if (rendersInside(displayLayout[i])) insideOrder.push(i); // 依實際落點/變體分流（E7），不是依 hostType 一刀切
     else aboveCounterOrder.push(i);
   }
 
@@ -699,6 +700,18 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop }: { me: UserState; 
   const selP = selected != null ? shop.layout[selected] : undefined;
   const selItem = selP ? itemById(selP.id) : undefined;
   const selCanRotate = selItem ? availableFacings(selItem).length > 1 : false;
+  // E7：吧檯格上的 counter-inside 小家電可切「嵌內側⇄放檯面」（省略 top＝嵌入）
+  const selCanToggleInside = selP ? canToggleInside(selP) : false;
+  const toggleInside = () => {
+    if (selected == null || !selP) return;
+    const layout = shop.layout.map((p, i) => {
+      if (i !== selected) return p;
+      if (p.top) { const { top: _, ...rest } = p; return rest; } // 回嵌入＝拿掉旗標，存檔乾淨
+      return { ...p, top: true };
+    });
+    saveShop({ ...shop, layout });
+    sfx.correct(1);
+  };
   const rotatePlaced = () => {
     if (selected == null || !selP || !selItem) return;
     const nf = nextFacing(selItem, selP.facing ?? 'front');
@@ -765,6 +778,7 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop }: { me: UserState; 
         <p className="hint">
           選取「{selItem?.name}」·直接拖它搬位置
           {selCanRotate && <> · <button className="linkish" style={{ display: 'inline' }} onClick={rotatePlaced}>🔄 轉向（{FACING_LABEL[selP?.facing ?? 'front']}）</button></>}
+          {selCanToggleInside && <> · <button className="linkish" style={{ display: 'inline' }} onClick={toggleInside}>{selP?.top ? '⬇ 嵌進吧檯' : '⬆ 放上檯面'}</button></>}
           {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={removeSelected}>🗑 收回托盤</button>
           {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={() => setSelected(null)}>取消選取</button>
         </p>

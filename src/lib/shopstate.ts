@@ -18,6 +18,7 @@ export interface PlacedItem {
   gx: number; // 格子座標（footprint 左上角）
   gy: number;
   facing?: Facing; // 朝向（省略＝front）；left/right 會把 footprint 的 w/h 對調
+  top?: boolean; // E7：counter-inside 小家電在吧檯格的變體——省略＝嵌內側（下半被面板遮）、true＝放檯面全露；非吧檯格無意義
 }
 
 export interface ShopState {

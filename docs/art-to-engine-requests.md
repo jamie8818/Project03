@@ -192,3 +192,10 @@ base → 地毯(L0) → 店長 → counter_front(.cafe-counter-fg) → 地板家
 **引擎改法建議**：放置合法性判斷把 `hostType==='counter-inside'` 從「排他限定」改成「額外允許」——即 canPlace 對這 6 件走一般 surface 規則 ∪ counter-inside 格；渲染分流依「實際落點」決定（落在內側格→E4 路徑、其他→一般 surface 路徑），不是依 hostType 一刀切。
 
 **美術側**：素材/manifest 不用動（sprite 底錨與現有 surface 小物一致）。sHT 1.83–1.91 擺一般桌上會偏大件，屬合理（同 vase 2.36 前例）；若引擎接完 JJ 嫌大再回報、美術重生縮版。
+
+**✅ 引擎已接手完成（2026-07-09，本輪引擎 session；「吧檯格嵌入 vs 檯面」JJ 拍板＝可切換）**：
+1. `canPlace`（shop.ts）：counter-inside 件的排他特判整段移除，改走一般 surface 規則＝吧檯格（含店長區 col4/5）＋任何 `surface:true` host 桌面都可放，空地板仍不可。
+2. 嵌入降級成**渲染變體**：`PlacedItem` 新增 `top?: boolean`（省略＝嵌內側、true＝檯面全露，比照 facing 只在非預設時存檔）；shop.ts 新增 `rendersInside(p)`（吧檯格＋非 col4/5＋沒切 top 才嵌）與 `canToggleInside(p)`（兩變體都合法才給切）。col4/5（店長視覺區）與桌面上一律強制檯面/一般 surface 路徑。
+3. `Shop.tsx` 渲染分流改依 `rendersInside`（實際落點/變體）而非 hostType 一刀切：嵌入→E4 內側層（`COUNTER_INSIDE_Y=145`、counter_front 之前）；檯面→一般 surface 層（`COUNTER_SURFACE_Y=124` 或桌面錨、counter_front 之後）。
+4. 裝潢模式選取吧檯格上的小家電時，工具列多一顆「⬆ 放上檯面／⬇ 嵌進吧檯」切換鈕（與 🔄 轉向並排）；預設落點＝嵌內側。
+5. `npm test` 101/101（E4 那條 canPlace 測試改寫成 E7 加法語義＋變體/切換鈕條件全覆蓋）、tsc 過；preview 實測：義式機吧檯格預設嵌入（bottom 271px）→ 切檯面（292px、畫在 counter_front 之後全露）→ 切回嵌入，桌面放置合法。sHT 尺度 JJ 還沒看桌上實擺，嫌大再回報重生縮版。
