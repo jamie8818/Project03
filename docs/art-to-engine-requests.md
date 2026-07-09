@@ -1,0 +1,125 @@
+# 美術 → 引擎 需求清單（日々喫茶 Shop）
+
+> 美術 session 開的反向介面需求（對應 `engine-to-art-requests.md` 的反方向）。
+> 這裡的項目要改**引擎守備範圍**（`src/components/Shop.tsx`、`src/styles.css` 等），美術不碰、由引擎 session 處理。
+> 慣例同 §分工：兩 session 不並行改同一檔。
+
+## E1. 伝言板送出鈕位置微調（`src/styles.css` `.dengon-send`）— 小、可選、非 blocker
+
+**背景**：伝言板打字區「破圖」已由美術修好——`public/cafe/board/input_field.png`（乾淨整條打字列，鈕塗掉）＋`button_send.png`（留言鈕乾淨去背 overlay）重裁自完稿 `panel.png`。這版已可 drop-in，引擎不改也能用。
+
+**問題（Codex 量測確認）**：`.dengon-send` 目前 `right: 3%; width: 27%`（styles.css 約 3223 行）→ 送出鈕**實際繪製中心落在 ~83.5%**，但完稿 `panel.png` 原稿鈕中心在 **~79–80%**。鈕偏右、右緣太靠內框，hover（scale 1.05）／送出 pulse（scale 1.14）放大時偏右感更明顯。
+
+**建議修法**：`.dengon-send` 的 `right: 3%` → **`right: 7%`**（`width` 維持 `27%`）。這會把鈕中心拉回 ~79–80%、貼回原稿，也讓 hover/pulse 不會頂到右內框。
+
+**驗收**：開伝言板，送出鈕視覺置中於右側奶油區、不貼右內框；hover/pulse 時不外溢。
+
+**備註**：純位置微調，不影響資料/互動；美術素材不需再動。若之後 `input_field.png` 右側「補色平塗區」想更接近原稿紙紋（Codex 提的非 blocker 小點），再回報美術補即可。
+
+**✅ 引擎已處理＋JJ 定案（2026-07-09）**：`.dengon-send` 最終 **`right: 8%`、`top: 18%`**（起於 E1 建議 `right:7%`＝中心 79.5%，JJ preview 上再微調左右、並把鈕往下移對齊輸入線）。鈕中心約 78.5%（仍貼原稿 ~79–80%）、右緣距奶油右界有留白。順帶修：送出 pulse（scale 1.14）峰值原會凸出右內框 ~4px，已把 `.dengon-send.sent` 的 `transform-origin` 改成 `right center`（往左脹、右緣釘住），不外溢。已重載對新裁的 `input_field.png`/`button_send.png`，輸入列破圖清乾淨。
+
+## E2. 店長站進吧檯裡面（`src/components/Shop.tsx` `PANDA_CX`/`PANDA_TOP`）— JJ 指定，需求④
+
+**背景**：JJ 要「店長站在吧台裡面」（＝四需求裡最後沒完成的④）。店長目前 `PANDA_CX=136 / PANDA_TOP=150`＝站在吧檯**前面**的開放地板。要它站**裡面**（吧檯後方工作區、上半身露在檯面上、下半身被吧檯正面板遮住）。
+
+**⚠️ 踩過的坑（2026-07-09，別重蹈）**：我一度把吧檯正面板併進 `base-fg.png`（`.cafe-fg` 本來就畫在店長之上，想說這樣就遮到）。**但店長還在原位 top=150 時，頭正好落在正面板佔的 y118–202 區間 → 頭被切掉**（JJ 回報「店長頭被切到」）。教訓：**「移店長到檯後」＋「正面板遮擋」必須同一步落地**，只做遮擋不移店長＝切頭。已撤回合併，`base-fg.png` **還原成純門/牆**（吧檯區 0 不透明）。
+
+**正解（引擎一次做完，原子操作、無中間破圖）**：
+1. **移店長到檯後**：`PANDA_CX: 136 → 150`、`PANDA_TOP: 150 → 50`（preview 實測：feet≈146 落在檯面前緣 y118，下半 ~28px 被正面板遮、頭在 y50 露在檯面上＝趴吧檯裡面）。preview 可微調。
+2. **正面板當獨立層**：把 `public/cafe/counter_front.png`（現成、x0-272 / y118-202：檯面前緣＋正面板＋銅角＋3 綠椅，與 base 像素完全對齊）畫成一張 **恆全不透明**的圖層，**畫在店長之後**（draw order：base → 地毯/家具 → 店長 → **counter_front.png** →（之後）檯面小物）。這樣正面板不會跟 base-fg 一起在裝潢模式變淡，店長下半身在 view/decorate 都乾淨被遮。
+
+**為何用獨立層、不併進 base-fg**：①base-fg 裝潢時淡到 0.3、正面板不該淡 ②併進去會遇到上面那個「移店長前先切頭」的時序坑——獨立層由引擎跟移店長**同一個 commit** 落地就沒這問題。
+
+**已驗證（preview 實測，兩種都試過）**：移店長 top=50 ＋ 疊 counter_front → 店面模式店長乾淨站吧檯裡面、下半身被正面板遮（截圖給 JJ 看過、成立）。
+
+**素材狀態**：`counter_front.png` 現成可用、不用我再動。若你要我改它（例如去掉 3 綠椅只留正面板、或改尺寸）再說。
+
+**範圍**：這條只做「店長站裡面」。§C 完整版（不含吧檯的 base ＋ 檯面裡放小家電）是另一件、之後再說。
+
+**✅ 引擎已處理（2026-07-09，同一 commit 原子落地）**：`Shop.tsx` `PANDA_CX 136→150`、`PANDA_TOP 150→50`；新增 `.cafe-counter-fg` 圖層＝`counter_front.png` 整張 576×416 疊、畫在店長之後、**恆全不透明**（`styles.css`，裝潢模式不淡化）、pointer 穿透。preview 量測：店長頭頂 y50（遠在正面板 y118 之上＝沒切頭）、腳 y146（下 ~28px 沒入正面板）、中心 x150.5。view／decorate 兩模式都驗過：店長乾淨站吧檯裡面、下半身被遮、正面板在裝潢模式仍不透明。tsc／build／console 皆過。（順帶：`base-fg.png` 已載入成功＝美術已交付，門/牆景深也生效。）
+
+## E3. 吧檯正面板層的繪製順序：只該擋店長、不該擋吧檯外的家具（`src/components/Shop.tsx` renderOrder / `.cafe-counter-fg`）— JJ 指定
+
+**背景（JJ 回報）**：E2 加的 `.cafe-counter-fg`（`counter_front.png`）目前畫在**所有東西之上**，連**吧檯外的家具**也被它擋到。JJ 的規則：**「吧檯外面的家具一律要畫在吧檯之上（擋住吧檯）；只有吧檯裡面的東西（＝店長）才被吧檯擋。」**
+
+**現況**：draw order ≈ `base → 地毯/地板家具 → 店長 → counter_front → base-fg`。→ counter_front 在地板家具之後 → 靠吧檯、往上 overhang 的家具會被正面板蓋掉頂端（錯，該在吧檯前）。
+
+**正解（改 draw order）**：把 `counter_front` 這層移到「**店長之後、地板家具(L1)之前**」：
+```
+base → 地毯(L0) → 店長 → counter_front(.cafe-counter-fg) → 地板家具(L1) → 檯面小物(L2) → 壁飾(L3) → base-fg
+```
+結果：① 店長（吧檯裡面）畫在 counter_front 之前 → 被吧檯擋 ✅ ② 地板家具/檯面小物畫在 counter_front 之後 → **畫在吧檯之上**＝吧檯外家具擋住吧檯 ✅。
+
+**注意/確認點**：
+- 這也把「店長 vs 地板家具」的順序改成**家具畫在店長之上**。合理性：店長固定在吧檯後方（最後排），所有地板家具都在它前面 → 家具蓋過店長是正確景深。若你 renderOrder 有更嚴謹的前緣 y-sort，讓 counter_front 跟著「吧檯的前緣列」一起排也行，只要滿足上面兩條規則即可。
+- **地毯(L0)** 留在 counter_front 之前（地毯在地上、不該蓋吧檯）；只有 L1 以上要畫在吧檯之上。
+- 這是純繪製順序調整，素材不用動（`counter_front.png` 不變）。
+
+**驗收**：靠吧檯下方放一件高家具（sprite 往上 overhang 到 y118–202）→ 它的頂端畫在吧檯**之上**、不被正面板蓋；店長仍被吧檯擋（站裡面）。
+
+**範圍備註**：這是 counter_front「單層 occluder」框架下的順序修正，能解 JJ 這條。若之後要更嚴謹（例如某家具一半在吧檯前一半在後），才需要 §C 完整版把吧檯做成有 footprint 的深度排序物件。
+
+**✅ 引擎已處理（2026-07-09）**：`Shop.tsx` 把逐件渲染抽成 `renderFurn(i)`，並依 `renderOrder` 拆兩批——`rugOrder`（z=rug，L0）畫在店長＋`counter_front` **之前**，`aboveCounterOrder`（L1 家具／L2 檯面小物／L3 壁飾）畫在 `counter_front` **之後**。新 draw order：`base → 陰影 → 地毯(L0) → 店長 → counter_front → 地板家具/檯面小物/壁飾 → base-fg`。preview 驗證（吧檯正下方放 2 件高 `bottle_shelf`）：家具頂端畫在吧檯**之上**、不被正面板蓋；店長仍站吧檯裡面被擋；DOM 層序確認 `panda(3) → counter-fg(4) → z-furniture(5,6)`。tsc／build／`npm test` 96/96／console 皆過。
+
+## E4. §C 完整版：吧檯拆層（不含吧檯的 base ＋ 吧檯本體/正面板 sprite ＋ 檯面格座標）— 「檯面裡放小家電」的美術前置作業已交付
+
+**背景**：`engine-to-art-requests.md §C` 的三項交付（①不含吧檯的 base ②吧檯本體+正面板可分層 sprite ③檯面格/內側開放格座標）。「店長站吧檯裡面」已用 `counter_front.png` occluder 做完（E2/E3），**這條只補「檯面裡放小家電」需要的剩餘拆層**。
+
+**交付檔案**（都是從 `base.png` 原像素裁切，未重繪；`scripts/verify-counter-split.py` 驗證像素級 diff==0）：
+- `public/cafe/base_nocounter.png`（576×416，對齊 base）＝base 拿掉整個吧檯（吧檯本體+正面板+3張凳）、補回牆面(綠護牆板延續)+木地板。**上排展示層架（罐子，y32-64）刻意保留在此檔、不拆**——它是純貼牆裝飾，不需要跟前景家具互動，拆了反而增加複雜度沒有實益。
+- `public/cafe/counter_body.png`（576×416，透明畫布，僅 `x:[0,272) y:[64,118)` 不透明）＝吧檯本體上緣＋原本的矮櫃抽屜排＋L 型內角柱，都收進這張。定位：**背景層**，緊接在 base_nocounter 之後、店長之前畫（跟 base 同時機恆亮，不需要跟其他家具做深度排序——理由見下）。
+- `public/cafe/counter_front.png`（既有檔，**完全沒動**，`x:[0,272) y:[118,202)`）＝正面板＋銅角＋3 綠凳，沿用 E2/E3 已驗證的 `.cafe-counter-fg` 恆亮遮擋層，不必重做。
+
+**為什麼 counter_body 不需要跟家具動態排序**：目前 draw order（E3 已定案）＝`base → 地毯 → 店長 → counter_front → 地板家具/檯面小物/壁飾`。counter_front 固定在「店長之後、其餘家具之前」，所以**吧檯外的所有地板家具永遠畫在吧檯之上**（不管前緣列多少）——這代表吧檯（本體+正面板）其實是跟 base 等級的「恆定背景」，不是要跟其他家具比前後的普通 furniture。因此 `counter_body.png` 可以直接當成緊跟在 `base_nocounter` 之後的第二張背景圖疊上去（`<img>` 疊在 base 上，店長之前），**不需要進 renderOrder／不需要 footprint**。
+
+**座標定義（CELL=32，格系同 `CAFE.cols=18 rows=13`，STARTER_LAYOUT 同一套）**：
+
+- **檯面格（頂面小物，現有機制沿用）**：`row=3`（y96–128）× `col=0..7`（x0–256；col8 只覆蓋到 x272 是吧檯視覺邊緣，格子算不滿一格、不建議拿來放置）。共 **8 格**。這是吧檯唯一一條實體「攤平可見」的檯面（現有的收銀機擺飾就烤在這排），取代舊的 `COUNTER_TOP`（原本 row2 兩端「翹角」+ row3，經這輪拆層確認 row2 其實是矮櫃抽屜排+內角柱，不是平面、不能放東西——**建議直接刪掉 row2 那兩格特例**）。`COUNTER_SURFACE_Y=124` 現有值落在 row3 底部，不用改。
+- **內側開放格（新，供「檯面裡放小家電」用）**：**跟檯面格同一排 row3 cols0–7**，但要當一個**新的 z 類別**（例如 `'counter-inside'` 或沿用 `surface` 再加 flag），因為視覺行為不同：小家電（例如咖啡機）要跟店長一樣**畫在 counter_front 之前**（`店長 → [這裡插新的 inside 小家電] → counter_front`），讓下半身被正面板遮住、才有「嵌在吧檯裡」的效果；現有 `檯面格` 小物則維持畫在 counter_front **之後**（完全外露，像現有收銀機那樣）。
+  - 建議底部錨定：比照店長 `PANDA_TOP=50` 的做法，內側小家電 bottom 抓 **y≈145**（＝店長腳落點附近、落在 counter_front 的 y118–202 範圍內，才會被正面板蓋到下半）；sprite 往上 overhang 表現高度，不受 CELL 限制。
+  - 建議欄位排除：店長固定站 `cx=150`（約 col4.7），為了不跟店长模型重疊，內側家電落點建議避開 `col4`（可用 `col0–3, col6–7` 共 6 格；`col4/col5` 讓給店長視覺區）。這條排除是建議、非硬性，實際要不要限制由引擎決定。
+
+**⚠️ 這條需要引擎新做的事（美術這邊到此為止）**：
+1. `base.png` → `base_nocounter.png` + `counter_body.png`（緊接 base 之後畫，恆亮，同 base 不需 onError 特別處理，因為兩者理應同時切換）。
+2. 新增一個「內側小家電」的渲染路徑：跟店長一樣畫在 `counter_front` **之前**（現有 `aboveCounterOrder` 的東西都畫在 `counter_front` 之後，不適用）。這是本條最大的實作量——需要新 z 類別或 `Shop.tsx` 加一個特判過濾，把「內側小家電」從 `aboveCounterOrder` 移到跟店長同一批。
+3. `COUNTER_TOP` 常數建議簡化成純 row3 cols0-7（見上），`counterBlocked` 維持現況（rows2-4 cols0-7，仍然涵蓋新 base_nocounter 的吧檯區域，不用改）。
+4. `cafe-catalog.json` 若要加「內側小家電」新家具，需要標一個新旗標（例如 `hostType: 'counter-inside'`）讓引擎分流；美術目前**沒有**新增任何小家電項目到 catalog（這條先只交付拆層本身，家電本身是後續工作，等引擎接完管線再排）。
+
+**驗收**：`python3 scripts/verify-counter-split.py` → PASS（diff==0）；codex review 兩輪過（第一版有孤立面板瑕疵，第二版收進 counter_body 修掉，codex 判定「可以定案」）。
+
+**未解問題／留給下一輪**：
+- 內側小家電目前 catalog 裡沒有任何一件（沒有「咖啡機」之類的家具項目）；等引擎把渲染路徑接好，美術再補新家具＋標記 `hostType`。
+- `col8`（x256-272，吧檯視覺右邊緣不滿一格）目前建議不開放放置；如果引擎覺得需要，可以再議。
+
+**✅ 引擎已接手完成（2026-07-09，本輪引擎 session）**：
+1. `cafe-base` 換 `base_nocounter.png`＋緊接 `.cafe-counter-body`（`counter_body.png`，恆亮背景層、店長之前、不進 renderOrder、無 footprint）。preview 對圖與拆層前像素一致。
+2. 內側小家電渲染路徑已通：`hostType:'counter-inside'` 的 surface 件從 `aboveCounterOrder` 拆出 `insideOrder`，畫在店長之後、`counter_front` 之前；底錨 `COUNTER_INSIDE_Y=145`（Shop.tsx 常數）。放置規則（shop.ts `canPlace`）＝只嵌吧檯格（row3 cols0–7）、**硬性排除 col4/5**（店長視覺區）、不可上桌；已有單元測試（注入假 item）。
+3. `COUNTER_TOP` 已簡化成純 row3 cols0–7（row2 兩格翹角特例已刪，連帶 Shop.tsx 的抬格計算移除）；`counterBlocked`、`COUNTER_SURFACE_Y=124` 不變。
+4. **輪到美術**：補內側小家電家具＋在 catalog 標 `hostType: 'counter-inside'` 即可直接生效（引擎端用結構型別讀這個欄位，manifest/`cafe.gen.ts` 的 `CafeItem` 加欄位後不用改引擎）。`col8` 維持不開放。
+
+## E5. 店長台詞資料管線＋新增 500 句（`docs/shop-lines.json` → `src/data/shop-lines.gen.ts`）— 內容 session 已交付，等引擎接線
+
+**背景**：`src/lib/shop.ts` 目前 `SHOP_LINES`（closed/solo/full/idle 四池，硬編陣列）＋`poseForLine`（`POSE_KEYWORDS` 關鍵字表猜姿勢、猜不到 hash 輪播）是手寫、不好擴充。這條把台詞資料改走「JSON 來源 → 腳本產生 TS」的管線，並把台詞從 102 句擴到 702 句（含遷移的原句），順便讓每句台詞**自帶姿勢**（不用再靠關鍵字猜）。
+
+**交付檔案**（美術／內容 session 範圍，已完成，未動 `src/lib/`、`src/components/`）：
+- `docs/shop-lines.json`（手維護 source of truth，共 702 筆）：每筆 `{ id, text, pose, states, tags }`。
+  - `text`：台詞原文。原 `SHOP_LINES` 的 102 句（closed 35／solo 30／full 35／idle 102，注意 idle 池比對時三態通用）**一字不動**遷入，`id` 前綴 `orig-`、`tags:["migrated"]`；新增的 500 句 `id` 前綴 `new-`、`tags:["new"]`（含日語教學梗的另加 `"jp"`）。
+  - `pose`：16 選 1（`serve/idle/onion/no/eat/welcome/cheer/dismay/cat/happy/think/love/play/cozy/statue/shock`，即 `shop.ts` 的 `SHOPKEEPER_POSES`）。原句依 `POSE_KEYWORDS`＋語義人工標注；新句創作時就直接指定。
+  - `states`：該句可在哪些營業狀態抽到，`closed`/`solo`/`full` 的子集；原 `idle` 池（通用句）＝三態全給，等同舊行為的 `[...pool, ...idle]` 混池。
+- `scripts/build-shop-lines.py`：讀 `docs/shop-lines.json`，依 schema 檢查（pose 合法、states 合法、id/text 不重複）後產出 `src/data/shop-lines.gen.ts`；改台詞內容改 json 再重跑這支，不要手改 gen.ts。已跑過一次，`git diff --stat` 只會動這三個檔＋本文件。
+- `src/data/shop-lines.gen.ts`（產物，檔頭已標「AUTO-GENERATED」）：
+  ```ts
+  export interface ShopLine { text: string; pose: Pose; }
+  export const SHOP_LINES_GEN: Record<'closed' | 'solo' | 'full', ShopLine[]>
+  ```
+  三池已經是「原句＋新句攤平好」的最終陣列（`closed` 467 句／`solo` 482 句／`full` 487 句，通用句在三池都出現，數字不用再加 idle），**不含機率權重、不含 `poseForLine` 邏輯**——抽哪句、猜哪個姿勢仍是引擎的事。
+
+**⚠️ 這條需要引擎新做的事（內容/美術這邊到此為止，不碰 `src/lib/`、`src/components/`）**：
+1. `pickShopLine`（`shop.ts`）改吃 `SHOP_LINES_GEN[pool]` 而非現有的 `SHOP_LINES.closed/solo/full/idle` 手編陣列；回傳型別建議從純 `string` 改成 `ShopLine`（或至少讓呼叫端能同時拿到 `text` 和 `pose`），因為新資料每句自帶姿勢，不用再靠 `poseForLine` 猜。
+2. `poseForLine` 建議改成「優先吃該句自帶的 `pose` 欄位，猜不到（例如呼叫端只有裸字串、找不到對應 `ShopLine`）才 fallback 現有的 `POSE_KEYWORDS` 關鍵字表＋情境池 hash」。`POSE_KEYWORDS`／`CLOSED_POSES`／`SOLO_POSES`／`FULL_POSES` 不用刪，降級成 fallback 即可，舊呼叫路徑（例如黑板留言之類非店長台詞的姿勢猜測，如果有）不受影響。
+3. **行為不變保證**：原 102 句台詞文字**照舊**（`orig-*` 那些），只是換了資料來源＋多了明確 pose；玩家端看到的台詞池組成（closed 時看到 closed+舊idle、solo 時 solo+舊idle、full 時 full+舊idle）在遷移後應完全一致，只是量體從 102→702、且姿勢不再靠 hash 輪播猜、改成內容作者指定（多數跟原 `poseForLine` 猜出來的一致，少數修正得更貼合語意）。
+4. `SHOP_LINES`（`shop.ts` 現有手編陣列）待引擎接完 `SHOP_LINES_GEN` 後可以整塊刪掉；`docs/shop-lines.json` 之後就是唯一 source of truth。
+
+**驗收**：`python3 scripts/build-shop-lines.py` 重跑一次應該 no-op（gen.ts 內容不變）；接線後 `npm test` 全過、preview 點店長能抽到新句、closed/solo/full 三態底下抽到的句子只落在對應池、姿勢跟句子語意扣合（不會出現「趴著睡」配 cheer 姿勢這種明顯不搭）。
+
+**備註**：500 句新增內容分 4 批寫、每批都過 codex review（人設漂移／日文正確性／姿勢扣合／重複度＋長度）後修正定案；16 姿勢每種 ≥33 句、closed/solo/full 專屬各 ≥60/80/80、日語教學梗（假名讀音／N5-N4 詞彙）130 句，單句 8–28 字（含泡泡邊界）。

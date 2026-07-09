@@ -1,0 +1,8588 @@
+[
+  {
+    "id": "orig-closed-001",
+    "text": "今天還沒開店……你的日文份還沒練吧",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-002",
+    "text": "（店暗暗的）我在等你開燈喔",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-003",
+    "text": "準備中……其實是你在準備中",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-004",
+    "text": "沒開店的日子，布丁會難過",
+    "pose": "eat",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-005",
+    "text": "快去練今天的份，我腳好痠（站著等）",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-006",
+    "text": "客人在門口張望了，就差你一輪練習",
+    "pose": "no",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-007",
+    "text": "燈沒開我不敢烤布丁，會烤焦（藉口）",
+    "pose": "eat",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-008",
+    "text": "打烊狀態的店長，只有平常的三成可愛",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-009",
+    "text": "我把「準備中」的牌子擦了三遍了，快來",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-010",
+    "text": "黑暗中的喫茶店，像沒加焦糖的布丁",
+    "pose": "eat",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-011",
+    "text": "別怕，練一輪就天亮了",
+    "pose": "no",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-012",
+    "text": "今天的份大概 20 分鐘，比一集動畫短",
+    "pose": "think",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-013",
+    "text": "（小聲）其實我在黑暗裡偷吃了一口布丁",
+    "pose": "eat",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-014",
+    "text": "店休不是假期，是遺憾",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-015",
+    "text": "客人剛剛探頭進來，我說馬上開，別讓我食言",
+    "pose": "no",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-016",
+    "text": "你不來，我就繼續站著。我很會站",
+    "pose": "eat",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-017",
+    "text": "燈一暗，貓就以為可以睡櫃檯了",
+    "pose": "cat",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-018",
+    "text": "練習之前，先深呼吸。好，去吧",
+    "pose": "happy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-019",
+    "text": "店長日記：今日未開店。內容：無。心情：等",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-020",
+    "text": "暖爐都冷了……快來點火（比喻你）",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-021",
+    "text": "這麼晚還沒開店，房租照算欸（誰付？）",
+    "pose": "think",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-022",
+    "text": "傳說中連續開店 30 天的店，會發光喔",
+    "pose": "eat",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-023",
+    "text": "御神籤抽了嗎？搞不好今天大吉",
+    "pose": "think",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-024",
+    "text": "今天的你只需要贏過昨天的你，來",
+    "pose": "cheer",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-025",
+    "text": "門口的風鈴響了三次，都不是你",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-026",
+    "text": "我不催你，我只是把「準備中」掛得特別顯眼",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-027",
+    "text": "黑板上的留言在等一個練完的人喔",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-028",
+    "text": "就算末吉的日子，開店就是吉",
+    "pose": "happy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-029",
+    "text": "沒開店的店長，像沒有音樂的卡拉OK",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-030",
+    "text": "燈開了我再講笑話給你聽（先付款：練習一輪）",
+    "pose": "play",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-031",
+    "text": "偷偷告訴你，深夜的布丁特別甜，練完來一份",
+    "pose": "eat",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-032",
+    "text": "再不開店，散步客要走去隔壁了（沒有隔壁）",
+    "pose": "think",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-033",
+    "text": "今天份的日文在門口排隊，放它們進來吧",
+    "pose": "welcome",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-034",
+    "text": "你知道嗎，開店的瞬間我尾巴會搖（沒尾巴）",
+    "pose": "think",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-closed-035",
+    "text": "好啦不催了。……開玩笑的，快來",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-001",
+    "text": "今天只有一個人開店，客人少一半",
+    "pose": "statue",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-002",
+    "text": "另一位還沒來喔……要不要黑板留言催一下",
+    "pose": "dismay",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-003",
+    "text": "一人開店也是開店，偉い！",
+    "pose": "happy",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-004",
+    "text": "半開店狀態～風扇只開一半（省電）",
+    "pose": "play",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-005",
+    "text": "等那個人來，我把好位子留著",
+    "pose": "dismay",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-006",
+    "text": "一個人也把店撐起來了，你是台柱",
+    "pose": "happy",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-007",
+    "text": "另一半的燈還沒亮，但你這半邊很亮",
+    "pose": "happy",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-008",
+    "text": "獨自開店的日子，布丁分你大塊一點",
+    "pose": "eat",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-009",
+    "text": "要我去叫他嗎？我只會ぽ〜う，可能沒用",
+    "pose": "think",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-010",
+    "text": "你先練，等等他來了就客滿了",
+    "pose": "cheer",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-011",
+    "text": "一人開店的 BGM 是安靜的爵士（想像中）",
+    "pose": "think",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-012",
+    "text": "半滿的店有半滿的浪漫",
+    "pose": "think",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-013",
+    "text": "對方今天是不是忙？黑板留句溫柔的吧",
+    "pose": "think",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-014",
+    "text": "你today的出席，我記在光榮簿上了",
+    "pose": "happy",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-015",
+    "text": "孤軍奮戰的樣子，帥",
+    "pose": "happy",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-016",
+    "text": "等雙人開店那天，我把彩帶準備好",
+    "pose": "cheer",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-017",
+    "text": "客人問怎麼只開一半，我說另一半在路上",
+    "pose": "think",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-018",
+    "text": "一人份的努力，兩人份的期待",
+    "pose": "happy",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-019",
+    "text": "先幫他點好他愛喝的，等他來",
+    "pose": "dismay",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-020",
+    "text": "今天你是店長代理的代理（我是代理）",
+    "pose": "play",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-021",
+    "text": "有你在，店就不算休息",
+    "pose": "love",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-022",
+    "text": "對決下了戰帖沒？等他上線一起熱鬧",
+    "pose": "cheer",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-023",
+    "text": "偷偷說，連續一人開店三天的話，我會擔心你們",
+    "pose": "eat",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-024",
+    "text": "窗邊的位子空著，總覺得少了什麼",
+    "pose": "dismay",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-025",
+    "text": "半邊亮的店，像缺了一角的最中餅",
+    "pose": "dismay",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-026",
+    "text": "沒關係，感情這種事，輪流撐也是撐",
+    "pose": "think",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-027",
+    "text": "他來的時候，記得裝作不在意（我教的）",
+    "pose": "play",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-028",
+    "text": "一人開店加成：店長話變多（現在就是）",
+    "pose": "play",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-029",
+    "text": "今天的你，值得一句えらい",
+    "pose": "happy",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-solo-030",
+    "text": "等等他吧，布丁我先冰著",
+    "pose": "eat",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-001",
+    "text": "雙人開店！今天客滿，忙死我了（開心）",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-002",
+    "text": "兩個人都來了，店裡亮晶晶",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-003",
+    "text": "今日大入！晚上加菜布丁",
+    "pose": "eat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-004",
+    "text": "你們一起來的日子，連咖啡都比較香",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-005",
+    "text": "客滿御礼！明天也要這樣喔",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-006",
+    "text": "雙人開店的日子，我走路都有風",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-007",
+    "text": "滿席！請看客人臉上的笑（我畫的）",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-008",
+    "text": "你們倆同框，店的等級體感 +1",
+    "pose": "dismay",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-009",
+    "text": "這就是傳說中的「営業日和」",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-010",
+    "text": "兩盞燈都亮著，看著就想唱歌",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-011",
+    "text": "客滿的秘訣？就是你們倆，寫進店訓了",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-012",
+    "text": "今天的營業額（快樂計）創新高",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-013",
+    "text": "雙人開店連續紀錄，我在心裡刻正字",
+    "pose": "eat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-014",
+    "text": "你們一起練習的聲音，是本店的 BGM",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-015",
+    "text": "大入袋準備好了，裡面裝布丁",
+    "pose": "eat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-016",
+    "text": "兩個人都在的話，Boss 也不足為懼吧",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-017",
+    "text": "今天適合下戰帖，反正都到齊了",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-018",
+    "text": "店長宣布：今日甜點無限續（想像中）",
+    "pose": "eat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-019",
+    "text": "這種日子多來點，我裝潢都想升級了",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-020",
+    "text": "客人說這家店有兩位常勝軍，我說對",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-021",
+    "text": "滿員御礼！留言板記得寫點好話",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-022",
+    "text": "你們同時在店裡，貓都出來巡場了",
+    "pose": "cat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-023",
+    "text": "雙人開店＝雙倍可愛＝我說的",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-024",
+    "text": "興隆！興隆！（敲木魚）",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-025",
+    "text": "兩人都練完的夜晚，星星特別多",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-026",
+    "text": "今天的店，是整條街最熱鬧的（唯一的）",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-027",
+    "text": "齊聚！這就叫日文裡的「勢揃い」",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-028",
+    "text": "我以你們為榮，布丁以我為榮",
+    "pose": "eat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-029",
+    "text": "照這個氣勢，傳說喫茶指日可待",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-030",
+    "text": "兩位常客都在，我可以安心打個盹了嗎（不行）",
+    "pose": "think",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-031",
+    "text": "雙人開店的日子，連掃把都在跳舞",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-032",
+    "text": "今日客滿，明日也滿，後日更滿（貪心）",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-033",
+    "text": "你們知道嗎，兩個人一起變強是很稀有的事",
+    "pose": "think",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-034",
+    "text": "這畫面我想裱起來掛牆上",
+    "pose": "love",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-full-035",
+    "text": "営業中の札，今天掛得特別正",
+    "pose": "welcome",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-001",
+    "text": "いらっしゃいませ〜",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-002",
+    "text": "布丁……剛烤好……（聞）",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-003",
+    "text": "這面牆的家紋是我挑的，有品味吧",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-004",
+    "text": "偷偷說，升級就有新家具，練起來",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-005",
+    "text": "店長的工作：站著，可愛，偶爾講話",
+    "pose": "dismay",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-006",
+    "text": "再升幾級，聽說會有貓住進來",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-007",
+    "text": "暖爐的火我顧著呢，安心練習",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-008",
+    "text": "有客人的日子，掃地都有勁",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-009",
+    "text": "嗯？點我幹嘛……開心（小聲）",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-010",
+    "text": "目標是傳說喫茶！靠你們了",
+    "pose": "cheer",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-011",
+    "text": "今日のおすすめ：布丁（每天都是）",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-012",
+    "text": "榻榻米的房間，是我的夢想之一",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-013",
+    "text": "窗邊那盆是ミント，別問我為什麼知道",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-014",
+    "text": "簽約時說好的，你們練習我開店",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-015",
+    "text": "石窯烤的布丁，傳說中好吃三倍",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-016",
+    "text": "ぽ〜う",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-017",
+    "text": "ぽ〜う ぽ〜う（營業版）",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-018",
+    "text": "喫茶店的下午，時間走得比較慢",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-019",
+    "text": "我的圍裙呢？……我沒有圍裙",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-020",
+    "text": "咖啡豆是隔壁森林的松鼠批發的（設定）",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-021",
+    "text": "客人留下的書，我讀了三頁，睡了",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-022",
+    "text": "櫃檯的高度，是照我的身高訂做的",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-023",
+    "text": "今天擦了十次杯子，每次都更亮",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-024",
+    "text": "菜單第一頁是布丁，最後一頁也是",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-025",
+    "text": "你聽，暖爐的火在唱歌",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-026",
+    "text": "常連さん（常客）這個詞，唸起來很溫暖",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-027",
+    "text": "木地板嘎吱響的位置我都背下來了",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-028",
+    "text": "窗外有貓經過，牠看了我三秒，輸了",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-029",
+    "text": "本店的水是免費的，笑容也是",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-030",
+    "text": "有人說店長太閒，我說這叫氣定神閒",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-031",
+    "text": "收銀機裡有 128 円，鎮店之寶",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-032",
+    "text": "牆上那幅畫……那是窗戶啦",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-033",
+    "text": "今天的雲很像鮮奶油，想舀",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-034",
+    "text": "掃把立起來的日子，會有好事",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-035",
+    "text": "我數過了，天花板有 96 塊板子",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-036",
+    "text": "座敷（榻榻米席）要脫鞋喔，貓不用",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-037",
+    "text": "風鈴是夏天限定，我捨不得收",
+    "pose": "love",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-038",
+    "text": "啊，打翻了牛奶……（沒有，練習講這句）",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-039",
+    "text": "日文的「喫茶店」唸 きっさてん，考你",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-040",
+    "text": "布丁的日文是プリン，本店最重要單字",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-041",
+    "text": "「いただきます」之後的第一口最好吃",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-042",
+    "text": "常客的座位，椅墊都比較軟（我偷換的）",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-043",
+    "text": "外帶布丁的紙盒，我摺了一下午",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-044",
+    "text": "今天練習的聲音，隔壁的鳥有在聽",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-045",
+    "text": "石窯的溫度，跟你的熱情一樣（現在幾度？）",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-046",
+    "text": "烤布丁的焦糖香，是本店的招牌結界",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-047",
+    "text": "偶爾抬頭看看，我都在櫃檯（不然咧）",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-048",
+    "text": "有一天要在店門口種一棵櫻花樹",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-049",
+    "text": "你們的 XP 是這間店的柱子，字面意思",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-050",
+    "text": "店規第一條：開心。第二條：參照第一條",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-051",
+    "text": "傳說喫茶的傳說，正在被你們寫",
+    "pose": "cheer",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-052",
+    "text": "客人的笑聲，是最好的裝潢",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-053",
+    "text": "我調的咖啡有三種：濃、淡、看心情",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-054",
+    "text": "打烊後我會自己練五十音喔（模仿你）",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-055",
+    "text": "喫茶店的貓都會日文，是常識",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-056",
+    "text": "你今天的發音，比昨天圓潤（布丁形容詞）",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-057",
+    "text": "座位不多，但心意很多",
+    "pose": "love",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-058",
+    "text": "進貨清單：牛奶、雞蛋、勇氣",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-059",
+    "text": "牆角那株植物又長高了，比我快",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-060",
+    "text": "有時候我會對著石窯說話，它很會聽",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-061",
+    "text": "本店的鎮店之寶其實是你們（說出來了）",
+    "pose": "love",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-062",
+    "text": "雨天的客人比較少，布丁比較多（我吃的）",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-063",
+    "text": "晴天適合曬棉被，我沒有棉被，曬自己",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-064",
+    "text": "「ごゆっくり」＝請慢慢享用，本店口頭禪",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-065",
+    "text": "杯子的把手一律朝右，強迫症店長",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-066",
+    "text": "毎日、君を待ってる（每天都在等你）",
+    "pose": "love",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-067",
+    "text": "你點我的頻率，跟布丁出爐的頻率差不多",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-068",
+    "text": "這間店最貴的東西，是你們的堅持",
+    "pose": "love",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-069",
+    "text": "菜單上沒有的，跟我說，我畫給你",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-070",
+    "text": "安靜的午後，適合背五個單字",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-071",
+    "text": "螞蟻搬走了一粒糖，我目送牠",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-072",
+    "text": "天氣好的日子，窗台會有光斑，貓的專座",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-073",
+    "text": "每賣出一份布丁，我就在心裡放一次煙火",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-074",
+    "text": "喫茶店的時鐘走得慢，是特調的",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-075",
+    "text": "今天也是適合學日文的好日子（每天都說）",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-076",
+    "text": "窗戶擦亮了，外面的世界高清了",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-077",
+    "text": "你們吵架的話，本店提供和好布丁（半價）",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-078",
+    "text": "賒帳可以，用單字還",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-079",
+    "text": "店長推薦座位：離暖爐兩步，離我三步",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-080",
+    "text": "有人問我為什麼是熊貓開店。緣分",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-081",
+    "text": "燈泡換新的了，亮到布丁反光",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-082",
+    "text": "練習卡關的時候，看看我，我也卡關（人生）",
+    "pose": "dismay",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-083",
+    "text": "本店 Wi-Fi 密碼：沒有 Wi-Fi，專心練",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-084",
+    "text": "你的努力我都看在眼裡，記在帳本裡",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-085",
+    "text": "帳本第一頁寫著：本店永不放棄（第二頁空白）",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-086",
+    "text": "偶爾也想去別人的店坐坐……不行，走不開",
+    "pose": "dismay",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-087",
+    "text": "門鈴「叮」一聲的瞬間，是我最喜歡的音效",
+    "pose": "love",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-088",
+    "text": "據說滿級的店會出現在雜誌上（誰的雜誌？）",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-089",
+    "text": "掛在牆上的許願牌，寫的都是 N4",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-090",
+    "text": "你唸日文的時候，客人都安靜了，尊重",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-091",
+    "text": "布丁的搖晃頻率，是幸福的頻率",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-092",
+    "text": "今天進了新的茶葉，名字很長，忘了",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-093",
+    "text": "喫茶店經營的秘訣：等待，與被等待",
+    "pose": "dismay",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-094",
+    "text": "角落的椅子有點翹腳，那是貓的傑作",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-095",
+    "text": "冬天賣暖布丁，夏天賣冰布丁，天才吧",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-096",
+    "text": "睡前複習一輪，夢裡我請客",
+    "pose": "love",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-097",
+    "text": "今天也謝謝光臨。明天的位子留好了",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-098",
+    "text": "拖地拖到一半發現地板本來就這個顏色",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-099",
+    "text": "本店禁止的事：放棄。其他都行",
+    "pose": "no",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-100",
+    "text": "你看那個火，燒得多敬業，學它",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-101",
+    "text": "有一天布丁會有自己的專屬櫃（夢想清單第七項）",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "orig-idle-102",
+    "text": "喫茶店開久了，連沉默都是香的",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "migrated"
+    ]
+  },
+  {
+    "id": "new-001",
+    "text": "兩位一起站在我面前，我的笑容藏不住",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-002",
+    "text": "你們一起來，我連腰都挺直了三公分",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-003",
+    "text": "今天客滿，我笑到布丁都要掉了",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-004",
+    "text": "兩人同框的瞬間，我開心到快跳起來",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-005",
+    "text": "你們倆一起出現，我笑得合不攏嘴",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-006",
+    "text": "雙人到齊，我把最亮的笑容擺上臉",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-007",
+    "text": "兩位都「元気」，我看了也精神百倍（げんき，有活力）",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-008",
+    "text": "你們一起練完，我笑到眼睛瞇成一條線",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-009",
+    "text": "兩份努力加在一起，我笑不停",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-010",
+    "text": "客滿的日子，我連掃地都用跳的",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-011",
+    "text": "你們同時出現在門口，我先笑三秒",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-012",
+    "text": "這種雙人陣容，是我最愛的組合",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-013",
+    "text": "今天的笑容，全部都給你們了",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-014",
+    "text": "兩人一起，連咖啡都煮得特別順手",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-015",
+    "text": "客滿的笑容我留了一整天沒用完",
+    "pose": "happy",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-016",
+    "text": "我今天心情很好，因為你在練習",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-017",
+    "text": "看到你走進來，這就是我說的開心",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-018",
+    "text": "笑一個給你看，「無料」念むりょう，免費",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-019",
+    "text": "我笑起來是因為布丁，也因為你",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-020",
+    "text": "今天的笑容，比平常多三分",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-021",
+    "text": "你努力的樣子，讓我忍不住笑",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-022",
+    "text": "「元気を出して」我對你笑，是這個意思（打起精神）",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-023",
+    "text": "「理由」念りゆう，開心不用理由，硬要說就是你",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-024",
+    "text": "我的笑容，隨時對你開放",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-025",
+    "text": "「一緒」念いっしょ，跟你一起，我特別想笑",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-026",
+    "text": "笑著等你，比皺眉等你划算",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-027",
+    "text": "這份微笑，是招牌，不外送",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-028",
+    "text": "你進步一點點，我笑一整天",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-029",
+    "text": "「一番」念いちばん，這是我今天最棒的笑容",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-030",
+    "text": "「嬉しい」念うれしい，今天天氣普通，心情卻很好",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-031",
+    "text": "「笑顔」念えがお，是本店唯一的招牌",
+    "pose": "happy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-032",
+    "text": "兩人都在，貓也跑出來蹭一下熱鬧",
+    "pose": "cat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-033",
+    "text": "客滿的日子，連貓都想加班",
+    "pose": "cat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-034",
+    "text": "貓看你們倆一起來，尾巴翹得比平常高",
+    "pose": "cat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-035",
+    "text": "貓說今天客滿，牠要收兩份小費（貓語）",
+    "pose": "cat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-036",
+    "text": "雙人開店，貓破例讓你們摸兩下",
+    "pose": "cat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-037",
+    "text": "貓被你們的笑聲吵醒，決定留下來看戲",
+    "pose": "cat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-038",
+    "text": "今天貓也出來巡場，見證客滿盛況",
+    "pose": "cat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-039",
+    "text": "兩人同時逗貓，貓表示很為難",
+    "pose": "cat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-040",
+    "text": "客滿的貓，比平常多睡半小時（滿足）",
+    "pose": "cat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-041",
+    "text": "客滿的日子，貓也悄悄跑來湊熱鬧",
+    "pose": "cat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-042",
+    "text": "貓今天占了我最喜歡的位子",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-043",
+    "text": "「怒る」念おこる，貓尾巴掃過我的手，我沒有生氣",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-044",
+    "text": "貓對布丁沒興趣，這點我不能理解",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-045",
+    "text": "「店員」念てんいん，貓睡在收銀機旁，像另一位店員",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-046",
+    "text": "貓瞪了我一眼，因為我碰了牠的位子",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-047",
+    "text": "「お腹」念おなか，貓今天特別黏人，可能お腹が空いた",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-048",
+    "text": "「猫」念ねこ，牠不學日文，靠表情溝通",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-049",
+    "text": "貓踩過我剛整理好的帳本",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-050",
+    "text": "「窓」念まど，貓對著窓發呆，跟我一樣",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-051",
+    "text": "貓偷喝了我的牛乳，嫌疑很大（牛乳＝ぎゅうにゅう）",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-052",
+    "text": "貓的呼嚕聲，是本店隱藏的配樂",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-053",
+    "text": "「機嫌」念きげん，貓今天機嫌がいい，賞我一個蹭臉",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-054",
+    "text": "貓比我還會擺姿勢，這不公平",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-055",
+    "text": "貓占位子的技術，比客人還熟練",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-056",
+    "text": "貓看我抱牠，露出勉為其難的表情",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-057",
+    "text": "貓的毛掉在布丁上，我沒說（別說）",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-058",
+    "text": "貓今天教我一件事：躺著也很忙",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-059",
+    "text": "貓對著鏡子看了很久，看不膩自己",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-060",
+    "text": "貓跳上吧檯，被我溫柔請下去",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-061",
+    "text": "貓喜歡我，只是不太表現出來",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-062",
+    "text": "「安心」念あんしん，抱貓的重量剛好是一份安心感",
+    "pose": "cat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-063",
+    "text": "一個人的午後，我讀了半頁書，剩下用猜的",
+    "pose": "idle",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-064",
+    "text": "只有你在，我翻書的速度也慢下來",
+    "pose": "idle",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-065",
+    "text": "一人開店的安靜，適合我看完這本書",
+    "pose": "idle",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-066",
+    "text": "你一個人練習，我陪你一起安靜",
+    "pose": "idle",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-067",
+    "text": "少了一位，書頁翻得也少了一頁",
+    "pose": "idle",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-068",
+    "text": "一人時光，書比較看得進去",
+    "pose": "idle",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-069",
+    "text": "你先練，我看書，互不打擾但互相陪伴",
+    "pose": "idle",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-070",
+    "text": "一個人的店，連翻書聲都聽得見",
+    "pose": "idle",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-071",
+    "text": "少一位客人，我書看得比較認真（藉口）",
+    "pose": "idle",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-072",
+    "text": "安靜的一人時段，最適合我裝深沉",
+    "pose": "idle",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-073",
+    "text": "這本書我讀了三年，還在第五頁",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-074",
+    "text": "「静か」念しずか，安靜的午後，連灰塵飄落都看得見",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-075",
+    "text": "「平仮名」念ひらがな，讀書先從這裡開始",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-076",
+    "text": "讀書使我看起來很有學問（其實在發呆）",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-077",
+    "text": "「絵」念え，這一頁我讀了很多遍，因為喜歡上面的絵",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-078",
+    "text": "安靜不是沒事做，是在存能量",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-079",
+    "text": "書上的字，跟布丁一樣耐人尋味",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-080",
+    "text": "「片仮名」念かたかな，外來語都靠它",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-081",
+    "text": "「基本」念きほん，靜靜坐著，是店長的基本功",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-082",
+    "text": "這本書的作者，寫得比我還會拖",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-083",
+    "text": "讀完一頁，獎勵自己看一眼窗外",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-084",
+    "text": "安靜的時候，連貓都懂得配合",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-085",
+    "text": "「本」念ほん，本掉了，我撿起來，繼續裝認真",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-086",
+    "text": "有些下午，什麼都不做才是正事",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-087",
+    "text": "我看書的姿勢比內容認真",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-088",
+    "text": "「漢字」念かんじ，這本書的難關都在這",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-089",
+    "text": "安靜久了，連風鈴響都嫌吵",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-090",
+    "text": "讀書讀累了，就看看你練習",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-091",
+    "text": "一本書、一杯茶、一個下午，夠了",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-092",
+    "text": "我讀書的進度跟你的日文差不多（一起加油）",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-093",
+    "text": "「文字」念もじ，這頁的文字比較少，我喜歡",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-094",
+    "text": "靜靜的下午，是喫茶店最誠實的樣子",
+    "pose": "idle",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-095",
+    "text": "準備中的托盤空空，等你來裝滿它",
+    "pose": "serve",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-096",
+    "text": "開店前先擦亮杯子，等你來喝",
+    "pose": "serve",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-097",
+    "text": "我把「メニュー」擺正，等你一到就翻開（菜單）",
+    "pose": "serve",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-098",
+    "text": "咖啡壺先燒著，等你練完就上桌",
+    "pose": "serve",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-099",
+    "text": "一個人的份，我端得特別穩",
+    "pose": "serve",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-100",
+    "text": "只有你，我可以慢慢上菜，講究擺盤",
+    "pose": "serve",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-101",
+    "text": "一人份的咖啡，我多加了一點誠意",
+    "pose": "serve",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-102",
+    "text": "你的餐先上，另一位的我留著溫度",
+    "pose": "serve",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-103",
+    "text": "一個人的桌，也要擺得好看",
+    "pose": "serve",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-104",
+    "text": "今天上菜特別慢，因為我想多陪你聊",
+    "pose": "serve",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-105",
+    "text": "一份餐點，兩份用心，這是我的堅持",
+    "pose": "serve",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-106",
+    "text": "端給你的這杯，比平常穩一點",
+    "pose": "serve",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-107",
+    "text": "端盤的手不能抖，這是職業道德",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-108",
+    "text": "「注文」念ちゅうもん，就是點餐的意思",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-109",
+    "text": "這盤剛出爐，燙口，慢慢吃",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-110",
+    "text": "端咖啡的角度，決定了整間店的格調",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-111",
+    "text": "我端東西從不打翻，這是唯一驕傲",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-112",
+    "text": "「深呼吸」念しんこきゅう，上菜前來一個，跟你考試前一樣",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-113",
+    "text": "「料理」念りょうり，這道料理配色我想了很久",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-114",
+    "text": "端出去的每一盤，都是我的作品",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-115",
+    "text": "「皿」念さら，就是盤子，桌上最忙的東西",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-116",
+    "text": "上菜的順序，我照心情排（隨性店長）",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-117",
+    "text": "這杯咖啡的溫度，剛好適合配練習",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-118",
+    "text": "端盤子的日子，比坐著站得挺",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-119",
+    "text": "上菜這件事，我做了很多年了",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-120",
+    "text": "這份餐點，附贈一句加油",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-121",
+    "text": "我端出的每一盤，都帶著誠意",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-122",
+    "text": "「鏡」念かがみ，上菜途中經過鏡，順便檢查儀態",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-123",
+    "text": "這盤布丁上桌的瞬間，最有成就感",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-124",
+    "text": "端穩，是給客人的基本尊重",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-125",
+    "text": "開動前記得說一句「いただきます」",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-126",
+    "text": "「一言」念ひとこと，送餐路上，順便練習了一句日文",
+    "pose": "serve",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-127",
+    "text": "考你：「開店」的日文是かいてん，記住了嗎",
+    "pose": "think",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-128",
+    "text": "托腮想事情，其實是在想你的「復習」進度（ふくしゅう）",
+    "pose": "think",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-129",
+    "text": "想了想，「準備中」唸作じゅんびちゅう",
+    "pose": "think",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-130",
+    "text": "托腮出題：「頑張って」是加油的意思，會唸嗎",
+    "pose": "think",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-131",
+    "text": "想到一半忘記想什麼了，跟等你一樣久",
+    "pose": "think",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-132",
+    "text": "我在想今天要不要提早開燈催你",
+    "pose": "think",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-133",
+    "text": "托腮沉思，「まだです」是「還沒」，你也常說吧",
+    "pose": "think",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-134",
+    "text": "想著想著，天都要亮了，你還沒來",
+    "pose": "think",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-135",
+    "text": "我在想，另一位是不是被作業纏住了",
+    "pose": "think",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-136",
+    "text": "托著腮，想著要不要幫他留位子",
+    "pose": "think",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-137",
+    "text": "想了想，「一人前」念いちにんまえ，是獨當一面",
+    "pose": "think",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-138",
+    "text": "我在想，你會不會希望他也在",
+    "pose": "think",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-139",
+    "text": "托腮沉思：今天要不要主動留言催他",
+    "pose": "think",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-140",
+    "text": "想到一半，覺得一個人也挺好的",
+    "pose": "think",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-141",
+    "text": "我在想，他到底在忙什麼（八卦臉）",
+    "pose": "think",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-142",
+    "text": "托腮考你：「一人」怎麼唸？（ひとり）",
+    "pose": "think",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-143",
+    "text": "想著想著，覺得你今天特別認真",
+    "pose": "think",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-144",
+    "text": "我在想，要不要幫你也留一份甜點",
+    "pose": "think",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-145",
+    "text": "托腮的時候，其實在偷偷觀察你",
+    "pose": "think",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-146",
+    "text": "想了老半天，還是決定不催他",
+    "pose": "think",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-147",
+    "text": "考你一下：五十音的「あ」怎麼唸？（a）",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-148",
+    "text": "我托著腮在想，晚餐要吃什麼（不是布丁）",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-149",
+    "text": "想一想，「食べる」是吃、「飲む」是喝，別搞混",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-150",
+    "text": "托腮沉思中，其實只是在放空",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-151",
+    "text": "我在想，今天的謎題該出難一點還簡單一點",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-152",
+    "text": "想想看，「猫」念ねこ，你記住了嗎",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-153",
+    "text": "托著腮看你，覺得你今天特別專心",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-154",
+    "text": "我在想，要不要開一堂免費日文課（其實每天都在教）",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-155",
+    "text": "考你：「大丈夫」怎麼唸？（だいじょうぶ）",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-156",
+    "text": "托腮的姿勢，是我最帥的角度（自認）",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-157",
+    "text": "我在想，人生跟布丁一樣，急不得，要耐心等它定型",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-158",
+    "text": "想一想，「単語」的意思是單字（たんご）",
+    "pose": "think",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-159",
+    "text": "準備中順便切蔥，「ねぎ」的眼淚跟等你一樣多",
+    "pose": "onion",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-160",
+    "text": "開店前的進貨清單：蔥、雞蛋（たまご）、你的努力",
+    "pose": "onion",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-161",
+    "text": "蔥還沒切完，別怪我開店慢",
+    "pose": "onion",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-162",
+    "text": "準備中我先把帳本攤開，等你來一起算",
+    "pose": "onion",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-163",
+    "text": "切蔥切到一半，才想起燈還沒開",
+    "pose": "onion",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-164",
+    "text": "進貨的菜都到了，就差你這份日文",
+    "pose": "onion",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-165",
+    "text": "帳本翻開空白一頁，等你填練習紀錄",
+    "pose": "onion",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-166",
+    "text": "準備中先點一遍進貨單：牛乳、雞蛋、布丁的原料",
+    "pose": "onion",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-167",
+    "text": "一人份的食材，我切得特別仔細",
+    "pose": "onion",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-168",
+    "text": "只有你，我進貨都省著點買（不是小氣）",
+    "pose": "onion",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-169",
+    "text": "切蔥的時候想到你，眼淚就更多了（藉口）",
+    "pose": "onion",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-170",
+    "text": "一個人來，帳本我幫你多記一筆孤勇分",
+    "pose": "onion",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-171",
+    "text": "進貨清單少了一項：另一位的「食欲」（しょくよく）",
+    "pose": "onion",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-172",
+    "text": "一人的份，蔥花我多撒一點意思意思",
+    "pose": "onion",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-173",
+    "text": "帳本上你的名字，我劃了個小星星",
+    "pose": "onion",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-174",
+    "text": "切菜的空檔，順便考你「野菜」怎麼唸（やさい）",
+    "pose": "onion",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-175",
+    "text": "蔥的日文是ねぎ，記住了嗎",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-176",
+    "text": "咖啡豆進貨了，「豆」的日文是まめ",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-177",
+    "text": "帳本第一頁，我寫著：布丁優先，其餘再說",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-178",
+    "text": "切蔥不流淚的秘訣：想點開心的事",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-179",
+    "text": "進貨單上的字，比日文考卷還難認",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-180",
+    "text": "收銀機叮一聲，是本店最悅耳的音效",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-181",
+    "text": "帳本裡的赤字，我都用笑容抵銷",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-182",
+    "text": "蔥花撒下去的瞬間，是一種儀式感",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-183",
+    "text": "「砂糖」念さとう、「塩」念しお，別加反了",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-184",
+    "text": "進貨的松鼠又漲價了，明明是熟客",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-185",
+    "text": "帳本記著：你今天又進步了一點",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-186",
+    "text": "切菜的刀工，是我另一項隱藏才藝",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-187",
+    "text": "「水」念みず，這是本店唯一免費的東西",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-188",
+    "text": "進貨清單寫著：牛乳、卵、你的耐心",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-189",
+    "text": "收銀機的抽屜，比我還誠實",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-190",
+    "text": "帳本翻到最後一頁，寫著：待續",
+    "pose": "onion",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-191",
+    "text": "雙人到齊，我像中獎一樣跳起來",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-192",
+    "text": "「万歳」念ばんざい，看到你們倆，我雙手直接舉高",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-193",
+    "text": "兩位都在，我整個人像在慶祝過年",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-194",
+    "text": "「拍手」念はくしゅ，這場面值得我拍手叫好",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-195",
+    "text": "「跳ぶ」念とぶ，開心到我原地跳了兩下",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-196",
+    "text": "客滿的瞬間，我像撿到一整盤布丁一樣開心",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-197",
+    "text": "你們同框，我在心裡放了一串鞭炮",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-198",
+    "text": "「最高」念さいこう，今天這陣容，最高",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-199",
+    "text": "客滿御礼，我對著門口鞠躬了三次",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-200",
+    "text": "兩人到齊，這場面我想拍下來留念",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-201",
+    "text": "雙人陣容出擊，門鈴都響得比較大聲",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-202",
+    "text": "今天客滿，連我的鬍鬚都在興奮",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-203",
+    "text": "「応援」念おうえん，齊聚一堂，我為你們応援",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-204",
+    "text": "雙人開店的氣勢，值得我多烤一份布丁慶祝",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-205",
+    "text": "兩位都在，開心直接寫在我臉上",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-206",
+    "text": "今天客滿，「興隆」兩個字我想寫上黑板",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-207",
+    "text": "雙人到齊的瞬間，我差點打翻了咖啡壺",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-208",
+    "text": "熱鬧成這樣，連貓都探頭出來看",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-209",
+    "text": "你們一起出現，是本店今天最大的新聞",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-210",
+    "text": "今天營業額（快樂計）破表，破的是我的表情",
+    "pose": "cheer",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-211",
+    "text": "每次你進步，我都想在心裡放一次煙火",
+    "pose": "cheer",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-212",
+    "text": "歡呼不用理由，開心就是理由",
+    "pose": "cheer",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-213",
+    "text": "「頑張れ」是加油的命令形，我常對自己喊",
+    "pose": "cheer",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-214",
+    "text": "「お祝い」念おいわい，值得慶祝的日子，先開心再說",
+    "pose": "cheer",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-215",
+    "text": "小小的進步，也值得我多笑一次",
+    "pose": "cheer",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-216",
+    "text": "舉起雙手，是我表達開心最直接的方式",
+    "pose": "cheer",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-217",
+    "text": "每進步一點點，我的心情就跟著漲一點",
+    "pose": "cheer",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-218",
+    "text": "一輪練習過，我就想替你敲鑼打鼓（沒有鑼鼓）",
+    "pose": "cheer",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-219",
+    "text": "開心值得被看見，我從不掩飾",
+    "pose": "cheer",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-220",
+    "text": "這種進步，值得記進帳本第一頁",
+    "pose": "cheer",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-221",
+    "text": "歡呼完別忘了，明天還有下一輪",
+    "pose": "cheer",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-222",
+    "text": "一個人也要好好吃布丁，我陪你分著吃",
+    "pose": "eat",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-223",
+    "text": "一人份的布丁，我幫你多留了一口",
+    "pose": "eat",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-224",
+    "text": "你一個人練得辛苦，我先餵你一口布丁",
+    "pose": "eat",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-225",
+    "text": "一人時段，我偷吃了半份布丁（承認）",
+    "pose": "eat",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-226",
+    "text": "只有你，我把三明治的酪梨切給你多一點",
+    "pose": "eat",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-227",
+    "text": "一個人的下午茶，我陪你多吃一輪",
+    "pose": "eat",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-228",
+    "text": "你練完的獎勵，我已經咬了一口先試毒",
+    "pose": "eat",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-229",
+    "text": "一人份的甜點，我幫你嚐過確認好吃",
+    "pose": "eat",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-230",
+    "text": "兩人都到，我捧著三明治慶祝加菜",
+    "pose": "eat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-231",
+    "text": "客滿的日子，布丁要多烤一輪",
+    "pose": "eat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-232",
+    "text": "雙人開店，我邊吃邊看你們練習（不專業）",
+    "pose": "eat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-233",
+    "text": "你們倆一起吃，連我食欲都變好",
+    "pose": "eat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-234",
+    "text": "今天客滿，我犒賞自己一份三明治",
+    "pose": "eat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-235",
+    "text": "兩份努力，配一份雙倍布丁慶祝",
+    "pose": "eat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-236",
+    "text": "客滿的甜點，我先試吃把關（藉口）",
+    "pose": "eat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-237",
+    "text": "雙人到齊，我的下午茶份量加倍",
+    "pose": "eat",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-238",
+    "text": "「甘い」念あまい，就是甜，布丁的靈魂",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-239",
+    "text": "「噛む」念かむ，三明治要咬（噛む）得仔細",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-240",
+    "text": "「正直」念しょうじき，好不好吃，我表情最正直",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-241",
+    "text": "這口布丁，甜度剛好配上你的進步",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-242",
+    "text": "「美味しい」念おいしい，好吃的意思",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-243",
+    "text": "布丁配咖啡，是本店唯一的黃金比例",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-244",
+    "text": "這份甜點，我吃得比你練習還投入",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-245",
+    "text": "「苦い」念にがい，咖啡沒加糖就是這個味",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-246",
+    "text": "「チーズ」是起司，三明治夾層我加了雙倍",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-247",
+    "text": "布丁吃到最後一口，總覺得意猶未盡",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-248",
+    "text": "「お腹いっぱい」吃飽的意思，才有力氣繼續碎念",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-249",
+    "text": "「幸せ」念しあわせ，這口甜的，是我今天的小確幸",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-250",
+    "text": "吃東西的速度，洩漏了我今天的心情",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-251",
+    "text": "布丁在嘴裡化開的瞬間，值得鼓掌",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-252",
+    "text": "三明治吃一半，突然想起要看你練習",
+    "pose": "eat",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-253",
+    "text": "一個人也能吹泡泡自娛，你別笑我",
+    "pose": "play",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-254",
+    "text": "只有你在，我摸魚摸得比較安心",
+    "pose": "play",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-255",
+    "text": "一人時段，我偷偷玩起了泡泡水",
+    "pose": "play",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-256",
+    "text": "你先練，我在旁邊吹泡泡假裝很閒",
+    "pose": "play",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-257",
+    "text": "一個人的下午，摸魚也要有品質",
+    "pose": "play",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-258",
+    "text": "你練習認真，我摸魚也認真（矛盾）",
+    "pose": "play",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-259",
+    "text": "兩人都在，我玩心大起吹了滿天泡泡",
+    "pose": "play",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-260",
+    "text": "「特権」念とっけん，客滿還敢摸魚，這是店長特権",
+    "pose": "play",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-261",
+    "text": "你們倆一起來，我開心到想玩泡泡",
+    "pose": "play",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-262",
+    "text": "雙人開店，我用泡泡歡迎你們",
+    "pose": "play",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-263",
+    "text": "客滿的日子，連摸魚都變得理直氣壯",
+    "pose": "play",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-264",
+    "text": "兩人到齊，我吹泡泡當作慶祝煙火",
+    "pose": "play",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-265",
+    "text": "今天太熱鬧，讓我玩一下泡泡水",
+    "pose": "play",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-266",
+    "text": "「趣味」念しゅみ，吹泡泡是我認證的正職趣味",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-267",
+    "text": "泡泡飛過窗邊，我目送它飛遠",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-268",
+    "text": "「休憩」念きゅうけい，摸魚也是一種休憩",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-269",
+    "text": "吹一個大泡泡，破了，再吹一個就好",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-270",
+    "text": "「自由」念じゆう，玩泡泡水，是店長的小小自由",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-271",
+    "text": "「気分」念きぶん，泡泡吹得圓不圓，看気分",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-272",
+    "text": "摸魚十分鐘，工作效率反而變好（沒有根據）",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-273",
+    "text": "吹泡泡的技巧，我練了比日文還久",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-274",
+    "text": "這罐泡泡水，是本店隱藏福利",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-275",
+    "text": "「運がいい」念うんがいい，泡泡飄到你頭上，算你運氣好",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-276",
+    "text": "摸魚被抓包，我就說在做深呼吸訓練",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-277",
+    "text": "「我慢」念がまん，布丁要等，泡泡也要忍住手",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-278",
+    "text": "這個泡泡特別大，我叫它「今日之最」",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-279",
+    "text": "玩心不能丟，這是熊貓的天性",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-280",
+    "text": "「音」念おと，泡泡破掉的音，聽起來像嘆氣",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-281",
+    "text": "摸魚也要挑地點，窗邊最舒服",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-282",
+    "text": "吹泡泡吹到一半，看到你在認真練習",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-283",
+    "text": "泡泡水快見底了，該進貨一罐新的",
+    "pose": "play",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-284",
+    "text": "「驚く」念おどろく，欸！布丁被偷吃一口，是我吃的",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-285",
+    "text": "「まさか」，什麼？今天已經這個時間了",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-286",
+    "text": "啊！我忘記看石窯了（其實沒事）",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-287",
+    "text": "「本当」念ほんとう，咦，這句日文我居然唸對了",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-288",
+    "text": "「びっくり」，哇！你進步的速度嚇到我了",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-289",
+    "text": "欸欸欸，這個單字我也不會",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-290",
+    "text": "什麼！收銀機裡的錢變多了（誰放的）",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-291",
+    "text": "咦，鏡子裡的我有點可愛……恥ずかしい",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-292",
+    "text": "咦？今天怎麼這麼安靜，不習慣",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-293",
+    "text": "哇喔，這杯咖啡我倒得也太準了",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-294",
+    "text": "「不思議」念ふしぎ，欸，風鈴自己響了，真不思議",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-295",
+    "text": "什麼時候多了這麼多灰塵，嚇一跳",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-296",
+    "text": "啊！我把糖當成鹽加進咖啡了（開玩笑）",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-297",
+    "text": "咦，這道題我以為很難結果秒懂",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-298",
+    "text": "哇！布丁居然烤出新的形狀，驚喜",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-299",
+    "text": "欸，貓居然主動蹭我，太陽打西邊出來",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-300",
+    "text": "「曜日」念ようび，什麼？原來今天不是我以為的曜日",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-301",
+    "text": "啊，我把菜單拿反了，尷尬",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-302",
+    "text": "咦，這句話你講得比我還標準",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-303",
+    "text": "哇，這個進步幅度值得我張大嘴",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-304",
+    "text": "欸！我剛剛差點把杯子疊歪了（開玩笑，別緊張）",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-305",
+    "text": "什麼，客人的留言這麼窩心，嚇到",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-306",
+    "text": "啊！鏡子裡有東西動，是我自己",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-307",
+    "text": "「変化」念へんか，咦，今天的咖啡特別香，有変化",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-308",
+    "text": "哇，這句文法你居然一次就對",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-309",
+    "text": "欸，我竟然把托盤端反了（沒事，還好穩）",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-310",
+    "text": "什麼！時間過得比布丁烤得還快",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-311",
+    "text": "啊，原來剛才那句話是你唸的，嚇到我",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-312",
+    "text": "咦，這罐調味料放錯位置多久了",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-313",
+    "text": "哇！今天的雲，形狀居然很像布丁",
+    "pose": "shock",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-314",
+    "text": "別想跳過今天的份，我不答應",
+    "pose": "no",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-315",
+    "text": "不行，燈沒開之前不能開店",
+    "pose": "no",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-316",
+    "text": "「怠ける」念なまける，就是偷懶，我看得出來",
+    "pose": "no",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-317",
+    "text": "不催了但也不放行，練完再說",
+    "pose": "no",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-318",
+    "text": "別想混過去，日文份還在等你",
+    "pose": "no",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-319",
+    "text": "不行不行，準備中就是準備中",
+    "pose": "no",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-320",
+    "text": "別鬧，開店前的規矩不能破",
+    "pose": "no",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-321",
+    "text": "不放行，除非你把今天的份練完",
+    "pose": "no",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-322",
+    "text": "「言い訳」念いいわけ，別找言い訳，我聽過的比你多",
+    "pose": "no",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-323",
+    "text": "不行，我不接受「まだです」這種藉口（還沒）",
+    "pose": "no",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-324",
+    "text": "別擔心，一個人也能撐住場面",
+    "pose": "no",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-325",
+    "text": "不用不好意思，一人開店很正常",
+    "pose": "no",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-326",
+    "text": "別為了他沒來就影響心情，練你的",
+    "pose": "no",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-327",
+    "text": "不介意的話，我陪你聊代替他",
+    "pose": "no",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-328",
+    "text": "別想太多，他大概只是忙，不是忘記",
+    "pose": "no",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-329",
+    "text": "別想騙我說你練過了，表情藏不住",
+    "pose": "no",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-330",
+    "text": "不行，「もう一度」是再一次，重來",
+    "pose": "no",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-331",
+    "text": "「絶対」念ぜったい，別放棄，這句我絕對不讓步",
+    "pose": "no",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-332",
+    "text": "不可以敷衍，我看得出來",
+    "pose": "no",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-333",
+    "text": "「基礎」念きそ，別小看基礎，五十音馬虎不得",
+    "pose": "no",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-334",
+    "text": "「駄目」念だめ，不行的意思，別敷衍",
+    "pose": "no",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-335",
+    "text": "別擔心出錯，錯了才知道要改",
+    "pose": "no",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-336",
+    "text": "不行，這個單字你上次也唸錯",
+    "pose": "no",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-337",
+    "text": "「ゆっくり」慢慢來，但不能停下來",
+    "pose": "no",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-338",
+    "text": "不可以，休息可以，放棄不行",
+    "pose": "no",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-339",
+    "text": "「できる」你做得到，別懷疑自己",
+    "pose": "no",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-340",
+    "text": "不行，這句我聽出來你在猜",
+    "pose": "no",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-341",
+    "text": "別小聲，唸日文要有自信",
+    "pose": "no",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-342",
+    "text": "不能就這樣算了，再試一次",
+    "pose": "no",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-343",
+    "text": "別怕丟臉，我聽過的破音比你多",
+    "pose": "no",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-344",
+    "text": "燈沒開，我站在這裡跟木頭人沒兩樣",
+    "pose": "statue",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-345",
+    "text": "準備中的我，閉眼發呆最擅長",
+    "pose": "statue",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-346",
+    "text": "「呼吸」念こきゅう，沒開店的時候，我連呼吸都放慢",
+    "pose": "statue",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-347",
+    "text": "黑暗中站著，我練成了一尊雕像",
+    "pose": "statue",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-348",
+    "text": "開店前的空白時間，我用來放空",
+    "pose": "statue",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-349",
+    "text": "準備中，我站得比平常還挺，也還呆",
+    "pose": "statue",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-350",
+    "text": "一個人的店，我站著放空剛剛好",
+    "pose": "statue",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-351",
+    "text": "「考える」念かんがえる，我站著假裝在思考",
+    "pose": "statue",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-352",
+    "text": "一人時段，我常常站著站著就恍神",
+    "pose": "statue",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-353",
+    "text": "只有你在，我也能站成一尊安靜的雕像",
+    "pose": "statue",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-354",
+    "text": "少了一位，我的站姿也跟著慢下來",
+    "pose": "statue",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-355",
+    "text": "一個人的下午，適合我閉眼放空",
+    "pose": "statue",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-356",
+    "text": "你專心練習，我站著陪你一起安靜",
+    "pose": "statue",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-357",
+    "text": "一人開店的空檔，我練習什麼都不想",
+    "pose": "statue",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-358",
+    "text": "站在這裡，看你一個人努力，我也不敢動",
+    "pose": "statue",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-359",
+    "text": "安靜的一人時光，我站得像座石像",
+    "pose": "statue",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-360",
+    "text": "我站久了會忘記自己在想什麼",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-361",
+    "text": "閉眼發呆，是熊貓的祖傳技能",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-362",
+    "text": "「観察」念かんさつ，我不動時，其實在觀察你",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-363",
+    "text": "木頭人遊戲，我永遠是贏家",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-364",
+    "text": "發呆久了，連時間都跟著變慢",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-365",
+    "text": "站在這裡，我把自己站成了裝潢的一部分",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-366",
+    "text": "「復習」念ふくしゅう，閉著眼睛在腦內復習菜單",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-367",
+    "text": "「営業」念えいぎょう，站著發呆，也算一種営業",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-368",
+    "text": "我這個姿勢，客人常以為我睡著了",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-369",
+    "text": "一動也不動，這是我最省電的模式",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-370",
+    "text": "發呆的時候，腦袋比平常清醒",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-371",
+    "text": "站成雕像的秘訣：心裡「静か」，身體就不動（しずか）",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-372",
+    "text": "我閉眼站著，其實在算今天賺多少",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-373",
+    "text": "呆滯久了，連貓都懶得理我",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-374",
+    "text": "站著不動，是我對抗睡意的方式",
+    "pose": "statue",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-375",
+    "text": "燈還沒亮，但我先把「いらっしゃいませ」練好",
+    "pose": "welcome",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-376",
+    "text": "準備中也要練習迎客的笑容",
+    "pose": "welcome",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-377",
+    "text": "開店前先對著門口說一次「いらっしゃい」",
+    "pose": "welcome",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-378",
+    "text": "還沒開店，但迎客的手勢我先舉好",
+    "pose": "welcome",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-379",
+    "text": "兩位一起最熱鬧，「いらっしゃいませ」！",
+    "pose": "welcome",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-380",
+    "text": "歡迎光臨，今天特別為兩位鋪紅毯（沒有紅毯）",
+    "pose": "welcome",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-381",
+    "text": "雙人光臨，我舉起雙手歡迎",
+    "pose": "welcome",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-382",
+    "text": "兩位到齊，本店最高規格接待",
+    "pose": "welcome",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-383",
+    "text": "歡迎歡迎，客滿的迎賓詞我練了很久",
+    "pose": "welcome",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-384",
+    "text": "「いらっしゃい」！雙人套餐奉上（沒有套餐）",
+    "pose": "welcome",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-385",
+    "text": "兩位一起進來，我的迎客笑容加倍",
+    "pose": "welcome",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-386",
+    "text": "歡迎光臨，今天座位隨便挑（都是空的）",
+    "pose": "welcome",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-387",
+    "text": "雙人駕到，我舉手示意最好的位子",
+    "pose": "welcome",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-388",
+    "text": "歡迎兩位，本店招牌笑容全開",
+    "pose": "welcome",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-389",
+    "text": "「いらっしゃいませ」的意思是歡迎光臨",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-390",
+    "text": "舉手歡迎是我最標準的姿勢",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-391",
+    "text": "「おかえりなさい」是歡迎回來，這句我每天想講",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-392",
+    "text": "本店的迎客詞只有一句：いらっしゃいませ",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-393",
+    "text": "歡迎光臨，位子隨便坐，笑容不用客氣",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-394",
+    "text": "舉起手說歡迎，是開店的第一件事",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-395",
+    "text": "迎客的手勢，我對著鏡子練過",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-396",
+    "text": "「こんにちは」是白天的招呼語，記住了嗎",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-397",
+    "text": "いらっしゃい要唸得中氣十足才道地",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-398",
+    "text": "舉手迎客，順便把笑容一起遞出去",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-399",
+    "text": "「歡迎光臨」店裡最常說いらっしゃいませ",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-400",
+    "text": "迎客時眼神要對上，這是禮貌",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-401",
+    "text": "歡迎光臨的下一句，通常是請坐",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-402",
+    "text": "舉手的高度，代表我今天的熱情指數",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-403",
+    "text": "「ご来店ありがとうございます」＝謝謝光臨",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-404",
+    "text": "說習慣了「いらっしゃいませ」，變成一種呼吸",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-405",
+    "text": "舉手迎客，是我這份工作最甜的部分",
+    "pose": "welcome",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-406",
+    "text": "沒開店的夜，我趴著先練「おやすみ」怎麼說（晚安）",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-407",
+    "text": "準備中趴一下，等你來再爬起來",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-408",
+    "text": "燈沒開，我先趴著補個眠",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-409",
+    "text": "黑暗裡趴著，其實在偷偷等你",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-410",
+    "text": "打烊感的夜晚，我先趴下練習放鬆",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-411",
+    "text": "沒開店就是我最正當的趴著理由",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-412",
+    "text": "準備中的空檔，趴一下不算偷懶",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-413",
+    "text": "燈暗暗的，趴著剛好符合氣氛",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-414",
+    "text": "沒開店的我，趴在檯面像隻曬太陽的貓",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-415",
+    "text": "黑暗中趴著等，比站著等舒服多了",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-416",
+    "text": "準備中先趴著，練習今天的「我慢」（がまん，忍耐）",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-417",
+    "text": "打烊氣氛太重，我忍不住趴下",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-418",
+    "text": "「休む」念やすむ，沒開店的日子，趴著也是一種休む方式",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-419",
+    "text": "燈暗的時候，趴著最有安全感",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-420",
+    "text": "準備中趴一下，養足精神等你敲門",
+    "pose": "cozy",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-421",
+    "text": "趴在檯面上，是我思考人生的姿勢",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-422",
+    "text": "「眠い」念ねむい，這個姿勢最配這個字",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-423",
+    "text": "這個姿勢一躺下去，五分鐘就過去了",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-424",
+    "text": "趴著的時候，貓會過來確認我還活著",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-425",
+    "text": "「昼寝」念ひるね，打個盹的時間，剛好等你練完一輪",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-426",
+    "text": "趴著休息，是店長合理的日常",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-427",
+    "text": "想睡歸想睡，眼睛還是要開一條縫看你",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-428",
+    "text": "趴在檯面，聽著暖爐的聲音就想睡",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-429",
+    "text": "這樣趴著，是我對抗一整天的方式",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-430",
+    "text": "想睡的熊貓，比想睡的貓還有說服力",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-431",
+    "text": "趴一下不代表不營業，只是換個姿勢",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-432",
+    "text": "眼皮重的時候，我就靠在檯面上撐著",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-433",
+    "text": "趴著打盹，夢裡也在算帳（職業病）",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-434",
+    "text": "這個姿勢最舒服，別叫醒我（開玩笑的）",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-435",
+    "text": "想睡的午後，連布丁的甜味都變得催眠",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-436",
+    "text": "趴一下，起來後笑容會更燦爛，划算",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-437",
+    "text": "「おやすみなさい」，趴著先睡個十分鐘",
+    "pose": "cozy",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-438",
+    "text": "端咖啡給你們倆，這杯冒著愛心不是我加的",
+    "pose": "love",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-439",
+    "text": "「気持ち」念きもち，這杯咖啡裡裝的都是気持ち",
+    "pose": "love",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-440",
+    "text": "雙人到齊，這杯拿鐵的奶泡我畫了愛心",
+    "pose": "love",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-441",
+    "text": "端給你們的咖啡，溫度剛好，心意更多",
+    "pose": "love",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-442",
+    "text": "客滿的日子，咖啡上的愛心多畫一個",
+    "pose": "love",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-443",
+    "text": "兩人一起，這杯咖啡我端得特別穩特別暖",
+    "pose": "love",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-444",
+    "text": "雙人開店，愛心拉花是本日限定",
+    "pose": "love",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-445",
+    "text": "「大事」念だいじ，這畫面我要好好珍惜",
+    "pose": "love",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-446",
+    "text": "客滿的咖啡，每一杯都有我偷加的心意",
+    "pose": "love",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-447",
+    "text": "端咖啡給你們，連我的手都更輕柔了",
+    "pose": "love",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-448",
+    "text": "這杯咖啡的愛心，獻給今天到齊的你們",
+    "pose": "love",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-449",
+    "text": "雙人套餐（沒有）附贈滿滿愛心拉花",
+    "pose": "love",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-450",
+    "text": "端咖啡給你們，是我今天最幸福的十秒",
+    "pose": "love",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-451",
+    "text": "「香り」念かおり，客滿的午後，咖啡的香り都比較甜",
+    "pose": "love",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-452",
+    "text": "兩位在的日子，我連拉花都更用心",
+    "pose": "love",
+    "states": [
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-453",
+    "text": "端這杯咖啡給你，愛心是我偷偷加的",
+    "pose": "love",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-454",
+    "text": "「特別」念とくべつ，一個人也值得一杯特別的咖啡",
+    "pose": "love",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-455",
+    "text": "只有你在，我把這杯咖啡端得特別溫柔",
+    "pose": "love",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-456",
+    "text": "一人份的咖啡，愛心畫得比平常大",
+    "pose": "love",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-457",
+    "text": "「手紙」念てがみ，這杯就當我寫給你的応援手紙",
+    "pose": "love",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-458",
+    "text": "端給你的咖啡，溫度剛好等於我的關心",
+    "pose": "love",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-459",
+    "text": "一個人的下午，值得一杯有心意的咖啡",
+    "pose": "love",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-460",
+    "text": "這杯咖啡上的愛心，是我對你努力的肯定",
+    "pose": "love",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-461",
+    "text": "只有你，我拉花的時間都不吝嗇",
+    "pose": "love",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-462",
+    "text": "端這杯給你，順便說「好き」是喜歡的意思",
+    "pose": "love",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-463",
+    "text": "每天端出的咖啡，都藏著一點小心意",
+    "pose": "love",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-464",
+    "text": "咖啡拉花畫壞了，那就重畫一次",
+    "pose": "love",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-465",
+    "text": "端咖啡是工作，加愛心是心情",
+    "pose": "love",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-466",
+    "text": "拉花畫得好不好，看我今天心情如何",
+    "pose": "love",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-467",
+    "text": "端出的每一杯，都希望被好好喝掉",
+    "pose": "love",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-468",
+    "text": "「心」念こころ，這杯咖啡不加糖，但加了滿滿的心",
+    "pose": "love",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-469",
+    "text": "「大切」念たいせつ，就是珍惜、重要的意思",
+    "pose": "love",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-470",
+    "text": "站太久，腳痠得像練了一整天日文",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-471",
+    "text": "「時計」念とけい，沒開店的我，垂著眼看時計嘆氣",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-472",
+    "text": "燈還沒開，我的心情也跟著暗下來",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-473",
+    "text": "準備中拖太久，我垂眼嘆了口氣",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-474",
+    "text": "沒人來開店，我懊惱地看著空蕩蕩的店",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-475",
+    "text": "打烊感重的夜，我垂著眼不太想動",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-476",
+    "text": "燈沒開，我連嘆氣都特別大聲",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-477",
+    "text": "準備中的失落，「頑張って」我講給自己聽",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-478",
+    "text": "沒開店的時候，我的耳朵都垂下來了",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-479",
+    "text": "「コップ」是杯子，遲遲不開店，我懊惱地擦了第八次",
+    "pose": "dismay",
+    "states": [
+      "closed"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-480",
+    "text": "只來一位，我垂眼小小嘆了口氣，隨即又振作",
+    "pose": "dismay",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-481",
+    "text": "「温度」念おんど，少了一位，這杯咖啡的温度都低了一點",
+    "pose": "dismay",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-482",
+    "text": "一個人的店，我懊惱地想著另一位是不是忙壞了",
+    "pose": "dismay",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-483",
+    "text": "只有你，我垂著眼練「大丈夫」這句話",
+    "pose": "dismay",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-484",
+    "text": "一人開店，難免懊惱地想著另一位",
+    "pose": "dismay",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-485",
+    "text": "少一位，我連掃地都掃得比較沒勁",
+    "pose": "dismay",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-486",
+    "text": "一個人的下午，我垂眼看著空椅子",
+    "pose": "dismay",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-487",
+    "text": "只有你在，我懊惱地嘆了口氣又笑了",
+    "pose": "dismay",
+    "states": [
+      "solo"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-488",
+    "text": "唸錯的那句，我懊惱得比你還明顯",
+    "pose": "dismay",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-489",
+    "text": "垂著眼，是我聽到藉口時的標準反應",
+    "pose": "dismay",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-490",
+    "text": "懊惱的時候，布丁吃起來都不夠甜",
+    "pose": "dismay",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-491",
+    "text": "這句話你又唸錯了，我垂眼嘆氣",
+    "pose": "dismay",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-492",
+    "text": "懊惱歸懊惱，明天還是要繼續練",
+    "pose": "dismay",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-493",
+    "text": "「優しい」念やさしい，垂眼的瞬間，是我假裝失望其實優しい",
+    "pose": "dismay",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-494",
+    "text": "「諦めない」是不放棄的意思，記好",
+    "pose": "dismay",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new",
+      "jp"
+    ]
+  },
+  {
+    "id": "new-495",
+    "text": "垂著眼看帳本，赤字讓我心情低落",
+    "pose": "dismay",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-496",
+    "text": "懊惱的表情，是我唯一的扣分項目",
+    "pose": "dismay",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-497",
+    "text": "垂眼嘆氣的頻率，跟你偷懶的頻率成正比",
+    "pose": "dismay",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-498",
+    "text": "懊惱一下就過去了，繼續加油最重要",
+    "pose": "dismay",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-499",
+    "text": "垂眼看著沒烤好的布丁，心情跟著塌下去",
+    "pose": "dismay",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  },
+  {
+    "id": "new-500",
+    "text": "懊惱的時候，我會摸摸鼻子假裝沒事",
+    "pose": "dismay",
+    "states": [
+      "closed",
+      "solo",
+      "full"
+    ],
+    "tags": [
+      "new"
+    ]
+  }
+]

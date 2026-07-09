@@ -1,0 +1,1517 @@
+[
+  {
+    "id": "purin",
+    "ja": "プリン",
+    "kana": "ぷりん",
+    "zh": "布丁",
+    "price": 120,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/purin.png"
+  },
+  {
+    "id": "shortcake",
+    "ja": "ショートケーキ",
+    "kana": "しょーとけーき",
+    "zh": "草莓蛋糕",
+    "price": 180,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/shortcake.png"
+  },
+  {
+    "id": "icecream",
+    "ja": "アイスクリーム",
+    "kana": "あいすくりーむ",
+    "zh": "冰淇淋",
+    "price": 130,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜",
+      "冰"
+    ],
+    "art": "/baito/food/icecream.png"
+  },
+  {
+    "id": "taiyaki",
+    "ja": "たい焼き",
+    "kana": "たいやき",
+    "zh": "鯛魚燒",
+    "price": 100,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/taiyaki.png"
+  },
+  {
+    "id": "dorayaki",
+    "ja": "どら焼き",
+    "kana": "どらやき",
+    "zh": "銅鑼燒",
+    "price": 120,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/dorayaki.png"
+  },
+  {
+    "id": "daifuku",
+    "ja": "大福",
+    "kana": "だいふく",
+    "zh": "大福",
+    "price": 110,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/daifuku.png"
+  },
+  {
+    "id": "mitarashi",
+    "ja": "みたらし団子",
+    "kana": "みたらしだんご",
+    "zh": "醬油糰子",
+    "price": 100,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/mitarashi.png"
+  },
+  {
+    "id": "warabimochi",
+    "ja": "わらび餅",
+    "kana": "わらびもち",
+    "zh": "蕨餅",
+    "price": 130,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜",
+      "冰"
+    ],
+    "art": "/baito/food/warabimochi.png"
+  },
+  {
+    "id": "parfait",
+    "ja": "パフェ",
+    "kana": "ぱふぇ",
+    "zh": "聖代",
+    "price": 250,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜",
+      "冰"
+    ],
+    "art": "/baito/food/parfait.png"
+  },
+  {
+    "id": "crepe",
+    "ja": "クレープ",
+    "kana": "くれーぷ",
+    "zh": "可麗餅",
+    "price": 200,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/crepe.png"
+  },
+  {
+    "id": "donut",
+    "ja": "ドーナツ",
+    "kana": "どーなつ",
+    "zh": "甜甜圈",
+    "price": 120,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/donut.png"
+  },
+  {
+    "id": "macaron",
+    "ja": "マカロン",
+    "kana": "まかろん",
+    "zh": "馬卡龍",
+    "price": 150,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/macaron.png"
+  },
+  {
+    "id": "kakigori",
+    "ja": "かき氷",
+    "kana": "かきごおり",
+    "zh": "刨冰",
+    "price": 180,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜",
+      "冰"
+    ],
+    "art": "/baito/food/kakigori.png"
+  },
+  {
+    "id": "softcream",
+    "ja": "ソフトクリーム",
+    "kana": "そふとくりーむ",
+    "zh": "霜淇淋",
+    "price": 150,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜",
+      "冰"
+    ],
+    "art": "/baito/food/softcream.png"
+  },
+  {
+    "id": "waffle",
+    "ja": "ワッフル",
+    "kana": "わっふる",
+    "zh": "鬆餅",
+    "price": 170,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/waffle.png"
+  },
+  {
+    "id": "chocolate",
+    "ja": "チョコレート",
+    "kana": "ちょこれーと",
+    "zh": "巧克力",
+    "price": 90,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/chocolate.png"
+  },
+  {
+    "id": "cookie",
+    "ja": "クッキー",
+    "kana": "くっきー",
+    "zh": "餅乾",
+    "price": 80,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/cookie.png"
+  },
+  {
+    "id": "castella",
+    "ja": "カステラ",
+    "kana": "かすてら",
+    "zh": "蜂蜜蛋糕",
+    "price": 140,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/castella.png"
+  },
+  {
+    "id": "montblanc",
+    "ja": "モンブラン",
+    "kana": "もんぶらん",
+    "zh": "蒙布朗",
+    "price": 220,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/montblanc.png"
+  },
+  {
+    "id": "anmitsu",
+    "ja": "あんみつ",
+    "kana": "あんみつ",
+    "zh": "蜜豆冰",
+    "price": 190,
+    "cuisine": "甜點",
+    "category": "甜點",
+    "tags": [
+      "甜",
+      "冰"
+    ],
+    "art": "/baito/food/anmitsu.png"
+  },
+  {
+    "id": "ramen",
+    "ja": "ラーメン",
+    "kana": "らーめん",
+    "zh": "拉麵",
+    "price": 250,
+    "cuisine": "日式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/ramen.png"
+  },
+  {
+    "id": "sushi",
+    "ja": "寿司",
+    "kana": "すし",
+    "zh": "壽司",
+    "price": 350,
+    "cuisine": "日式",
+    "category": "正餐",
+    "tags": [
+      "鹹"
+    ],
+    "art": "/baito/food/sushi.png"
+  },
+  {
+    "id": "tempura",
+    "ja": "天ぷら",
+    "kana": "てんぷら",
+    "zh": "天婦羅",
+    "price": 280,
+    "cuisine": "日式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/tempura.png"
+  },
+  {
+    "id": "udon",
+    "ja": "うどん",
+    "kana": "うどん",
+    "zh": "烏龍麵",
+    "price": 220,
+    "cuisine": "日式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/udon.png"
+  },
+  {
+    "id": "soba",
+    "ja": "そば",
+    "kana": "そば",
+    "zh": "蕎麥麵",
+    "price": 220,
+    "cuisine": "日式",
+    "category": "正餐",
+    "tags": [
+      "鹹"
+    ],
+    "art": "/baito/food/soba.png"
+  },
+  {
+    "id": "curryrice",
+    "ja": "カレーライス",
+    "kana": "かれーらいす",
+    "zh": "咖哩飯",
+    "price": 260,
+    "cuisine": "日式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/curryrice.png"
+  },
+  {
+    "id": "onigiri",
+    "ja": "おにぎり",
+    "kana": "おにぎり",
+    "zh": "飯糰",
+    "price": 100,
+    "cuisine": "日式",
+    "category": "點心",
+    "tags": [
+      "鹹"
+    ],
+    "art": "/baito/food/onigiri.png"
+  },
+  {
+    "id": "gyudon",
+    "ja": "牛丼",
+    "kana": "ぎゅうどん",
+    "zh": "牛肉蓋飯",
+    "price": 280,
+    "cuisine": "日式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/gyudon.png"
+  },
+  {
+    "id": "oyakodon",
+    "ja": "親子丼",
+    "kana": "おやこどん",
+    "zh": "親子丼",
+    "price": 280,
+    "cuisine": "日式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/oyakodon.png"
+  },
+  {
+    "id": "katsudon",
+    "ja": "カツ丼",
+    "kana": "かつどん",
+    "zh": "豬排丼",
+    "price": 300,
+    "cuisine": "日式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/katsudon.png"
+  },
+  {
+    "id": "takoyaki",
+    "ja": "たこ焼き",
+    "kana": "たこやき",
+    "zh": "章魚燒",
+    "price": 150,
+    "cuisine": "日式",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/takoyaki.png"
+  },
+  {
+    "id": "okonomiyaki",
+    "ja": "お好み焼き",
+    "kana": "おこのみやき",
+    "zh": "大阪燒",
+    "price": 260,
+    "cuisine": "日式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/okonomiyaki.png"
+  },
+  {
+    "id": "yakisoba",
+    "ja": "焼きそば",
+    "kana": "やきそば",
+    "zh": "炒麵",
+    "price": 230,
+    "cuisine": "日式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/yakisoba.png"
+  },
+  {
+    "id": "gyoza",
+    "ja": "餃子",
+    "kana": "ぎょうざ",
+    "zh": "煎餃",
+    "price": 200,
+    "cuisine": "日式",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/gyoza.png"
+  },
+  {
+    "id": "karaage",
+    "ja": "唐揚げ",
+    "kana": "からあげ",
+    "zh": "炸雞塊",
+    "price": 240,
+    "cuisine": "日式",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/karaage.png"
+  },
+  {
+    "id": "tonkatsu",
+    "ja": "とんかつ",
+    "kana": "とんかつ",
+    "zh": "炸豬排",
+    "price": 300,
+    "cuisine": "日式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/tonkatsu.png"
+  },
+  {
+    "id": "sashimi",
+    "ja": "刺身",
+    "kana": "さしみ",
+    "zh": "生魚片",
+    "price": 380,
+    "cuisine": "日式",
+    "category": "正餐",
+    "tags": [
+      "鹹"
+    ],
+    "art": "/baito/food/sashimi.png"
+  },
+  {
+    "id": "misoshiru",
+    "ja": "味噌汁",
+    "kana": "みそしる",
+    "zh": "味噌湯",
+    "price": 80,
+    "cuisine": "日式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/misoshiru.png"
+  },
+  {
+    "id": "oden",
+    "ja": "おでん",
+    "kana": "おでん",
+    "zh": "關東煮",
+    "price": 240,
+    "cuisine": "日式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/oden.png"
+  },
+  {
+    "id": "tamagoyaki",
+    "ja": "卵焼き",
+    "kana": "たまごやき",
+    "zh": "玉子燒",
+    "price": 120,
+    "cuisine": "日式",
+    "category": "點心",
+    "tags": [
+      "鹹"
+    ],
+    "art": "/baito/food/tamagoyaki.png"
+  },
+  {
+    "id": "pasta",
+    "ja": "パスタ",
+    "kana": "ぱすた",
+    "zh": "義大利麵",
+    "price": 260,
+    "cuisine": "各國",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/pasta.png"
+  },
+  {
+    "id": "tacos",
+    "ja": "タコス",
+    "kana": "たこす",
+    "zh": "墨西哥夾餅",
+    "price": 230,
+    "cuisine": "各國",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/tacos.png"
+  },
+  {
+    "id": "burrito",
+    "ja": "ブリトー",
+    "kana": "ぶりとー",
+    "zh": "捲餅",
+    "price": 250,
+    "cuisine": "各國",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/burrito.png"
+  },
+  {
+    "id": "indiancurry",
+    "ja": "インドカレー",
+    "kana": "いんどかれー",
+    "zh": "印度咖哩",
+    "price": 270,
+    "cuisine": "各國",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/indiancurry.png"
+  },
+  {
+    "id": "naan",
+    "ja": "ナン",
+    "kana": "なん",
+    "zh": "烤餅",
+    "price": 100,
+    "cuisine": "各國",
+    "category": "主食",
+    "tags": [
+      "熱"
+    ],
+    "art": "/baito/food/naan.png"
+  },
+  {
+    "id": "tomyum",
+    "ja": "トムヤムクン",
+    "kana": "とむやむくん",
+    "zh": "泰式酸辣湯",
+    "price": 280,
+    "cuisine": "各國",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "酸",
+      "鹹"
+    ],
+    "art": "/baito/food/tomyum.png"
+  },
+  {
+    "id": "padthai",
+    "ja": "パッタイ",
+    "kana": "ぱったい",
+    "zh": "泰式炒麵",
+    "price": 250,
+    "cuisine": "各國",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/padthai.png"
+  },
+  {
+    "id": "pho",
+    "ja": "フォー",
+    "kana": "ふぉー",
+    "zh": "越南河粉",
+    "price": 250,
+    "cuisine": "各國",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/pho.png"
+  },
+  {
+    "id": "springroll",
+    "ja": "生春巻き",
+    "kana": "なまはるまき",
+    "zh": "越南春捲",
+    "price": 180,
+    "cuisine": "各國",
+    "category": "點心",
+    "tags": [
+      "鹹"
+    ],
+    "art": "/baito/food/springroll.png"
+  },
+  {
+    "id": "bibimbap",
+    "ja": "ビビンバ",
+    "kana": "びびんば",
+    "zh": "韓式拌飯",
+    "price": 270,
+    "cuisine": "各國",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/bibimbap.png"
+  },
+  {
+    "id": "kimchi",
+    "ja": "キムチ",
+    "kana": "きむち",
+    "zh": "泡菜",
+    "price": 100,
+    "cuisine": "各國",
+    "category": "點心",
+    "tags": [
+      "鹹",
+      "酸"
+    ],
+    "art": "/baito/food/kimchi.png"
+  },
+  {
+    "id": "tteokbokki",
+    "ja": "トッポギ",
+    "kana": "とっぽぎ",
+    "zh": "辣炒年糕",
+    "price": 200,
+    "cuisine": "各國",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/tteokbokki.png"
+  },
+  {
+    "id": "paella",
+    "ja": "パエリア",
+    "kana": "ぱえりあ",
+    "zh": "西班牙燉飯",
+    "price": 320,
+    "cuisine": "各國",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/paella.png"
+  },
+  {
+    "id": "croissant",
+    "ja": "クロワッサン",
+    "kana": "くろわっさん",
+    "zh": "可頌",
+    "price": 130,
+    "cuisine": "各國",
+    "category": "點心",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/croissant.png"
+  },
+  {
+    "id": "kebab",
+    "ja": "ケバブ",
+    "kana": "けばぶ",
+    "zh": "沙威瑪",
+    "price": 230,
+    "cuisine": "各國",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/kebab.png"
+  },
+  {
+    "id": "sausage",
+    "ja": "ソーセージ",
+    "kana": "そーせーじ",
+    "zh": "德式香腸",
+    "price": 180,
+    "cuisine": "各國",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/sausage.png"
+  },
+  {
+    "id": "pretzel",
+    "ja": "プレッツェル",
+    "kana": "ぷれっつぇる",
+    "zh": "蝴蝶餅",
+    "price": 140,
+    "cuisine": "各國",
+    "category": "點心",
+    "tags": [
+      "鹹"
+    ],
+    "art": "/baito/food/pretzel.png"
+  },
+  {
+    "id": "mapo",
+    "ja": "麻婆豆腐",
+    "kana": "まーぼーどうふ",
+    "zh": "麻婆豆腐",
+    "price": 250,
+    "cuisine": "各國",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/mapo.png"
+  },
+  {
+    "id": "chahan",
+    "ja": "チャーハン",
+    "kana": "ちゃーはん",
+    "zh": "炒飯",
+    "price": 240,
+    "cuisine": "各國",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/chahan.png"
+  },
+  {
+    "id": "pekingduck",
+    "ja": "北京ダック",
+    "kana": "ぺきんだっく",
+    "zh": "北京烤鴨",
+    "price": 400,
+    "cuisine": "各國",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/pekingduck.png"
+  },
+  {
+    "id": "sandwich",
+    "ja": "サンドイッチ",
+    "kana": "さんどいっち",
+    "zh": "三明治",
+    "price": 180,
+    "cuisine": "美式",
+    "category": "點心",
+    "tags": [
+      "鹹"
+    ],
+    "art": "/baito/food/sandwich.png"
+  },
+  {
+    "id": "hamburger",
+    "ja": "ハンバーガー",
+    "kana": "はんばーがー",
+    "zh": "漢堡",
+    "price": 250,
+    "cuisine": "美式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/hamburger.png"
+  },
+  {
+    "id": "hotdog",
+    "ja": "ホットドッグ",
+    "kana": "ほっとどっぐ",
+    "zh": "熱狗",
+    "price": 180,
+    "cuisine": "美式",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/hotdog.png"
+  },
+  {
+    "id": "fries",
+    "ja": "フライドポテト",
+    "kana": "ふらいどぽてと",
+    "zh": "薯條",
+    "price": 150,
+    "cuisine": "美式",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/fries.png"
+  },
+  {
+    "id": "pizza",
+    "ja": "ピザ",
+    "kana": "ぴざ",
+    "zh": "披薩",
+    "price": 280,
+    "cuisine": "美式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/pizza.png"
+  },
+  {
+    "id": "friedchicken",
+    "ja": "フライドチキン",
+    "kana": "ふらいどちきん",
+    "zh": "炸雞",
+    "price": 240,
+    "cuisine": "美式",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/friedchicken.png"
+  },
+  {
+    "id": "pancake",
+    "ja": "パンケーキ",
+    "kana": "ぱんけーき",
+    "zh": "鬆餅",
+    "price": 180,
+    "cuisine": "美式",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/pancake.png"
+  },
+  {
+    "id": "steak",
+    "ja": "ステーキ",
+    "kana": "すてーき",
+    "zh": "牛排",
+    "price": 450,
+    "cuisine": "美式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/steak.png"
+  },
+  {
+    "id": "bagel",
+    "ja": "ベーグル",
+    "kana": "べーぐる",
+    "zh": "貝果",
+    "price": 150,
+    "cuisine": "美式",
+    "category": "點心",
+    "tags": [
+      "鹹"
+    ],
+    "art": "/baito/food/bagel.png"
+  },
+  {
+    "id": "popcorn",
+    "ja": "ポップコーン",
+    "kana": "ぽっぷこーん",
+    "zh": "爆米花",
+    "price": 120,
+    "cuisine": "美式",
+    "category": "點心",
+    "tags": [
+      "甜",
+      "鹹"
+    ],
+    "art": "/baito/food/popcorn.png"
+  },
+  {
+    "id": "macncheese",
+    "ja": "マカロニチーズ",
+    "kana": "まかろにちーず",
+    "zh": "起司通心粉",
+    "price": 240,
+    "cuisine": "美式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/macncheese.png"
+  },
+  {
+    "id": "nachos",
+    "ja": "ナチョス",
+    "kana": "なちょす",
+    "zh": "玉米片",
+    "price": 200,
+    "cuisine": "美式",
+    "category": "點心",
+    "tags": [
+      "鹹"
+    ],
+    "art": "/baito/food/nachos.png"
+  },
+  {
+    "id": "bbqribs",
+    "ja": "BBQリブ",
+    "kana": "ばーべきゅーりぶ",
+    "zh": "烤肋排",
+    "price": 380,
+    "cuisine": "美式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/bbqribs.png"
+  },
+  {
+    "id": "corndog",
+    "ja": "コーンドッグ",
+    "kana": "こーんどっぐ",
+    "zh": "玉米熱狗",
+    "price": 160,
+    "cuisine": "美式",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/corndog.png"
+  },
+  {
+    "id": "onionring",
+    "ja": "オニオンリング",
+    "kana": "おにおんりんぐ",
+    "zh": "洋蔥圈",
+    "price": 150,
+    "cuisine": "美式",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/onionring.png"
+  },
+  {
+    "id": "cheesecake",
+    "ja": "チーズケーキ",
+    "kana": "ちーずけーき",
+    "zh": "起司蛋糕",
+    "price": 200,
+    "cuisine": "美式",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/cheesecake.png"
+  },
+  {
+    "id": "milkshake",
+    "ja": "ミルクシェイク",
+    "kana": "みるくしぇいく",
+    "zh": "奶昔",
+    "price": 180,
+    "cuisine": "美式",
+    "category": "飲料",
+    "tags": [
+      "甜",
+      "冰"
+    ],
+    "art": "/baito/food/milkshake.png"
+  },
+  {
+    "id": "brownie",
+    "ja": "ブラウニー",
+    "kana": "ぶらうにー",
+    "zh": "布朗尼",
+    "price": 160,
+    "cuisine": "美式",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/brownie.png"
+  },
+  {
+    "id": "beefnoodle",
+    "ja": "牛肉麺",
+    "kana": "ぎゅうにくめん",
+    "zh": "牛肉麵",
+    "price": 260,
+    "cuisine": "台式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/beefnoodle.png"
+  },
+  {
+    "id": "xiaolongbao",
+    "ja": "小籠包",
+    "kana": "しょうろんぽう",
+    "zh": "小籠包",
+    "price": 220,
+    "cuisine": "台式",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/xiaolongbao.png"
+  },
+  {
+    "id": "rulohan",
+    "ja": "ルーローハン",
+    "kana": "るーろーはん",
+    "zh": "滷肉飯",
+    "price": 180,
+    "cuisine": "台式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/rulohan.png"
+  },
+  {
+    "id": "dajipai",
+    "ja": "タージーパイ",
+    "kana": "たーじーぱい",
+    "zh": "大雞排",
+    "price": 150,
+    "cuisine": "台式",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/dajipai.png"
+  },
+  {
+    "id": "boba",
+    "ja": "タピオカミルクティー",
+    "kana": "たぴおかみるくてぃー",
+    "zh": "珍珠奶茶",
+    "price": 150,
+    "cuisine": "台式",
+    "category": "飲料",
+    "tags": [
+      "甜",
+      "冰"
+    ],
+    "art": "/baito/food/boba.png"
+  },
+  {
+    "id": "congzhuabing",
+    "ja": "葱抓餅",
+    "kana": "ツォンジュアビン",
+    "zh": "蔥抓餅",
+    "price": 120,
+    "cuisine": "台式",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/congzhuabing.png"
+  },
+  {
+    "id": "hujiaobing",
+    "ja": "胡椒餅",
+    "kana": "フージャオビン",
+    "zh": "胡椒餅",
+    "price": 130,
+    "cuisine": "台式",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/hujiaobing.png"
+  },
+  {
+    "id": "stinkytofu",
+    "ja": "臭豆腐",
+    "kana": "しゅうどうふ",
+    "zh": "臭豆腐",
+    "price": 150,
+    "cuisine": "台式",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/stinkytofu.png"
+  },
+  {
+    "id": "oajian",
+    "ja": "オアジェン",
+    "kana": "おあじぇん",
+    "zh": "蚵仔煎",
+    "price": 180,
+    "cuisine": "台式",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/oajian.png"
+  },
+  {
+    "id": "saltchicken",
+    "ja": "鹹酥鶏",
+    "kana": "シェンスージー",
+    "zh": "鹽酥雞",
+    "price": 150,
+    "cuisine": "台式",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/saltchicken.png"
+  },
+  {
+    "id": "guabao",
+    "ja": "刈包",
+    "kana": "グアバオ",
+    "zh": "刈包",
+    "price": 160,
+    "cuisine": "台式",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/guabao.png"
+  },
+  {
+    "id": "douhua",
+    "ja": "豆花",
+    "kana": "トウファ",
+    "zh": "豆花",
+    "price": 120,
+    "cuisine": "台式",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/douhua.png"
+  },
+  {
+    "id": "pineapplecake",
+    "ja": "パイナップルケーキ",
+    "kana": "ぱいなっぷるけーき",
+    "zh": "鳳梨酥",
+    "price": 130,
+    "cuisine": "台式",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/pineapplecake.png"
+  },
+  {
+    "id": "aiyu",
+    "ja": "愛玉",
+    "kana": "アイユー",
+    "zh": "愛玉冰",
+    "price": 110,
+    "cuisine": "台式",
+    "category": "甜點",
+    "tags": [
+      "甜",
+      "冰"
+    ],
+    "art": "/baito/food/aiyu.png"
+  },
+  {
+    "id": "dachang",
+    "ja": "大腸包小腸",
+    "kana": "ダーチャンバオシャオチャン",
+    "zh": "大腸包小腸",
+    "price": 170,
+    "cuisine": "台式",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/dachang.png"
+  },
+  {
+    "id": "mianxian",
+    "ja": "麺線",
+    "kana": "めんせん",
+    "zh": "麵線",
+    "price": 150,
+    "cuisine": "台式",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/mianxian.png"
+  },
+  {
+    "id": "wheelcake",
+    "ja": "車輪餅",
+    "kana": "しゃりんもち",
+    "zh": "紅豆餅",
+    "price": 100,
+    "cuisine": "台式",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/wheelcake.png"
+  },
+  {
+    "id": "mangoice",
+    "ja": "マンゴーかき氷",
+    "kana": "まんごーかきごおり",
+    "zh": "芒果冰",
+    "price": 220,
+    "cuisine": "台式",
+    "category": "甜點",
+    "tags": [
+      "甜",
+      "冰"
+    ],
+    "art": "/baito/food/mangoice.png"
+  },
+  {
+    "id": "bread",
+    "ja": "パン",
+    "kana": "ぱん",
+    "zh": "麵包",
+    "price": 90,
+    "cuisine": "綜合",
+    "category": "點心",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/bread.png"
+  },
+  {
+    "id": "salad",
+    "ja": "サラダ",
+    "kana": "さらだ",
+    "zh": "沙拉",
+    "price": 160,
+    "cuisine": "綜合",
+    "category": "點心",
+    "tags": [
+      "鹹"
+    ],
+    "art": "/baito/food/salad.png"
+  },
+  {
+    "id": "coffee",
+    "ja": "コーヒー",
+    "kana": "こーひー",
+    "zh": "咖啡",
+    "price": 150,
+    "cuisine": "綜合",
+    "category": "飲料",
+    "tags": [
+      "熱"
+    ],
+    "art": "/baito/food/coffee.png"
+  },
+  {
+    "id": "tea",
+    "ja": "お茶",
+    "kana": "おちゃ",
+    "zh": "茶",
+    "price": 100,
+    "cuisine": "綜合",
+    "category": "飲料",
+    "tags": [
+      "熱"
+    ],
+    "art": "/baito/food/tea.png"
+  },
+  {
+    "id": "juice",
+    "ja": "ジュース",
+    "kana": "じゅーす",
+    "zh": "果汁",
+    "price": 140,
+    "cuisine": "綜合",
+    "category": "飲料",
+    "tags": [
+      "冰"
+    ],
+    "art": "/baito/food/juice.png"
+  },
+  {
+    "id": "omurice",
+    "ja": "オムライス",
+    "kana": "おむらいす",
+    "zh": "蛋包飯",
+    "price": 260,
+    "cuisine": "綜合",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/omurice.png"
+  },
+  {
+    "id": "unagi",
+    "ja": "うなぎ",
+    "kana": "うなぎ",
+    "zh": "鰻魚飯",
+    "price": 400,
+    "cuisine": "綜合",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/unagi.png"
+  },
+  {
+    "id": "yakitori",
+    "ja": "焼き鳥",
+    "kana": "やきとり",
+    "zh": "烤雞肉串",
+    "price": 180,
+    "cuisine": "綜合",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/yakitori.png"
+  },
+  {
+    "id": "ebifry",
+    "ja": "エビフライ",
+    "kana": "えびふらい",
+    "zh": "炸蝦",
+    "price": 240,
+    "cuisine": "綜合",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/ebifry.png"
+  },
+  {
+    "id": "hamburg",
+    "ja": "ハンバーグ",
+    "kana": "はんばーぐ",
+    "zh": "漢堡排",
+    "price": 280,
+    "cuisine": "綜合",
+    "category": "正餐",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/hamburg.png"
+  },
+  {
+    "id": "korokke",
+    "ja": "コロッケ",
+    "kana": "ころっけ",
+    "zh": "可樂餅",
+    "price": 120,
+    "cuisine": "綜合",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/korokke.png"
+  },
+  {
+    "id": "nikuman",
+    "ja": "肉まん",
+    "kana": "にくまん",
+    "zh": "肉包",
+    "price": 130,
+    "cuisine": "綜合",
+    "category": "點心",
+    "tags": [
+      "熱",
+      "鹹"
+    ],
+    "art": "/baito/food/nikuman.png"
+  },
+  {
+    "id": "shucream",
+    "ja": "シュークリーム",
+    "kana": "しゅーくりーむ",
+    "zh": "泡芙",
+    "price": 150,
+    "cuisine": "綜合",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/shucream.png"
+  },
+  {
+    "id": "eggtart",
+    "ja": "エッグタルト",
+    "kana": "えっぐたると",
+    "zh": "蛋撻",
+    "price": 130,
+    "cuisine": "綜合",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/eggtart.png"
+  },
+  {
+    "id": "frenchtoast",
+    "ja": "フレンチトースト",
+    "kana": "ふれんちとーすと",
+    "zh": "法式吐司",
+    "price": 180,
+    "cuisine": "綜合",
+    "category": "甜點",
+    "tags": [
+      "甜"
+    ],
+    "art": "/baito/food/frenchtoast.png"
+  }
+]

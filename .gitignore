@@ -1,0 +1,16 @@
+node_modules
+dist
+dev-dist
+.wrangler
+.DS_Store
+*.tsbuildinfo
+.app-key.local
+.notion-token.local
+
+# LimeZu 完整素材包（可重新下載，不進版控；~230MB / 5萬檔）
+assets_src/limezu/
+
+# code-graph 工具 cache（非專案檔）
+graphify-out/
+src/graphify-out/
+.git-broken-20260709/

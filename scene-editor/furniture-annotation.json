@@ -1,0 +1,15 @@
+{
+  "note": "cafe.tmx 家具標注。固定=場景骨架不可動；movable=遊戲內可買/搬/刪的物件。座標為 tile grid (col,row)，尺寸 w×h。",
+  "fixed": [
+    {"id": "counter_zone", "name": "咖啡吧檯區(甜點櫃x2+U櫃檯+電話+剉冰機+冰箱+咖啡機)", "x": 1, "y": 0, "w": 8, "h": 5},
+    {"id": "sliding_door", "name": "落地窗", "x": 13, "y": 0, "w": 3, "h": 3}
+  ],
+  "movable": [
+    {"id": "table_1", "name": "深色桌椅", "x": 10, "y": 4, "w": 2, "h": 3},
+    {"id": "table_2", "name": "深色桌椅", "x": 14, "y": 4, "w": 2, "h": 3},
+    {"id": "plant_1", "name": "盆栽", "x": 1, "y": 9, "w": 1, "h": 3},
+    {"id": "plant_2", "name": "盆栽", "x": 16, "y": 9, "w": 1, "h": 3},
+    {"id": "lamp", "name": "立燈", "x": 16, "y": 1, "w": 2, "h": 4},
+    {"id": "painting", "name": "掛畫", "x": 12, "y": 0, "w": 1, "h": 2}
+  ]
+}

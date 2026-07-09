@@ -1,0 +1,19 @@
+name = "nihongo"
+main = "worker/index.js"
+compatibility_date = "2026-06-01"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+run_worker_first = ["/api/*"]
+
+[[kv_namespaces]]
+binding = "PROGRESS"
+id = "baf70dd4d95945668215eca337089e1c"
+
+[vars]
+MODEL = "claude-sonnet-4-6"   # 歌詞標音翻譯用
+
+# secrets：
+#   npx wrangler secret put APP_PASSWORD        # 進站金鑰（含在專屬連結）
+#   npx wrangler secret put ANTHROPIC_API_KEY   # App 內加歌（標音＋翻譯）用
