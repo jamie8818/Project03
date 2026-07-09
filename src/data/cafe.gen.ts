@@ -34,6 +34,7 @@ export const CATEGORY_LABELS: Array<[string, string]> = [
   ['rug', '地毯・地面'],
   ['tabletop', '桌上擺件・小物'],
   ['seasonal', '擺飾雜貨・季節'],
+  ['personal', '珍藏・私物'],
 ];
 
 // 各 z 可放的最上排（wall 可貼上牆，其餘從地板起）
@@ -246,6 +247,25 @@ export const CAFE_ITEMS: CafeItem[] = [
   { id: 'lemon_soda', category: 'tabletop', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 1.08, name: '檸檬蘇打', sprite: '/cafe/catalog/lemon_soda.png', price: 27, lv: 1, starter: false },
   { id: 'salt_pepper_set', category: 'tabletop', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.97, name: '鹽胡椒罐組', sprite: '/cafe/catalog/salt_pepper_set.png', price: 26, lv: 1, starter: false },
   { id: 'kagami_mochi', category: 'seasonal', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 1.38, name: '正月鏡餅', sprite: '/cafe/catalog/kagami_mochi.png', price: 42, lv: 2, starter: false },
+  { id: 'sewing_machine_table', category: 'seating', z: 'furniture', w: 1, h: 1, surface: true, spriteHeightTiles: 1.02, name: '老式縫紉機改造桌', sprite: '/cafe/catalog/sewing_machine_table.png', price: 85, lv: 3, starter: false },
+  { id: 'room_divider', category: 'seating', z: 'furniture', w: 2, h: 1, surface: false, spriteHeightTiles: 2.03, name: '木格拉門屏風', sprite: '/cafe/catalog/room_divider.png', price: 78, lv: 3, starter: false },
+  { id: 'goldfish_bowl', category: 'seating', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.23, name: '金魚缸擺飾', sprite: '/cafe/catalog/goldfish_bowl.png', price: 48, lv: 2, starter: false },
+  { id: 'monstera_floor', category: 'seating', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.17, name: '落地龜背芋', sprite: '/cafe/catalog/monstera_floor.png', price: 60, lv: 2, starter: false },
+  { id: 'safe_box', category: 'seating', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.02, name: '小型保險箱', sprite: '/cafe/catalog/safe_box.png', price: 68, lv: 3, starter: false },
+  { id: 'abacus_ledger', category: 'tabletop', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 1.0, name: '算盤帳本', sprite: '/cafe/catalog/abacus_ledger.png', price: 34, lv: 1, starter: false },
+  { id: 'bar_string_lights', category: 'wall', z: 'wall', w: 2, h: 1, surface: false, spriteHeightTiles: 1.0, name: '吧檯排燈串', sprite: '/cafe/catalog/bar_string_lights.png', price: 58, lv: 2, starter: false },
+  { id: 'deco_fan_pendant', category: 'wall', z: 'wall', w: 2, h: 1, surface: false, spriteHeightTiles: 1.0, name: 'Art Deco 扇形吊燈', sprite: '/cafe/catalog/deco_fan_pendant.png', price: 96, lv: 4, starter: false },
+  { id: 'rug_wave', category: 'rug', z: 'rug', w: 3, h: 1, surface: false, spriteHeightTiles: 1.0, name: '海浪紋地毯', sprite: '/cafe/catalog/rug_wave.png', price: 62, lv: 2, starter: false },
+  { id: 'rug_diamond', category: 'rug', z: 'rug', w: 2, h: 1, surface: false, spriteHeightTiles: 1.0, name: '菱格紋地毯', sprite: '/cafe/catalog/rug_diamond.png', price: 58, lv: 2, starter: false },
+  { id: 'vest_yaxuan', category: 'personal', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.84, name: '亞軒的競選背心', sprite: '/cafe/catalog/vest_yaxuan.png', price: 45, lv: 2, starter: false },
+  { id: 'signboard_yaxuan', category: 'personal', z: 'furniture', w: 2, h: 1, surface: false, spriteHeightTiles: 2.23, name: '亞軒的競選看板', sprite: '/cafe/catalog/signboard_yaxuan.png', price: 72, lv: 3, starter: false },
+  { id: 'golf_bag', category: 'personal', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.62, name: '高爾夫球具', sprite: '/cafe/catalog/golf_bag.png', price: 82, lv: 3, starter: false },
+  { id: 'snowboard', category: 'personal', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.14, name: '單板滑雪板', sprite: '/cafe/catalog/snowboard.png', price: 68, lv: 3, starter: false },
+  { id: 'camera_retro_digital', category: 'personal', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.66, name: '復古數位相機', sprite: '/cafe/catalog/camera_retro_digital.png', price: 42, lv: 2, starter: false },
+  { id: 'tesla_model', category: 'personal', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.56, name: '銀色特斯拉車模型', sprite: '/cafe/catalog/tesla_model.png', price: 55, lv: 2, starter: false },
+  { id: 'figure_chiikawa', category: 'personal', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.77, name: '吉伊卡哇公仔', sprite: '/cafe/catalog/figure_chiikawa.png', price: 38, lv: 1, starter: false },
+  { id: 'figure_hachiware', category: 'personal', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.78, name: '八割公仔', sprite: '/cafe/catalog/figure_hachiware.png', price: 38, lv: 1, starter: false },
+  { id: 'figure_usagi', category: 'personal', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.91, name: '兔兔公仔', sprite: '/cafe/catalog/figure_usagi.png', price: 38, lv: 1, starter: false },
 ];
 
 // 開局免費擺好的家具

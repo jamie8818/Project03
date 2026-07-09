@@ -31,6 +31,8 @@ GRID = {
     'furniture5': (3, 2), 'wall5': (2, 1), 'rug5': (2, 1),
     # JJ 特注「珍藏・私物」9 件，同一 sheet（furniture/surface 共用 view_furniture）
     'personal': (3, 3),
+    # 重生批：furniture5 三件畫風/比例修正、personal 四件（公仔單體化＋snowboard 比例）
+    'furniture5b': (3, 1), 'personalfix': (2, 2), 'furniture5c': (2, 1), 'furniture5d': (1, 1),
 }
 
 DATA = json.load(open(MANIFEST))

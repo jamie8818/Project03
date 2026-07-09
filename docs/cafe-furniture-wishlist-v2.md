@@ -21,7 +21,7 @@
 | 有 | 店頭床几長凳 | shogi_bench | 2×1 | furniture | false | 傳統日式店頭矮長凳，老喫茶／雜貨店門前小憩座 |
 | 有 | 黑皮雙人沙發 | sofa_leather | 3×1 | furniture | false | Chesterfield 車縫扣釦黑皮雙人沙發，扣釦紋理與光澤明顯區隔既有墨綠絨沙發 |
 | 有 | 讀書扶手椅 | chair_reading | 1×1 | furniture | false | 高背扶手椅側邊附雜誌口袋，閱讀角專用 |
-| 有 | 木格拉門屏風 | room_divider | 1×1 | furniture | false | 和紙木格拉門屏風，區隔座位區（v2 第三波） |
+| 有 | 木格拉門屏風 | room_divider | 2×1 | furniture | false | 和紙木格拉門屏風，區隔座位區（v2 第三波；生產時佔格 1×1→2×1，codex 審認 1 格寬太矮不像落地屏風） |
 | 候選 | 窗邊站高吧檯桌 | table_counter_high | 2×1 | furniture | true | 沿窗長條站立吧檯桌，區隔坐姿方桌 |
 | 候選 | 疊放備用椅 | chair_stack | 1×1 | furniture | false | 牆角疊三張備用椅，营业细节 |
 | 有 | 麻將桌 | mahjong_table | 2×2 | furniture | true | 內嵌牌槽的方形麻將桌，昭和喫茶／雜貨店常見的棋牌角 |
