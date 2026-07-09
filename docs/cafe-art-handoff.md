@@ -64,7 +64,7 @@
 - ✅ **base-fg 空氣牆重剪**（門欄 x257–331/y341、牆基 y373，以 JJ 標的淺色方形定位）；✅ **cozy 姿勢切邊重出**（`scripts/fix-shopkeeper-pose.py` 可重用）。
 - ✅ **店長台詞資料管線**：`docs/shop-lines.json`（702 句＝遷移 202＋新增 500，每句帶 pose/states 標籤）→ `scripts/build-shop-lines.py` → `src/data/shop-lines.gen.ts`。**引擎待接 E5**（`art-to-engine-requests.md`）。
 
-**⚠️ Git 事故與新守則**：2026-07-09 iCloud 桌面同步逐出 `.git` 物件→歷史重生於 root `09228f7`（舊清單 `docs/git-history-recovered.md`）。現有 remote：GitHub `jamie8818/Project03`（private）＋本機鏡像 `~/Project03-mirror.git`，**commit 後兩個都要 push**。**美術 agent 不自己 commit**——worker 交檔案清單、監工統一 commit；codex 生成一律前景跑。**專案待搬離 `~/Desktop`**（→ `~/Projects/`，脫離 iCloud），搬家時 Claude 專案記憶目錄要跟著遷。
+**⚠️ Git 事故與新守則**：2026-07-09 iCloud 桌面同步逐出 `.git` 物件→歷史重生於 root `09228f7`（舊清單 `docs/git-history-recovered.md`）。現有 remote：GitHub `jamie8818/Project03`（private）＋本機鏡像 `~/Project03-mirror.git`，**commit 後兩個都要 push**。**美術 agent 不自己 commit**——worker 交檔案清單、監工統一 commit；codex 生成一律前景跑。**專案已搬到 `~/Projects/Project03`**（2026-07-09，脫離 iCloud 管轄；Claude 記憶目錄已同步遷移）。舊路徑 session 一律作廢、在新路徑重開。
 
 ## 1. 已完成（美術）
 

@@ -67,7 +67,7 @@ import sys; from PIL import Image
 slug=sys.argv[1]; im=Image.open(f"/tmp/panda-gen/{slug}.png").convert("RGBA")
 bb=im.getbbox();  im=im.crop(bb) if bb else im
 h=96; im=im.resize((round(im.width*h/im.height),h), Image.NEAREST)
-import os; im.save(f"{os.environ['HOME']}/Desktop/Project03/public/cafe/shopkeeper/{slug}.png")
+import os; im.save(f"{os.environ['HOME']}/Projects/Project03/public/cafe/shopkeeper/{slug}.png")
 print("  ->", im.size)
 PY
 }

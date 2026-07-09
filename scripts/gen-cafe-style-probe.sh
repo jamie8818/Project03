@@ -49,7 +49,7 @@ python3 - <<'PY'
 import os, glob
 from collections import deque
 from PIL import Image, ImageDraw
-TMP='/tmp/cafe-probe'; OUT=os.path.expanduser('~/Desktop/Project03/assets_src/cafe')
+TMP='/tmp/cafe-probe'; OUT=os.path.expanduser('~/Projects/Project03/assets_src/cafe')
 
 def greenish(p):
     r,g,b=p[0],p[1],p[2]
