@@ -2103,14 +2103,15 @@ img.buddy {
 }
 
 /* 招牌布丁（掛在櫃檯上方）：躲開店長（x102–198/y50–146，E2 移位後），落在吧檯右段檯面上緣 */
-/* 招牌布丁展示座（E8 三層疊圖；源圖 2 倍尺度、顯示減半，總高 ~52px＝codex 定案的小型展示物比例，別放大過 56px）
-   疊法（美術 mockup 實測）：stand 頂盤線在自頂 22% 處；pudding 底疊入盤線下 12% 自高接地；dome 裙邊疊盤線下 10% 自高 */
+/* 招牌布丁「食品サンプル展示櫃」（E8 修訂：門口右側立櫃；源圖 72×118 顯示減半 36×59）
+   疊序：case_body → pudding（套口味色、置櫃內中層架上）→ case_glass（半透明前板）。
+   舊吧檯版 stand/dome 棄用、檔案保留（JJ 反悔可切回，見需求單 E8）。 */
 .cafe-sign {
   position: absolute;
-  left: 216px;
-  bottom: 292px; /* 底錨檯面 y=124（COUNTER_SURFACE_Y）；416−124 */
-  width: 44px;
-  height: 52px;
+  left: 352px; /* 櫃中心 x=370（門口右側 360–380 帶；門欄 x257–331 之右） */
+  bottom: 36px; /* 櫃腳底 y=380（規格 ≈370 preview 微調下移）：前牆不透明帶 y373 起，腳沉牆後 ~7px＝底緣被遮的正確景深 */
+  width: 36px;
+  height: 59px;
   pointer-events: none;
 }
 .cafe-sign.sign-hit { pointer-events: auto; cursor: pointer; }
@@ -2121,9 +2122,9 @@ img.buddy {
   image-rendering: auto; /* 同家具慣例：2 倍源圖平滑降階 */
   pointer-events: none;
 }
-.sign-stand { bottom: 0; width: 44px; }
-.sign-pudding { bottom: 12.5px; width: 24px; }
-.sign-dome { bottom: 10.5px; width: 42px; }
+.sign-case { bottom: 0; width: 36px; }
+.sign-pudding { bottom: 26px; width: 24px; } /* 中層架上（preview 對圖微調） */
+.sign-glass { bottom: 0; width: 36px; }
 
 /* 接地陰影（引擎畫在 footprint 前緣，全在家具 sprite 之下） */
 .cafe-shadow {

@@ -315,26 +315,6 @@ function Stage({ shop, attend, meDone, talk, variant = 'full', editing, placing,
           />
         </div>
 
-        {/* 招牌布丁展示座（E8）：台座→像素布丁（套口味 hue/sat，換色機制同舊 emoji）→半透明玻璃罩，
-            底錨檯面 y=COUNTER_SURFACE_Y、畫在店長之後 counter_front 之前；talk 模式 hover 看口味、點了店長放閃 */}
-        {shop.sign && PUDDING_BY_ID[shop.sign] && (
-          <div
-            className={`cafe-sign ${talk ? 'sign-hit' : ''}`}
-            title={PUDDING_BY_ID[shop.sign].name}
-            onClick={talk ? () => { sfx.correct(1); saySignLine(); } : undefined}
-          >
-            <img className="sign-stand" src="/cafe/sign/stand.png" alt="" draggable={false} />
-            <img
-              className="sign-pudding"
-              src="/cafe/sign/pudding.png"
-              alt={PUDDING_BY_ID[shop.sign].name}
-              draggable={false}
-              style={{ filter: `hue-rotate(${PUDDING_BY_ID[shop.sign].hue}deg) saturate(${PUDDING_BY_ID[shop.sign].sat ?? 1})` }}
-            />
-            <img className="sign-dome" src="/cafe/sign/dome.png" alt="" draggable={false} />
-          </div>
-        )}
-
         {/* 內側小家電（E4）：畫在店長之後、counter_front 之前＝下半身被正面板遮＝嵌在吧檯裡 */}
         {insideOrder.map(renderFurn)}
 
@@ -352,6 +332,27 @@ function Stage({ shop, attend, meDone, talk, variant = 'full', editing, placing,
 
         {/* 地板家具(L1)＋檯面小物(L2)：畫在吧檯正面板之上＝吧檯外家具擋住吧檯、且都畫在店長之上（店長在最後排）。E3 */}
         {aboveCounterOrder.map(renderFurn)}
+
+        {/* 招牌布丁「食品サンプル展示櫃」（E8 修訂）：門口右側立櫃，木櫃→像素布丁（套口味 hue/sat）→玻璃前板。
+            畫在 base-fg 之下＝底緣被前景牆遮（正確景深）、不恆亮（裝潢模式跟其他靠牆家具一樣透出）。
+            talk 模式 hover 看口味、點了店長放閃（互動沿用吧檯版）。 */}
+        {shop.sign && PUDDING_BY_ID[shop.sign] && (
+          <div
+            className={`cafe-sign ${talk ? 'sign-hit' : ''}`}
+            title={PUDDING_BY_ID[shop.sign].name}
+            onClick={talk ? () => { sfx.correct(1); saySignLine(); } : undefined}
+          >
+            <img className="sign-case" src="/cafe/sign/case_body.png" alt="" draggable={false} />
+            <img
+              className="sign-pudding"
+              src="/cafe/sign/pudding.png"
+              alt={PUDDING_BY_ID[shop.sign].name}
+              draggable={false}
+              style={{ filter: `hue-rotate(${PUDDING_BY_ID[shop.sign].hue}deg) saturate(${PUDDING_BY_ID[shop.sign].sat ?? 1})` }}
+            />
+            <img className="sign-glass" src="/cafe/sign/case_glass.png" alt="" draggable={false} />
+          </div>
+        )}
 
         {/* 前景層：門/牆去背圖（美術出 base-fg.png，門牆不透明、其餘透明），畫在家具之上＝景深。
             裝潢時調淡，好讓被擋住的家具還看得到、點得到（點格子選取，pointer 穿透前景）。 */}
