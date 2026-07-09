@@ -2571,7 +2571,7 @@ img.buddy {
   background: rgba(255, 250, 240, 0.6);
 }
 .gacha-cell img { max-width: 44px; max-height: 44px; object-fit: contain; image-rendering: pixelated; }
-.gacha-cell:not(.owned) img { filter: grayscale(1) brightness(0.32); opacity: 0.8; }
+.gacha-cell:not(.owned) img { filter: brightness(0); opacity: 0.85; } /* 未擁有＝全黑剪影只露形狀（JJ 指定），開出來才有驚喜 */
 .gacha-cell small { font-size: 10px; text-align: center; }
 .gacha-cell:not(.owned) small { opacity: 0.55; }
 
