@@ -199,3 +199,31 @@ base → 地毯(L0) → 店長 → counter_front(.cafe-counter-fg) → 地板家
 3. `Shop.tsx` 渲染分流改依 `rendersInside`（實際落點/變體）而非 hostType 一刀切：嵌入→E4 內側層（`COUNTER_INSIDE_Y=145`、counter_front 之前）；檯面→一般 surface 層（`COUNTER_SURFACE_Y=124` 或桌面錨、counter_front 之後）。
 4. 裝潢模式選取吧檯格上的小家電時，工具列多一顆「⬆ 放上檯面／⬇ 嵌進吧檯」切換鈕（與 🔄 轉向並排）；預設落點＝嵌內側。
 5. `npm test` 101/101（E4 那條 canPlace 測試改寫成 E7 加法語義＋變體/切換鈕條件全覆蓋）、tsc 過；preview 實測：義式機吧檯格預設嵌入（bottom 271px）→ 切檯面（292px、畫在 counter_front 之後全露）→ 切回嵌入，桌面放置合法。sHT 尺度 JJ 還沒看桌上實擺，嫌大再回報重生縮版。
+
+## E8. 招牌布丁「玻璃罩展示座」三層素材（JJ 需求 2026-07-09，方案 A）— 美術已交付，待引擎接線
+
+**背景**：招牌布丁目前是 `Shop.tsx` `.cafe-sign` 一顆 28px 的 🍮 emoji，套 `filter: hue-rotate(${hue}deg) saturate(${sat})`（`PUDDING_BY_ID`，24 種口味）換色。JJ 核定改成實體「黃銅台座＋玻璃罩＋像素布丁」展示座，emoji 換成三張疊圖，hue-rotate 換色機制不變（只是套色對象從 emoji 換成 `pudding.png`）。
+
+**交付檔案**（新目錄 `public/cafe/sign/`，源圖＝引擎顯示的 2 倍尺度，即「引擎顯示減半」慣例）：
+1. `stand.png`（88×38px）：黃銅展示台座，薄圓盤檯面＋短柱＋圓底座，右側烤一個斜立小名牌（奶油底＋深色裝飾線條，64px 尺度下可讀出「像招牌」即可，非真實可讀日文字）。
+2. `pudding.png`（48×39px）：布丁模具倒扣的經典梯形布丁，暖橘棕本體＋頂面深琥珀焦糖醬（邊緣兩處小圓弧滴痕，非直條/非把手狀），配色刻意貼近現行 🍮 emoji 的暖色調（見下方相容性測試）。**這張會套 `hue-rotate`/`saturate`，跟現在 emoji 用法完全一樣**。
+3. `dome.png`（84×82px）：半透明玻璃罩 overlay，alpha ≈ 28–38%（罩體本身、裙邊、高光各自不同 alpha，非單一數值），頂部黃銅小把手（不透明）、左上一道對角高光帶；PIL 手繪（非 codex chroma-key）——因為 chroma-key 去背只能出二值 alpha，做不出玻璃的漸層透明感。
+
+**疊序與定位建議**：
+- 渲染疊序（由下到上）：`stand.png` → `pudding.png`（套 `PUDDING_BY_ID[sign].hue/sat`，沿用現有 `hue-rotate(...) saturate(...)` 寫法）→ `dome.png`（無 filter，固定不透明度，玻璃罩不用跟著口味變色）。
+- 底部錨在檯面 y≈124（沿用 `COUNTER_SURFACE_Y`）、x 中心沿用 216 附近（現行 `.cafe-sign left:216` 一帶），避開店長視覺區 x102–198。三層水平置中對齊同一 x 中心（stand 最寬、pudding/dome 較窄，都以 stand 的中心線對齊）。
+- 垂直堆疊比例（美術端 mockup 實測的堆法，供引擎抓感覺，非強制像素值）：布丁底部疊入 stand 頂盤線下方約 12%（自身高度）做接地；stand 頂盤線落在 stand 圖高度自頂算 22% 處；玻璃罩裙邊在同一頂盤線上方重疊約 10%（自身高度），其餘罩體整個露出、把布丁整個罩住。三層合成後總顯示高度實測約 **51–52px**（源圖疊起來 ~103px÷2），比「2 格／64px」略矮一點；如果實際擺進場景後 JJ 覺得太小，可以在 CSS 整組再放大 1.2× 左右去逼近 64px，不需要重生素材（三張已经用同一比例關係疊，等比放大不會走樣）。
+- 顯示層級：三層都畫在店長之後、`counter_front` 之前（跟現行 `.cafe-sign` 同層級），pointer-events 沿用 none（除非要接互動，見下）。
+
+**互動需求（新增，現行 emoji 沒有）**：
+1. Hover 顯示口味名 tooltip（沿用 `PUDDING_BY_ID[sign].name`）。
+2. 點擊招牌 → 觸發店長切 `love` 姿勢＋動態台詞「本日の看板プリン：〈口味名〉！」（口味名同上）。
+3. 可選加分：偶發 ✨ 閃光 CSS（例如玻璃罩上定時淡入淡出一個小光點/sparkle，暗示「今日精選」），非必須。
+4. `shop.sign === ''`（未設招牌）時三層都不顯示，行為照舊。
+5. 裝潢面板「招牌」分頁（如果有預覽縮圖）建議比照正式渲染，把縮圖從 🍮 emoji 換成 `pudding.png`（可以不套 dome/stand，單純小圖示意即可）。
+
+**Hue-rotate 相容性測試（已驗證，方法可重現）**：用 W3C Filter Effects 規格的 hue-rotate／saturate 矩陣公式（跟瀏覽器 CSS filter 同一套數學），分別套在新 `pudding.png` 和 macOS 系統 🍮 emoji（Apple Color Emoji sbix 點陣，PIL `embedded_color=True` 直接取像素）上，取 8 個代表口味（plain h0／caramel h-15／matcha h70／taro h-130 sat0.8／rainbow h180 sat1.4／gold h3 sat1.6／sakura h-80 sat0.7／blueberry h-160 sat0.7）並排比對：新素材跟 emoji 版的色相偏移方向、飽和度觀感完全一致（matcha 兩者皆轉綠、taro 皆轉紫、sakura 皆轉粉、blueberry 皆轉藍紫），沒有出現新素材套色後「看不出味道」或「整個變灰/變黑」的情況。結論：**24 種口味的既有 hue/sat 數值表不用重調，直接套用在 `pudding.png` 上即可**，因為新素材的基色（暖橘棕）跟 emoji 的暖色調基線夠接近。
+
+**驗收**：三層疊起來且套色正常（至少實測 plain/caramel/matcha/taro/rainbow/gold 六種不出現詭異色）；`sign===''` 不顯示；hover tooltip／點擊切 love 姿勢＋台詞可用；preview 目視三層無明顯縫隙/破圖、跟吧檯場景風格融入（胡桃木/黃銅暖色系一致）。
+
+**⚠️ 待辦（未完成，非美術怠工）**：本輪照專案慣例（[[cafe-art-codex-review]]）在定案前應該跑 codex 總審（`codex exec --sandbox read-only -i 圖 -- brief`），但生成階段用掉的額度剛好把 codex 這次額度打滿，卡在使用量上限（非 401，訊息顯示要等到約 22:54 才重置），等到時間到之後还没來得及補跑。上面所有結論是美術這邊自己用「跟遊戲同公式的 hue-rotate 矩陣＋跟 emoji 並排比對＋貼進 base.png 模擬」驗過的，**還沒有 codex 交叉確認**，建議接線前後找個額度沒卡住的時間點，把三張素材＋合成模擬圖丟給 codex 過一輪再正式定案（brief 可以直接問：風格融進吧檯場景嗎、大小合不合理、玻璃罩透明感夠不夠、口味色還認得出來嗎）。
