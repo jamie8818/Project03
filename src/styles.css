@@ -2320,8 +2320,8 @@ img.buddy {
 /* 店長講話泡（在 576×416 舞台座標系內，會跟著縮放） */
 .shop-bubble {
   position: absolute;
-  left: 176px;
-  top: 96px;
+  left: 210px; /* 店長右邊界約 x200（PANDA_CX=150±半寬）；留一點餘裕別夾肩膀（G4） */
+  top: 70px; /* 貼店長頭側，別壓在胸口/手臂高度 */
   max-width: 260px;
   background: rgba(255, 250, 240, 0.92);
   border: 2px solid #6b4a2e;

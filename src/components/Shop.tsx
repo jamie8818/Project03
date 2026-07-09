@@ -46,6 +46,8 @@ const FACING_LABEL: Record<Facing, string> = { front: '前', back: '後', left: 
 const TABLE_INSET = 5; // 檯面小物坐進桌面上緣幾 px（桌沿唇厚；preview 微調）
 const COUNTER_SURFACE_Y = 124; // 吧檯檯面小物落點的 stage y（吧檯木檯面上緣；preview 微調）
 const COUNTER_INSIDE_Y = 145; // 內側小家電底錨 stage y（檯後工作區＝店長腳邊；落在 counter_front y118–202 內＝下半被正面板遮，E4）
+// 牆上伝言板黑板熱區（dengon-board-spec.md 座標，見 docs/dengon-board-spec.md）
+const BOARD_BTN = { left: 243, top: 12, width: 70, height: 50 };
 
 // 店長熊貓站在吧檯「裡面」（檯後工作區）：上半身露在檯面上、下半身被 counter_front.png 正面板遮住。
 // 中心底部錨定；PANDA_TOP 拉高到檯後 → feet 落檯面前緣、頭露在檯面上（E2，preview 實測值，可微調）。
@@ -244,13 +246,19 @@ function Stage({ shop, attend, meDone, talk, variant = 'full', editing, placing,
   // E3/E4 draw order：地毯(L0) 畫在吧檯之下、壁飾(L3) 貼後牆畫在店長之前（別蓋前景人物）、
   // 內側小家電（counter-inside）跟店長同批＝counter_front 之前（嵌吧檯裡）、
   // 其餘家具(L1/L2) 畫在吧檯之上。renderOrder 已依 z 分好序，filter 保序即可。
+  // 單次分流（原本 4 個 filter 各自重查 itemById／z，收斂成一輪迴圈）
   const order = renderOrder(displayLayout);
-  const zOf = (i: number) => itemById(displayLayout[i].id)?.z;
-  const insideOf = (i: number) => isCounterInside(itemById(displayLayout[i].id));
-  const rugOrder = order.filter((i) => zOf(i) === 'rug');
-  const wallOrder = order.filter((i) => zOf(i) === 'wall');
-  const insideOrder = order.filter(insideOf);
-  const aboveCounterOrder = order.filter((i) => zOf(i) !== 'rug' && zOf(i) !== 'wall' && !insideOf(i));
+  const rugOrder: number[] = [];
+  const wallOrder: number[] = [];
+  const insideOrder: number[] = [];
+  const aboveCounterOrder: number[] = [];
+  for (const i of order) {
+    const it = itemById(displayLayout[i].id);
+    if (it?.z === 'rug') rugOrder.push(i);
+    else if (it?.z === 'wall') wallOrder.push(i);
+    else if (isCounterInside(it)) insideOrder.push(i);
+    else aboveCounterOrder.push(i);
+  }
 
   return (
     <div className={`shop-wrap ${variant}`} ref={wrap} style={{ height: viewH * scale }}>
@@ -370,7 +378,7 @@ function Stage({ shop, attend, meDone, talk, variant = 'full', editing, placing,
           <button
             type="button"
             className="cafe-board-btn"
-            style={{ left: 243, top: 12, width: 70, height: 50 }}
+            style={BOARD_BTN}
             onClick={onBoard}
             aria-label="伝言板"
           >
@@ -435,22 +443,18 @@ function DengonBoard({ me, board, onSend, onClose }: { me: UserState; board: Boa
   const [sent, setSent] = useState(false); // 送出後短暫「✓ 送出！」回饋（按鈕脈動＋小提示）
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const sentTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   // 新留言（含撿到對方的）就捲到底。依賴看「最後一則的時間戳」不看長度——
   // 滿 BOARD_MAX 後 union 進新訊長度恆定，length 永遠不變、就再也不捲了（finding #5）
   useEffect(() => {
     const el = scrollRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [board[board.length - 1]?.at]);
-  useEffect(() => () => { if (sentTimer.current) clearTimeout(sentTimer.current); }, []);
   const submit = () => {
     const t = draft.trim().slice(0, 60);
     if (!t) return;
     onSend(t);
     setDraft('');
     setSent(true);
-    if (sentTimer.current) clearTimeout(sentTimer.current);
-    sentTimer.current = setTimeout(() => setSent(false), 1100);
     inputRef.current?.focus(); // 送完保持焦點，方便連續留言
   };
   return (
@@ -475,7 +479,7 @@ function DengonBoard({ me, board, onSend, onClose }: { me: UserState; board: Boa
           )}
         </div>
         <div className="dengon-inputbar">
-          {sent && <span className="dengon-sent-toast">✓ 送出！</span>}
+          {sent && <span className="dengon-sent-toast" onAnimationEnd={() => setSent(false)}>✓ 送出！</span>}
           <input
             ref={inputRef}
             className="dengon-input"
