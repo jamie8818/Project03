@@ -342,6 +342,13 @@ export const CAFE_ITEMS: CafeItem[] = [
   { id: 'taiwan_world_map', category: 'wall', z: 'wall', w: 2, h: 1, surface: false, spriteHeightTiles: 1.0, name: '世界地圖（只有台灣）', sprite: '/cafe/catalog/taiwan_world_map.png', price: 75, lv: 2, starter: false, flavor: '世界地圖，海很大，島一個' },
   { id: 'exit_sign_wall', category: 'wall', z: 'wall', w: 1, h: 1, surface: false, spriteHeightTiles: 1.0, name: '出口箭頭（指向牆壁）', sprite: '/cafe/catalog/exit_sign_wall.png', price: 38, lv: 1, starter: false, flavor: '逃生燈指著牆，牆先逃' },
   { id: 'traffic_cone', category: 'seating', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.19, name: '施工交通錐', sprite: '/cafe/catalog/traffic_cone.png', price: 32, lv: 1, starter: false, flavor: '施工中（沒有在施工）' },
+  { id: 'cat_litter_box', category: 'personal', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 0.95, name: '貓砂盆', sprite: '/cafe/catalog/cat_litter_box.png', price: 48, lv: 2, starter: false, flavor: '清乾淨老大才不會不開心' },
+  { id: 'house_model_otaru', category: 'personal', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.86, name: '小樽一戶建模型', sprite: '/cafe/catalog/house_model_otaru.png', price: 58, lv: 3, starter: false, flavor: '小樽別墅1比1000版本' },
+  { id: 'tofu_supermarket', category: 'personal', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.88, name: '超市豆腐', sprite: '/cafe/catalog/tofu_supermarket.png', price: 38, lv: 1, starter: false, flavor: '只要50日圓' },
+  { id: 'scuba_gear', category: 'personal', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.28, name: '水肺潛水器材', sprite: '/cafe/catalog/scuba_gear.png', price: 78, lv: 3, starter: false, flavor: '裝備到位，海再約' },
+  { id: 'yakiniku_grill', category: 'personal', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.91, name: '日式烤肉爐', sprite: '/cafe/catalog/yakiniku_grill.png', price: 48, lv: 2, starter: false, flavor: '煙往你那邊飄，抱歉' },
+  { id: 'melon_beer', category: 'personal', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 1.3, name: '哈密瓜啤酒', sprite: '/cafe/catalog/melon_beer.png', price: 44, lv: 2, starter: false, flavor: '大人的奶油蘇打' },
+  { id: 'tinder_flame', category: 'personal', z: 'wall', w: 1, h: 1, surface: false, spriteHeightTiles: 1.0, name: 'Tinder 火焰霓虹燈牌', sprite: '/cafe/catalog/tinder_flame.png', price: 58, lv: 3, starter: false, frontWall: true, flavor: '滑一萬個只為滑到你一個>_^' },
 ];
 
 // 開局免費擺好的家具

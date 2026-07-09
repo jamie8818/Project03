@@ -49,6 +49,12 @@ GRID = {
     'gagfurn1': (4, 2), 'gagfurn2': (4, 2), 'gagwall1': (2, 2), 'gagwall2': (2, 2), 'gagrug1': (1, 1),
     # 搞笑惡搞重生批：codex 判定 4 件需修（撲滿太卡通/小費箱字太小/門沒傳達通牆感/鏡子招牌字太小）
     'gagfix1': (2, 2),
+    # JJ 特注私藏第二批 7 件（category 全 personal）：furniture/surface 合一張 sheet，wall 獨立一張
+    'personal2': (3, 2), 'wall8': (1, 1),
+    # tofu_supermarket 重生：codex 判定豆腐本體偏米棕/紙盒感，不夠白，單件重生強化奶白色調＋封膜反光
+    'personal2fix': (1, 1),
+    # JJ 特注私藏第二批（另一組）6 件（category 全 personal）：furniture/surface 合一張 sheet
+    'personal3': (3, 2),
 }
 
 DATA = json.load(open(MANIFEST))

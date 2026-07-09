@@ -33,6 +33,9 @@ GRID = {
     'furniture9fix': (1, 1), 'surface5fix': (1, 1),
     'gagfurn1': (4, 2), 'gagfurn2': (4, 2), 'gagwall1': (2, 2), 'gagwall2': (2, 2), 'gagrug1': (1, 1),
     'gagfix1': (2, 2),
+    'personal2': (3, 2), 'wall8': (1, 1),
+    'personal2fix': (1, 1),
+    'personal3': (3, 2),
 }
 
 
