@@ -57,6 +57,10 @@ GRID = {
     'personal3': (3, 2),
     # personal3 重生：codex 判定 korean_chicken_feet 缺煙霧、yimei_puff 比例過方、character_balloon 比例過矮，3 件單獨重生
     'personal3fix': (3, 1),
+    # 日式喫茶 30 件（監工策展定案）：座席9／吧檯7／牆飾5／桌上小物9，依 category 各自獨立 sheet
+    'jpcafe_seat': (3, 3), 'jpcafe_counter': (4, 2), 'jpcafe_wall': (3, 2), 'jpcafe_tabletop': (3, 3),
+    # cuckoo_clock 重生：codex 判定屋頂小門的小鳥不夠清楚，單件重生強化鳥形輪廓
+    'jpcafe_wallfix': (1, 1),
 }
 
 DATA = json.load(open(MANIFEST))
