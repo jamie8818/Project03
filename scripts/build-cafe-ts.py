@@ -13,6 +13,16 @@ GEN_TS = os.path.join(ROOT, 'src', 'data', 'cafe.gen.ts')
 
 COLS, ROWS, CELL = 18, 13, 32
 
+# ── 分類 taxonomy（E6：目錄 UI 分頁籤用，key→中文顯示名，順序＝頁籤順序）──
+CATEGORY_LABELS = [
+    ('seating', '座席・桌椅'),
+    ('counter', '吧檯・沖煮・展示'),
+    ('wall', '燈・牆飾'),
+    ('rug', '地毯・地面'),
+    ('tabletop', '桌上擺件・小物'),
+    ('seasonal', '擺飾雜貨・季節'),
+]
+
 # ── 碰撞格（對齊 bar-baked 場景 base.png：左上吧檯＋後吧台層架＋三張高腳椅烤進圖）──
 WALL_ROWS = [0, 1]         # 上緣木牆＋牆裙
 BOTTOM_ROWS = [12]         # 底牆＋店門
@@ -59,6 +69,7 @@ def main():
     L.append('')
     L.append('export interface CafeItem {')
     L.append('  id: string;')
+    L.append('  category: string; // E6：目錄 UI 分頁籤 key（見 CATEGORY_LABELS）')
     L.append('  z: Z層;')
     L.append('  w: number; // 佔地寬（格）')
     L.append('  h: number; // 佔地深度（格，非視覺高度）')
@@ -78,6 +89,12 @@ def main():
     L.append('// z 層渲染順序（小→先畫→在下層）')
     L.append("export const Z_RANK: Record<Z層, number> = { rug: 0, furniture: 1, surface: 2, wall: 3 };")
     L.append('')
+    L.append('// 分類 taxonomy（E6：目錄 UI 分頁籤 key→中文顯示名，陣列順序＝頁籤順序）')
+    L.append('export const CATEGORY_LABELS: Array<[string, string]> = [')
+    for key, label in CATEGORY_LABELS:
+        L.append(f"  ['{key}', '{label}'],")
+    L.append('];')
+    L.append('')
     L.append('// 各 z 可放的最上排（wall 可貼上牆，其餘從地板起）')
     L.append("export const Z_TOP_ROW: Record<Z層, number> = { rug: 2, furniture: 2, surface: 2, wall: 0 };")
     L.append('')
@@ -96,7 +113,7 @@ def main():
             fac = ", facings: [" + ", ".join(f"'{f}'" for f in it['facings']) + "]"
         host = f", hostType: '{it['hostType']}'" if it.get('hostType') else ''
         L.append(
-            f"  {{ id: '{it['id']}', z: '{it['z']}', w: {it['w']}, h: {it['h']}, "
+            f"  {{ id: '{it['id']}', category: '{it['category']}', z: '{it['z']}', w: {it['w']}, h: {it['h']}, "
             f"surface: {str(it['surface']).lower()}, spriteHeightTiles: {it['spriteHeightTiles']}, "
             f"name: '{it['name']}', sprite: '/cafe/catalog/{it['id']}.png', price: {it['price']}, "
             f"lv: {it['lv']}, starter: {str(it['starter']).lower()}{fac}{host} }},"

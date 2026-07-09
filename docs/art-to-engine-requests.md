@@ -123,3 +123,47 @@ base → 地毯(L0) → 店長 → counter_front(.cafe-counter-fg) → 地板家
 **驗收**：`python3 scripts/build-shop-lines.py` 重跑一次應該 no-op（gen.ts 內容不變）；接線後 `npm test` 全過、preview 點店長能抽到新句、closed/solo/full 三態底下抽到的句子只落在對應池、姿勢跟句子語意扣合（不會出現「趴著睡」配 cheer 姿勢這種明顯不搭）。
 
 **備註**：500 句新增內容分 4 批寫、每批都過 codex review（人設漂移／日文正確性／姿勢扣合／重複度＋長度）後修正定案；16 姿勢每種 ≥33 句、closed/solo/full 專屬各 ≥60/80/80、日語教學梗（假名讀音／N5-N4 詞彙）130 句，單句 8–28 字（含泡泡邊界）。
+
+## E6. 家具目錄分類 taxonomy＋購買清單/裝潢托盤分頁籤（`docs/cafe-catalog.json` → `src/data/cafe.gen.ts`）— 美術已交付，等引擎接 UI
+
+**背景**：catalog 到 73 件，遊戲的購買清單／裝潢家具托盤目前平鋪列全部項目，找東西要滾很久。美術這條交付「分類定義」（manifest 加 `category` 欄＋中文顯示名對照表），引擎接手把 UI 做成分頁籤。
+
+**美術已交付的欄位形狀**：
+
+1. `docs/cafe-catalog.json`：73 件每件都加了 `"category"`（英文 key，字串），緊接在 `"id"` 之後。taxonomy 依 `docs/cafe-furniture-wishlist.md` 的既有分節劃定，共 **6 類**：
+
+   | key | 中文顯示名 | 件數 | 對應 wishlist 分節 |
+   |---|---|---|---|
+   | `seating` | 座席・桌椅 | 16 | 座席・桌椅 |
+   | `counter` | 吧檯・沖煮・展示 | 19 | 吧檯・沖煮・展示（含 6 件 `hostType:'counter-inside'` 吧檯內側小家電） |
+   | `wall` | 燈・牆飾 | 14 | 燈・牆飾＋桌上檯燈（`table_lamp`，wishlist 漏列的第 73 件，因主題是燈具併入本類） |
+   | `rug` | 地毯・地面 | 7 | 地毯・地面 |
+   | `tabletop` | 桌上擺件・小物 | 16 | 桌上擺件・小物 |
+   | `seasonal` | 擺飾雜貨・季節 | 1（`kadomatsu` 正月門松） | 擺地雜貨・季節 |
+
+   合計 16+19+14+7+16+1 = **73**，與 catalog 件數完全對齊。`seasonal` 目前只有 1 件、明顯小於其他類——這是刻意的（季節限定家具本來就該獨立分頁，方便之後按節慶擴充），不是分類疏漏。
+
+2. `scripts/build-cafe-ts.py`：
+   - `CafeItem` 介面新增 `category: string` 欄位（緊接 `id` 之後），比照 `hostType` 的透傳寫法，從 manifest 讀值直寫進每件 item 的 TS 物件字面量。
+   - 新增模組層級常數 `CATEGORY_LABELS: Array<[string, string]>`（腳本頂部維護 `key → 中文顯示名` 對照＋頁籤順序，見下方原始定義），產生器把它原樣寫進 `cafe.gen.ts` 匯出，**陣列順序即建議頁籤順序**：`seating → counter → wall → rug → tabletop → seasonal`。
+   - 已重跑產生器，`src/data/cafe.gen.ts` 73 件 `CafeItem` 都帶 `category`，`CATEGORY_LABELS` 已匯出（見檔案第 29–37 行）。
+
+   ```ts
+   // src/data/cafe.gen.ts（已產出，供引擎直接 import）
+   export const CATEGORY_LABELS: Array<[string, string]> = [
+     ['seating', '座席・桌椅'],
+     ['counter', '吧檯・沖煮・展示'],
+     ['wall', '燈・牆飾'],
+     ['rug', '地毯・地面'],
+     ['tabletop', '桌上擺件・小物'],
+     ['seasonal', '擺飾雜貨・季節'],
+   ];
+   ```
+
+**⚠️ 這條需要引擎新做的事（美術這邊到此為止）**：
+1. 購買清單（Shop 商店列表）與裝潢家具托盤（放置面板）UI 各加一排分頁籤，籤名／順序直接吃 `CATEGORY_LABELS`（`for (const [key, label] of CATEGORY_LABELS)`），不要另外手刻中文字串，之後美術要加類別／改順序只改 `build-cafe-ts.py` 頂部那份表即可同步兩處 UI。
+2. 篩選邏輯：`CAFE_ITEMS.filter(it => it.category === activeKey)`。目前每類都非空，不需要處理「空分類」的 UI 情境；但 `seasonal` 只有 1 件時頁籤仍要顯示（不要因為件數少就隱藏或合併，之後會加更多季節件）。
+3. 分頁籤是否要顯示「全部」總覽籤、預設選中哪一類、行動版排版怎麼收，由引擎自行決定，美術沒有硬性要求。
+4. **未接之前的行為保證**：`category` 欄位是新增欄位，`CafeItem` 型別新增必填屬性但既有引擎程式碼（`Shop.tsx`／`shop.ts` 等）目前沒有讀取它，多這個欄位純粹無害——不會改變任何現有渲染／購買/放置邏輯、`tsc --noEmit` 已驗證整包無型別錯誤。UI 分頁籤何時接、要不要接完全是引擎的排程，接之前遊戲行為不變。
+
+**驗收**：`python3 scripts/build-cafe-ts.py` 重跑應為 no-op（re-run 產出內容不變）；`npx tsc --noEmit` 過；`grep -c "category:" src/data/cafe.gen.ts` 73 件家具都有值，且 6 個 key 分佈為 seating16／counter19／wall14／rug7／tabletop16／seasonal1。
