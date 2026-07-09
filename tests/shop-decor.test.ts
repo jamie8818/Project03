@@ -17,6 +17,7 @@ import {
   placedCount,
   renderOrder,
   rendersInside,
+  rendersOnCounter,
   rotateHost,
   spriteFor,
   stockAvailable,
@@ -127,6 +128,20 @@ test('canPlace／變體：counter-inside 小家電加法放置（E7）——吧�
   } finally {
     delete ITEM_BY_ID[FAKE];
   }
+});
+
+test('canPlace／rendersOnCounter：counterTop 家具可放檯面格（E11 加法）', () => {
+  const G = 'grinder'; // 1×1 z=furniture counterTop:true（manifest 已標）
+  assert.ok(itemById(G)?.counterTop, '前置：grinder 應標 counterTop');
+  assert.ok(canPlace([], G, 3, 3), '檯面格 → 可（E11）');
+  assert.ok(canPlace([], G, 10, 8), '地板照舊可放（加法）');
+  assert.ok(!canPlace([], CHAIR, 3, 3), '非 counterTop 家具上檯面 → 仍擋（counterBlocked）');
+  assert.ok(!canPlace([{ id: G, gx: 3, gy: 3 }], GUEST, 3, 3), '小物別疊在檯面上的器材');
+  assert.ok(!canPlace([{ id: GUEST, gx: 3, gy: 3 }], G, 3, 3), '器材別疊在小物上');
+  assert.ok(!canPlace([{ id: G, gx: 3, gy: 3 }], G, 3, 3), '同格兩件器材 → 擋');
+  assert.ok(rendersOnCounter({ id: G, gx: 3, gy: 3 }), '檯面上 → 檯面錨變體');
+  assert.ok(!rendersOnCounter({ id: G, gx: 10, gy: 8 }), '地板上 → 一般家具錨');
+  assert.ok(!rendersOnCounter({ id: CHAIR, gx: 3, gy: 3 }), '非 counterTop 件永不走檯面錨');
 });
 
 test('footprintDims：left/right 旋轉時 w↔h 對調（①）', () => {

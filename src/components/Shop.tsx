@@ -28,6 +28,7 @@ import {
   poseForLine,
   renderOrder,
   rendersInside,
+  rendersOnCounter,
   rotateHost,
   shopLevel,
   shopLevelXp,
@@ -192,8 +193,10 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
     const cls = `cafe-furn z-${it.z} ${editing ? 'editable' : ''} ${editing && i === selectedIndex ? 'selected' : ''} ${isDragged ? (dragOk ? 'dragging' : 'dragging invalid') : ''}`;
     if (it.z === 'furniture') {
       // 底邊釘在 footprint 前緣、寬=佔地寬、高依素材自然比例往上長（overhang）；
-      // facing 決定用哪張 sprite（左右對稱件用 _right 鏡像＝scaleX(-1)）
+      // facing 決定用哪張 sprite（左右對稱件用 _right 鏡像＝scaleX(-1)）。
+      // E11：counterTop 件擺上吧檯時改錨檯面 y（跟檯面小物同高度、counter_front 之後全露）
       const sp = spriteFor(it, p.facing);
+      const bottom = rendersOnCounter(p) ? STAGE_H - COUNTER_SURFACE_Y : STAGE_H - frontRowOf(p) * CELL;
       return (
         <img
           key={`f${i}`}
@@ -204,7 +207,7 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
           draggable={false}
           onLoad={onImgLoad(sp.src)}
           onError={(e) => { if (!e.currentTarget.src.endsWith(it.sprite)) e.currentTarget.src = it.sprite; }} // 該向 sprite 還沒生 → 退回 front，不露破圖
-          style={{ left: p.gx * CELL, bottom: STAGE_H - frontRowOf(p) * CELL, width: dims.w * CELL, height: 'auto', transform: sp.flip ? 'scaleX(-1)' : undefined }}
+          style={{ left: p.gx * CELL, bottom, width: dims.w * CELL, height: 'auto', transform: sp.flip ? 'scaleX(-1)' : undefined }}
         />
       );
     }

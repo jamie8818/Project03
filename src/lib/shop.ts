@@ -142,6 +142,11 @@ export function canToggleInside(p: PlacedItem): boolean {
   return isCounterInside(ITEM_BY_ID[p.id]) && isCounterTop(p.gx, p.gy) && !COUNTER_INSIDE_EXCLUDED_COLS.has(p.gx);
 }
 
+/** E11：z=furniture 的 counterTop 件目前是否擺在吧檯檯面上（渲染改錨 COUNTER_SURFACE_Y、全露） */
+export function rendersOnCounter(p: PlacedItem): boolean {
+  return !!ITEM_BY_ID[p.id]?.counterTop && isCounterTop(p.gx, p.gy);
+}
+
 // 吧檯檯面格（虛擬 host）：純 row3 cols0–7＝吧檯唯一攤平可見的檯面（E4 拆層確認 row2 是矮櫃抽屜排
 // ＋內角柱、非平面，舊的兩格「翹角」特例已刪）。內側小家電（counter-inside）也用同一排格。
 export const COUNTER_TOP: ReadonlyArray<readonly [number, number]> = [
@@ -261,6 +266,9 @@ export function canPlace(layout: PlacedItem[], id: string, gx: number, gy: numbe
     layout.forEach((p, i) => {
       if (i === ignoreIndex) return;
       if (isSurfaceGuest(p.id)) footprint(p.id, p.gx, p.gy, p.facing).forEach(([x, y]) => guestCells.add(`${x},${y}`));
+      // E11：已放上吧檯的 counterTop 家具佔住檯面格＝小物別疊上去
+      if (ITEM_BY_ID[p.id]?.counterTop && isCounterTop(p.gx, p.gy))
+        footprint(p.id, p.gx, p.gy, p.facing).forEach(([x, y]) => guestCells.add(`${x},${y}`));
       if (isSurfaceHost(p.id)) footprint(p.id, p.gx, p.gy, p.facing).forEach(([x, y]) => hostCells.add(`${x},${y}`));
     });
     for (const [cx, cy] of cells) {
@@ -276,6 +284,20 @@ export function canPlace(layout: PlacedItem[], id: string, gx: number, gy: numbe
   if (gx < 0 || gx + w - 1 > CAFE.cols - 1) return false;
   const top = Z_TOP_ROW[it.z];
   if (gy < top || gy + h - 1 > PLACE.maxRow) return false;
+
+  // E11 加法：counterTop 件（咖啡器材/小型展示，z=furniture）可整件落吧檯檯面格——
+  // 佔格衝突比照 surface 小物（別疊小物、別疊其他檯面住客），counterBlocked 對這條路不適用；地板照舊走下面一般規則
+  if (it.counterTop && cells.every(([cx, cy]) => isCounterTop(cx, cy))) {
+    const taken = new Set<string>();
+    layout.forEach((p, i) => {
+      if (i === ignoreIndex) return;
+      // 檯面住客＝surface 小物（含嵌入式小家電）＋其他已放檯面的 counterTop 家具
+      if (isSurfaceGuest(p.id) || (ITEM_BY_ID[p.id]?.counterTop && isCounterTop(p.gx, p.gy)))
+        footprint(p.id, p.gx, p.gy, p.facing).forEach(([x, y]) => taken.add(`${x},${y}`));
+    });
+    return cells.every(([cx, cy]) => !taken.has(`${cx},${cy}`));
+  }
+
   const occupied = new Set<string>();
   layout.forEach((p, i) => {
     if (i === ignoreIndex) return;

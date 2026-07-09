@@ -271,6 +271,8 @@ JJ 看 preview 判定吧檯檯沿太窄破圖，拍板改門口展示櫃。**互
 z=furniture 的咖啡器材/小型展示，現實中本來就擺吧檯上，開放檯面格：manifest 已標 `counterTop: true`（9 件：cold_drip_tower/siphon_rack/grinder/register/pourover_stand/copper_kettle_set/sandwich_case/pudding_mold_shelf/fruit_shelf），**加法**——地板照舊可放。
 **引擎**：placement 對這 9 件開放 COUNTER_TOP（row3 cols0–7），底錨 `COUNTER_SURFACE_Y=124`，繪序走現有檯面小物路徑（counter_front 之後、全露）。E7 的 6 件小家電已涵蓋、不用動。
 
+**✅ 引擎已接手完成（2026-07-10）**：`canPlace` 家具分支加 E11 特判——`counterTop:true` 且整件落檯面格＝走檯面住客衝突檢查（別疊小物/別疊其他檯面器材），counterBlocked 不適用；地板照舊（加法）。雙向防疊：surface 小物的 canPlace 也把「已放檯面的 counterTop 家具」算進佔格。渲染變體 `rendersOnCounter(p)`（shop.ts export）：檯面上改錨 `COUNTER_SURFACE_Y`、否則一般家具前緣錨；繪序本來就在 aboveCounterOrder（counter_front 後全露）不用動。格線 row2 起已涵蓋 row3。npm test 107/107（新增 E11 測試含碰撞/變體/非 counterTop 仍擋）；preview 實擺 grinder/cold_drip_tower 上檯面、錨 292px、全露對圖過。
+
 ## E12. 珍藏・私物轉蛋系統（JJ 需求 2026-07-09）— 素材已交付（commit 553c077）
 
 # E12. 「珍藏・私物」轉蛋機（ガチャガチャ）系統 — 美術已交付素材，待引擎接線
