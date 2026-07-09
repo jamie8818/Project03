@@ -5,8 +5,8 @@ import type { UserState } from '../types.ts';
 import { VOCAB_N5, type WordInfo } from '../data/vocab.ts';
 
 export const CRAM_SIZE = 10;
-export const CRAM_COIN_DIVISOR = 2; // 金幣＝答對數÷2 無條件捨去（滿分 5，對齊 minigame 3 金幣行情）
-export const CRAM_DAILY_COIN_CAP = 15; // 每日背單字金幣上限（防無限刷；約 3 輪滿分的量）
+export const CRAM_COIN_RATE = 1.5; // 金幣＝答對數×1.5 無條件捨去（滿分 15；JJ 2026-07-09 嫌 5 太少調高）
+export const CRAM_DAILY_COIN_CAP = 45; // 每日背單字金幣上限（防無限刷；約 3 輪滿分的量）
 
 const wid = (w: WordInfo) => `w:${w.jp}`;
 
@@ -73,7 +73,7 @@ export function cramChoices(w: WordInfo, round: WordInfo[], rng: () => number = 
 /** 分數→金幣（含每日上限）。earned＝這輪實發；capLeft＝發完後今天還剩的額度 */
 export function cramCoins(correct: number, state: UserState, today: string): { earned: number; capLeft: number } {
   const used = state.cram?.date === today ? state.cram.coins : 0;
-  const raw = Math.floor(correct / CRAM_COIN_DIVISOR);
+  const raw = Math.floor(correct * CRAM_COIN_RATE);
   const earned = Math.max(0, Math.min(raw, CRAM_DAILY_COIN_CAP - used));
   return { earned, capLeft: CRAM_DAILY_COIN_CAP - used - earned };
 }

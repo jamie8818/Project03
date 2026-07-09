@@ -55,16 +55,16 @@ test('cramChoices：四選一、含正解、不重複', () => {
   }
 });
 
-test('cramCoins：答對數÷2、每日上限 15、跨日重置', () => {
+test('cramCoins：答對數×1.5、每日上限 45、跨日重置', () => {
   const s = initState('jj', { hira: true, kata: true }, TODAY);
-  assert.equal(cramCoins(10, s, TODAY).earned, 5, '滿分 5 金幣');
-  assert.equal(cramCoins(7, s, TODAY).earned, 3);
-  assert.equal(cramCoins(1, s, TODAY).earned, 0);
+  assert.equal(cramCoins(10, s, TODAY).earned, 15, '滿分 15 金幣');
+  assert.equal(cramCoins(7, s, TODAY).earned, 10, '7 對＝10.5 捨去成 10');
+  assert.equal(cramCoins(0, s, TODAY).earned, 0);
 
-  s.cram = { date: TODAY, coins: 14 };
+  s.cram = { date: TODAY, coins: 44 };
   assert.equal(cramCoins(10, s, TODAY).earned, 1, '剩 1 額度只發 1');
   s.cram = { date: TODAY, coins: CRAM_DAILY_COIN_CAP };
   assert.equal(cramCoins(10, s, TODAY).earned, 0, '滿額不發');
   s.cram = { date: '2026-07-08', coins: CRAM_DAILY_COIN_CAP };
-  assert.equal(cramCoins(10, s, TODAY).earned, 5, '跨日重置');
+  assert.equal(cramCoins(10, s, TODAY).earned, 15, '跨日重置');
 });
