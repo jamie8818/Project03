@@ -9,6 +9,7 @@ import {
   pickTodayFoods,
   orderLine,
   buildOrder,
+  maxOrderItems,
   orderPhrase,
   CUSTOMER_CHARS,
   CUST_ACTION,
@@ -88,6 +89,20 @@ test('buildOrder：1–3 樣不重複、單品必 single、三品必 seq、都�
     else assert.notEqual(o.mode, 'single');
     if (o.items.length === 3) assert.equal(o.mode, 'seq', '三品應走 seq');
   }
+});
+
+test('buildOrder 難度 gate：maxItems=1 全單品、=2 不出三品；maxOrderItems 依課程進度解鎖', () => {
+  const foods = FOOD_POOL.slice(0, 6);
+  for (let i = 0; i < 200; i++) {
+    assert.equal(buildOrder(foods, Math.random, 1).items.length, 1, 'maxItems=1 應全單品');
+    assert.ok(buildOrder(foods, Math.random, 2).items.length <= 2, 'maxItems=2 不應出三品');
+  }
+  // と/も L16 教 → 16 課前全單品；N5 全 20 課後開三品
+  assert.equal(maxOrderItems(0), 1);
+  assert.equal(maxOrderItems(15), 1);
+  assert.equal(maxOrderItems(16), 2);
+  assert.equal(maxOrderItems(19), 2);
+  assert.equal(maxOrderItems(20), 3);
 });
 
 test('orderPhrase：單品用を、追加用も、多品用と串接全部', () => {

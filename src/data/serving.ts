@@ -150,13 +150,22 @@ export interface Order {
   mode: OrderMode;
 }
 
-/** 抽一張訂單：多數單品，部分複數（同桌不同品項） */
-export function buildOrder(foods: FoodItem[], rng: () => number = Math.random): Order {
+/** 依課程進度決定訂單品項上限（JJ 2026-07-09：初學者一開始單純就好，複數點餐隨課程慢慢加）：
+ *  と（和）/も（也）＝複數點餐句型的助詞，課綱 L16 才教 → 前 16 課完成前一律單品；
+ *  N5 全 20 課完成後才開 3 品連點（挑戰量）。lessonsDone＝courseProgress().done（連續完成課數）。 */
+export function maxOrderItems(lessonsDone: number): 1 | 2 | 3 {
+  if (lessonsDone >= 20) return 3;
+  if (lessonsDone >= 16) return 2;
+  return 1;
+}
+
+/** 抽一張訂單：多數單品，部分複數（同桌不同品項）；maxItems 由課程進度 gate（maxOrderItems） */
+export function buildOrder(foods: FoodItem[], rng: () => number = Math.random, maxItems: 1 | 2 | 3 = 3): Order {
   const uniq = shuffle(foods, rng);
   const r = rng();
   let count = 1;
-  if (uniq.length >= 3 && r < 0.12) count = 3;
-  else if (uniq.length >= 2 && r < 0.42) count = 2;
+  if (maxItems >= 3 && uniq.length >= 3 && r < 0.12) count = 3;
+  else if (maxItems >= 2 && uniq.length >= 2 && r < 0.42) count = 2;
   const items = uniq.slice(0, count);
   const mode: OrderMode = count === 1 ? 'single' : count === 3 ? 'seq' : rng() < 0.5 ? 'batch' : 'seq';
   return { items, mode };

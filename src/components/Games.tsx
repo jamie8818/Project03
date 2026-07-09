@@ -10,12 +10,14 @@ import {
   pickCustomer,
   orderLine,
   buildOrder,
+  maxOrderItems,
   orderPhrase,
   type FoodItem,
   type CustAction,
   type OrderMode,
   type OrderLine,
 } from '../data/serving.ts';
+import { courseProgress } from '../lib/course.ts';
 import { speakJa } from '../lib/tts.ts';
 import { sfx } from '../lib/sounds.ts';
 import { COINS } from '../data/fun.ts';
@@ -504,9 +506,11 @@ function ShiftPlay({
     commit(custsRef.current.map((c) => (c.id === id ? { ...c, mood } : c)));
     window.setTimeout(() => commit(custsRef.current.filter((c) => c.id !== id)), 560);
   };
+  // 訂單品項上限隨課程進度解鎖（L16 教と/も後開 2 品、N5 全 20 課後開 3 品）；場中不變、算一次即可
+  const maxItems = maxOrderItems(courseProgress(state).done);
   const spawn = (now: number) => {
     const ch = pickCustomer();
-    const order = buildOrder(foods);
+    const order = buildOrder(foods, Math.random, maxItems);
     commit([
       ...custsRef.current,
       {
