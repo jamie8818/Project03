@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { buildSession, newCardOrder, quizChoices, pickQuizMode, MAX_REVIEWS } from '../src/lib/session.ts';
+import { buildDailyPlan } from '../src/lib/course.ts';
 import { initState, completeSession, displayStreak } from '../src/lib/store.ts';
 import { grade, newCard } from '../src/lib/srs.ts';
 import { KANA_BY_ID, HIRAGANA, KATAKANA } from '../src/data/kana.ts';
@@ -27,14 +28,16 @@ test('JJ（平假名已熟）：新卡先出片假名、種子卡不重複', () 
   assert.ok(order.every((id) => !s.cards[id]));
 });
 
-test('亞軒（都不熟）：新卡先平假名、第一天 session 是 5 教學＋測驗＋一句', () => {
+test('亞軒（都不熟）：新卡先平假名、第一天 session 是 10 教學＋測驗＋一句（五十音配速 KANA_NEW_CAP）', () => {
   const s = initState('yaxuan', { hira: false, kata: false }, TODAY);
-  const plan = buildSession(s, TODAY, rng);
-  assert.equal(plan.newIds.length, 5);
+  // 比照 Session.tsx 實際接線：課程計畫算好配速再餵給 buildSession
+  const daily = buildDailyPlan(s, TODAY);
+  const plan = buildSession(s, TODAY, rng, { newIds: [...daily.newVocab, ...daily.newGrammar] });
+  assert.equal(plan.newIds.length, 10);
   assert.ok(plan.newIds.every((id) => id.startsWith('h:')));
   assert.equal(plan.newIds[0], 'h:あ');
   const kinds = plan.items.map((i) => i.kind);
-  assert.equal(kinds.filter((k) => k === 'teach').length, 5);
+  assert.equal(kinds.filter((k) => k === 'teach').length, 10);
   assert.equal(kinds[kinds.length - 1], 'phrase');
 });
 

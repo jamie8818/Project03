@@ -12,6 +12,8 @@ const has = (state: UserState, id: string) => !!state.cards[id];
 // 標準日新量上限（Codex：3–5 單字＋1 主文法最多 2）；複習壓力大時走輕量。
 export const NEW_VOCAB_CAP = 5;
 export const NEW_GRAMMAR_CAP = 1;
+// 五十音階段配速較快（無文法/會話、前期複習壓力小；5/天要一個月太拖——JJ 2026-07-09 拍板）
+export const KANA_NEW_CAP = 10;
 export const LIGHT_DUE_THRESHOLD = 20; // 到期卡 ≥ 此數＝輕量日，減少新量
 export const QUIZ_PASS = 0.7; // 小測過關門檻
 
@@ -109,8 +111,8 @@ export function buildDailyPlan(state: UserState, today: string, sprint = false):
     newVocab = [];
     newGrammar = [];
   } else if (kana) {
-    // 五十音階段：照 introOrder 滴漏假名，無文法
-    newVocab = newV.slice(0, vCap);
+    // 五十音階段：照 introOrder 滴漏假名，無文法；配速用 KANA_NEW_CAP（輕量日照樣減半）
+    newVocab = newV.slice(0, light ? Math.ceil(KANA_NEW_CAP / 2) : KANA_NEW_CAP);
     newGrammar = [];
   } else if (lessonComplete(lesson, state)) {
     // 全部課程學完 → vocab.ts 補充 deck 尾巴（此時 newV 只剩尾巴）

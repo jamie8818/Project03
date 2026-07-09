@@ -12,6 +12,7 @@ import {
   dayMode,
   NEW_VOCAB_CAP,
   NEW_GRAMMAR_CAP,
+  KANA_NEW_CAP,
 } from '../src/lib/course.ts';
 
 const TODAY = '2026-07-08';
@@ -100,10 +101,28 @@ test('課序：每天新內容只從當前課出、不跨課搶跑（Codex 抓�
   }
 });
 
-test('buildDailyPlan：五十音階段新卡是假名、無文法', () => {
+test('buildDailyPlan：五十音階段新卡是假名、無文法、配速 KANA_NEW_CAP', () => {
   const s = initState('yaxuan', { hira: false, kata: false }, TODAY);
   const p = buildDailyPlan(s, TODAY);
   assert.equal(p.inKana, true);
   assert.ok(p.newVocab.every((id) => id.startsWith('h:') || id.startsWith('k:')), '五十音階段新卡是假名');
+  assert.equal(p.newVocab.length, KANA_NEW_CAP, '五十音配速走 KANA_NEW_CAP（比課綱階段快）');
   assert.equal(p.newGrammar.length, 0);
+
+  // 輕量日（到期複習多）照樣減半
+  const sl = initState('jj', { hira: true, kata: false }, TODAY); // 平假名種子 71 張
+  for (const id of Object.keys(sl.cards)) sl.cards[id] = { ...sl.cards[id], due: TODAY };
+  const pl = buildDailyPlan(sl, TODAY);
+  assert.equal(pl.light, true);
+  assert.equal(pl.newVocab.length, Math.ceil(KANA_NEW_CAP / 2), '輕量日假名減半');
+});
+
+test('加練一輪繼續滴漏：首輪教過的卡進 cards 後，重算計畫接下一批不重複', () => {
+  const s = initState('yaxuan', { hira: false, kata: false }, TODAY);
+  const p1 = buildDailyPlan(s, TODAY);
+  // 模擬首輪教完：newVocab 全部建卡（Session 的 gradeQuiz 會 newCard+grade）
+  for (const id of p1.newVocab) s.cards[id] = grade(newCard(id, TODAY), true, TODAY);
+  const p2 = buildDailyPlan(s, TODAY);
+  assert.equal(p2.newVocab.length, KANA_NEW_CAP, '加練一輪照樣給一批新的');
+  assert.ok(p2.newVocab.every((id) => !p1.newVocab.includes(id)), '下一批不含首輪教過的');
 });

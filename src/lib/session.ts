@@ -90,17 +90,17 @@ export interface SessionPlan {
 }
 
 /**
- * 組今日一輪：到期複習 → 新字教學(每字跟一題) → 混合測驗 → 今日一句。
- * opts.extraOnly：今天已完成、加練一輪，只出測驗＋一句。
+ * 組一輪：到期複習 → 新字教學(每字跟一題) → 混合測驗 → 今日一句。
  * opts.newIds：由「今日課程」計畫指定要新教的卡（已配速 cap）；不給則用預設 newCardOrder 滴漏。
+ * 加練一輪也走這裡（呼叫端重算計畫＝繼續滴漏下一批；首輪教過的卡已進 cards 不會重出）。
  */
 export function buildSession(
   state: UserState,
   today: string,
   rng: () => number = Math.random,
-  opts: { extraOnly?: boolean; newIds?: string[]; dialogLessonNo?: number; quizLessonNo?: number } = {},
+  opts: { newIds?: string[]; dialogLessonNo?: number; quizLessonNo?: number } = {},
 ): SessionPlan {
-  const { extraOnly = false, newIds: forcedNew, dialogLessonNo, quizLessonNo } = opts;
+  const { newIds: forcedNew, dialogLessonNo, quizLessonNo } = opts;
   const items: SessionItem[] = [];
 
   // 歌詞加入的 v: 卡 reps 0 也算到期（沒有教學步驟，直接以複習卡形式首見）
@@ -108,23 +108,19 @@ export function buildSession(
     .filter((c) => isDue(c, today) && (isLearning(c) || c.id.startsWith('v:')))
     .sort((a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : a.id < b.id ? -1 : 1))
     .slice(0, MAX_REVIEWS);
+  for (const c of due) items.push({ kind: 'flash', cardId: c.id });
 
-  let newIds: string[] = [];
-  if (!extraOnly) {
-    for (const c of due) items.push({ kind: 'flash', cardId: c.id });
-
-    // 有課程計畫就用它（已配速）；否則複習壓力太大就先不加新字，避免雪球
-    newIds = forcedNew ?? (due.length <= 20 ? newCardOrder(state).slice(0, state.newPerDay) : []);
-    for (const id of newIds) {
-      items.push({ kind: 'teach', cardId: id });
-      const mode: QuizMode = isGrammarCard(id) ? 'grammar' : isWordCard(id) ? 'word2zh' : 'kana2roma';
-      items.push({ kind: 'quiz', cardId: id, mode });
-    }
-
-    // 讀本課會話 → 本課小測（新內容之後、混合測驗之前）
-    if (dialogLessonNo != null) items.push({ kind: 'dialog', lessonNo: dialogLessonNo });
-    if (quizLessonNo != null) items.push({ kind: 'minitest', lessonNo: quizLessonNo });
+  // 有課程計畫就用它（已配速）；否則複習壓力太大就先不加新字，避免雪球
+  const newIds = forcedNew ?? (due.length <= 20 ? newCardOrder(state).slice(0, state.newPerDay) : []);
+  for (const id of newIds) {
+    items.push({ kind: 'teach', cardId: id });
+    const mode: QuizMode = isGrammarCard(id) ? 'grammar' : isWordCard(id) ? 'word2zh' : 'kana2roma';
+    items.push({ kind: 'quiz', cardId: id, mode });
   }
+
+  // 讀本課會話 → 本課小測（新內容之後、混合測驗之前）
+  if (dialogLessonNo != null) items.push({ kind: 'dialog', lessonNo: dialogLessonNo });
+  if (quizLessonNo != null) items.push({ kind: 'minitest', lessonNo: quizLessonNo });
 
   // 混合測驗：從已學的卡挑弱的優先（ease 低、忘記多）；v: 卡沒內容就跳過（防資料缺漏）
   const pool = Object.values(state.cards)

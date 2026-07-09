@@ -121,8 +121,16 @@ export default function Session({ state, today, update, onFinished, sprint = fal
     }));
   };
 
+  // 加練一輪＝繼續今天的滴漏：重算計畫（首輪教過的卡已進 cards，自動接下一批；
+  // 消化/補強日不給新、輕量日減量等規則同樣生效）。會話首輪讀過就不重複，小測沒過可在加練重考。
   const startExtra = () => {
-    setItems(buildSession(state, today, Math.random, { extraOnly: true }).items);
+    const p = buildDailyPlan(state, today);
+    setItems(
+      buildSession(state, today, Math.random, {
+        newIds: [...p.newVocab, ...p.newGrammar],
+        quizLessonNo: p.quizLessonNo ?? undefined,
+      }).items,
+    );
     setIdx(0);
     elapsed.current = 0;
     lastTick.current = Date.now();
@@ -192,6 +200,8 @@ export default function Session({ state, today, update, onFinished, sprint = fal
 
   if (phase === 'already' || phase === 'done') {
     const streak = displayStreak(state, today);
+    // 加練預告：下一輪會繼續教幾張新的（消化/補強日為 0＝純測驗）
+    const nextNew = (() => { const p = buildDailyPlan(state, today); return p.newVocab.length + p.newGrammar.length; })();
     return (
       <div className="session-done">
         {phase === 'done' && (
@@ -237,7 +247,7 @@ export default function Session({ state, today, update, onFinished, sprint = fal
         )}
         <Blackboard state={state} />
         <button className="primary" onClick={startExtra}>
-          再來一份（10 題）
+          {nextNew > 0 ? `再來一份（繼續學 ${nextNew} 個新的）` : '再來一份（10 題）'}
         </button>
         <p className="hint">到「我們的進度」看看對方今天練了沒 →</p>
       </div>

@@ -82,7 +82,13 @@ export default function TodayHome({
         </label>
       )}
 
-      <p className="hint">{doneToday ? '今天的課完成了 ✓' : '今天大概 20 分鐘。大課會分 2–3 天，別急。'}</p>
+      <p className="hint">
+        {doneToday
+          ? '今天的課完成了 ✓'
+          : plan.inKana
+            ? '大概 10–15 分鐘。練完還想學，按「再來一份」就繼續教下一批。'
+            : '今天大概 20 分鐘。大課會分 2–3 天，別急。'}
+      </p>
     </div>
   );
 }
