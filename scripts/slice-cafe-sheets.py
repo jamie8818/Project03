@@ -24,6 +24,8 @@ GRID = {
     'seating2': (3, 2), 'counter2': (2, 2), 'wall2': (3, 2), 'rug2': (2, 1), 'surface2': (3, 2),
     'furniture3': (4, 2), 'surface3': (3, 2), 'wall3': (3, 1),
     'furniture4': (3, 3), 'wall4': (2, 2), 'rug4': (3, 1), 'surface4': (2, 2),
+    'furniture5': (3, 2), 'wall5': (2, 1), 'rug5': (2, 1),
+    'personal': (3, 3),
 }
 
 

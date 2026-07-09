@@ -1,9 +1,10 @@
 # 日々喫茶 家具願望清單 v2（策展 100 種・全新候選）
 
 > **使用說明**：本文件純清單、不生圖。JJ 圈選 → 分批（25 件/波）生產 → 生一波轉正一波進 `cafe-furniture-wishlist.md`（v1）。
-> 狀態欄「候選」＝尚未進 `cafe-catalog.json`；「有」＝已生產入庫（首波 15 件已於 2026-07-09 轉正進 v1 清單，只做 front；第二波 20 件同日轉正，同樣只做 front）。id 為建議命名，實際生產時可微調。
+> 狀態欄「候選」＝尚未進 `cafe-catalog.json`；「有」＝已生產入庫（首波 15 件已於 2026-07-09 轉正進 v1 清單，只做 front；第二波 20 件同日轉正，同樣只做 front；第三波 10 件同日轉正，同樣只做 front）。id 為建議命名，實際生產時可微調。
 > 第二波原挑「圓形環繞卡座 booth_round」，codex 兩輪重生仍是俯視/等角視角、判斷這個完整圓形概念在 shallow-3D 正面風格下難處理，已放棄並換成同段落候選「shogi_bench 店頭床几長凳」；`booth_round` 一列仍留在候選、若日後想再挑戰可換角度重試。
 > 世界觀＝昭和喫茶／純喫茶／レトロ日本（1950–70s），可延伸店內營運雜貨與和洋折衷擺飾。與現有 52 件（見 `cafe-furniture-wishlist.md`＋`cafe-catalog.json`）**不得重複或高度雷同**，桌類/沙發類/地毯類等已飽和的品項一律走「材質／功能差異化」路線。
+> 第三波 10 件挑選思路：優先補當時分類數量最少的地毯（僅 10 件）與燈具／牆飾，並各補一件營運小物（算盤帳本、保險箱）撐開「開店經營感」；家具類挑材質/輪廓明確區隔既有款（縫紉機鑄鐵腳、拉門屏風、金魚缸、落地觀葉盆栽）而非再加一張桌/椅。全數 64px 縮圖可讀、無需精細紋理才能辨識的造型。
 
 ## 座席・桌椅（13）
 
@@ -16,11 +17,11 @@
 | 有 | 吧檯高腳圓桌 | table_bar_round | 1×1 | furniture | true | 站立飲用高度的小圓桌，非座椅用桌 |
 | 有 | 玻璃面圓桌 | table_glass_round | 1×1 | furniture | true | 細黑鐵蜘蛛腳＋透明玻璃桌面，鏤空穿透感區隔既有厚重大理石／實木圓桌 |
 | 候選 | 皮革圓矮凳 | stool_leather | 1×1 | furniture | false | 黑皮圓形矮凳無靠背，區隔吧檯高腳椅 |
-| 候選 | 老式縫紉機改造桌 | sewing_machine_table | 1×1 | furniture | true | Singer 式鑄鐵踏板腳＋木桌面改造小邊桌，鑄鐵鏤空花紋腳型獨特 |
+| 有 | 老式縫紉機改造桌 | sewing_machine_table | 1×1 | furniture | true | Singer 式鑄鐵踏板腳＋木桌面改造小邊桌，鑄鐵鏤空花紋腳型獨特（v2 第三波） |
 | 有 | 店頭床几長凳 | shogi_bench | 2×1 | furniture | false | 傳統日式店頭矮長凳，老喫茶／雜貨店門前小憩座 |
 | 有 | 黑皮雙人沙發 | sofa_leather | 3×1 | furniture | false | Chesterfield 車縫扣釦黑皮雙人沙發，扣釦紋理與光澤明顯區隔既有墨綠絨沙發 |
 | 有 | 讀書扶手椅 | chair_reading | 1×1 | furniture | false | 高背扶手椅側邊附雜誌口袋，閱讀角專用 |
-| 候選 | 木格拉門屏風 | room_divider | 1×1 | furniture | false | 和紙木格拉門屏風，區隔座位區 |
+| 有 | 木格拉門屏風 | room_divider | 1×1 | furniture | false | 和紙木格拉門屏風，區隔座位區（v2 第三波） |
 | 候選 | 窗邊站高吧檯桌 | table_counter_high | 2×1 | furniture | true | 沿窗長條站立吧檯桌，區隔坐姿方桌 |
 | 候選 | 疊放備用椅 | chair_stack | 1×1 | furniture | false | 牆角疊三張備用椅，营业细节 |
 | 有 | 麻將桌 | mahjong_table | 2×2 | furniture | true | 內嵌牌槽的方形麻將桌，昭和喫茶／雜貨店常見的棋牌角 |
@@ -70,9 +71,9 @@
 | 有 | 絨罩立燈 | floor_lamp | 1×1 | furniture | false | 落地立燈附流蘇絨布燈罩，區隔桌上檯燈 |
 | 候選 | 和紙提燈吊燈 | paper_lantern_lamp | 1×1 | wall | false | 和紙燈籠吊燈，材質區隔彩色玻璃吊燈 |
 | 候選 | 燭型壁燈 | wall_lamp_candle | 1×1 | wall | false | 仿燭形燈泡鐵藝壁燈，區隔黃銅素面壁燈 |
-| 候選 | 吧檯排燈串 | bar_string_lights | 2×1 | wall | false | 3-4 顆大顆暖色燈泡串沿吧檯上緣（非密集小燈點） |
+| 有 | 吧檯排燈串 | bar_string_lights | 2×1 | wall | false | 3-4 顆大顆暖色燈泡串沿吧檯上緣（非密集小燈點）（v2 第三波） |
 | 候選 | 仿古油燈風桌燈 | oil_lamp_electric | 1×1 | surface | false | 玻璃燈罩＋黃銅底座電燈，造型區隔彩玻桌燈 |
-| 候選 | Art Deco 扇形吊燈 | deco_fan_pendant | 2×1 | wall | false | 琥珀雲紋扇形玻璃罩吊燈，Art Deco 造型區隔既有 Tiffany 彩玻與和紙燈籠 |
+| 有 | Art Deco 扇形吊燈 | deco_fan_pendant | 2×1 | wall | false | 琥珀雲紋扇形玻璃罩吊燈，Art Deco 造型區隔既有 Tiffany 彩玻與和紙燈籠（v2 第三波） |
 | 候選 | 行灯立燈 | andon_lamp | 1×1 | furniture | false | 傳統日式行灯落地紙燈，區隔西式立燈 |
 | 有 | 氣泡罩吊燈 | bubble_pendant_lamp | 2×1 | wall | false | 圓潤氣泡玻璃罩吊燈，昭和洋食喫茶常見款式，樸素圓潤感區隔水晶吊燈的華麗感 |
 
@@ -85,9 +86,9 @@
 | 有 | 六角磚紋地毯 | rug_hex_tile | 2×2 | rug | false | 印花六角磚紋地毯，圖案區隔既有款式 |
 | 有 | 黑白棋盤地毯 | rug_checker | 2×2 | rug | false | 黑白棋盤格地毯，昭和洋食喫茶常見的磚紋地板意象 |
 | 候選 | 圓點地墊 | rug_polka | 1×1 | rug | false | 小型圓點花紋地墊，區隔小方格毯 |
-| 候選 | 海浪紋地毯 | rug_wave | 3×1 | rug | false | 藍綠海浪紋窄長地毯，新比例 3×1 |
+| 有 | 海浪紋地毯 | rug_wave | 3×1 | rug | false | 藍綠海浪紋窄長地毯，新比例 3×1（v2 第三波） |
 | 候選 | 深色素面地毯 | rug_plain_dark | 2×1 | rug | false | 純色無花紋地毯，區隔既有全部花紋款 |
-| 候選 | 菱格紋地毯 | rug_diamond | 2×1 | rug | false | 菱格車縫紋地毯 |
+| 有 | 菱格紋地毯 | rug_diamond | 2×1 | rug | false | 菱格車縫紋地毯（v2 第三波） |
 | 候選 | 碎花地毯 | rug_floral | 2×2 | rug | false | 小碎花印花地毯，區隔大膽幾何毯 |
 | 有 | 窄版走廊毯 | rug_runner_narrow | 4×1 | rug | false | 窄版長走廊毯，區隔既有寬版長毯（4×2） |
 
@@ -118,13 +119,13 @@
 
 | 狀態 | 中文名 | 建議 id | 佔格 w×h | 層 | surface | 說明 |
 |---|---|---|---|---|---|---|
-| 候選 | 落地龜背芋 | monstera_floor | 1×1 | furniture | false | 大型落地龜背芋盆栽，區隔桌上小盆栽（黃金葛） |
+| 有 | 落地龜背芋 | monstera_floor | 1×1 | furniture | false | 大型落地龜背芋盆栽，區隔桌上小盆栽（黃金葛）（v2 第三波） |
 | 候選 | 吊掛蕨類植物 | hanging_fern | 1×1 | furniture | false | 吊架蕨類植物，垂墜葉形 |
 | 候選 | 仙人掌小盆栽組 | cactus_set | 1×1 | surface | false | 三只迷你仙人掌陶盆，桌上擺件 |
 | 候選 | 竹編鳥籠裝飾 | bamboo_birdcage | 1×1 | furniture | false | 竹製鳥籠內置小盆栽，純裝飾不含鳥 |
 | 候選 | 落地琴葉榕 | fiddle_leaf_floor | 1×1 | furniture | false | 大型落地琴葉榕，葉形區隔龜背芋 |
 | 候選 | 乾燥花束吊掛 | dried_flower_bundle | 1×1 | wall | false | 牆上倒掛乾燥花束一叢 |
-| 候選 | 金魚缸擺飾 | goldfish_bowl | 1×1 | furniture | false | 玻璃金魚缸座架，昭和經典裝飾 |
+| 有 | 金魚缸擺飾 | goldfish_bowl | 1×1 | furniture | false | 玻璃金魚缸座架，昭和經典裝飾（v2 第三波） |
 | 候選 | 滿天星小盆花 | baby_breath_pot | 1×1 | surface | false | 白瓷小盆栽滿天星，簡單開花植栽，區隔玻璃生態缸類的當代感 |
 | 候選 | 落地枯枝花器 | floor_vase_branches | 1×1 | furniture | false | 落地竹編花器插枯枝，玄關角落 |
 
@@ -139,10 +140,10 @@
 | 候選 | 電話台 | phone_stand | 1×1 | furniture | true | 素面小邊几本身不含電話，是承接桌上轉盤電話與電話簿的家具底座 |
 | 候選 | 立式菜單看板 | menu_stand_outdoor | 1×1 | furniture | false | 門口 A 字型立式菜單牌 |
 | 候選 | 桌邊點餐鈴 | table_bell | 1×1 | surface | false | 小型呼叫鈴，桌上擺件 |
-| 候選 | 算盤帳本 | abacus_ledger | 1×1 | surface | false | 木製算盤配帳本，收銀台旁 |
+| 有 | 算盤帳本 | abacus_ledger | 1×1 | surface | false | 木製算盤配帳本，收銀台旁（v2 第三波） |
 | 有 | 濕紙巾おしぼり籃 | oshibori_basket | 1×1 | surface | false | 竹籃裝濕毛巾，待客細節 |
 | 候選 | 員工打卡鐘 | time_clock | 1×1 | wall | false | 牆掛式員工打卡鐘 |
-| 候選 | 小型保險箱 | safe_box | 1×1 | furniture | false | 黑色復古保險箱＋圓轉盤密碼鎖，圓盤剪影是視覺重點，收銀台後方 |
+| 有 | 小型保險箱 | safe_box | 1×1 | furniture | false | 黑色復古保險箱＋圓轉盤密碼鎖，圓盤剪影是視覺重點，收銀台後方（v2 第三波） |
 | 候選 | 常客留言本 | guestbook_stand | 1×1 | furniture | false | 皮革封面留言本立於小台架，常連客簽名留言用，與伝言板功能區隔（純裝飾道具） |
 | 候選 | 圍裙掛架 | apron_rack | 1×1 | furniture | false | 小型掛架掛備用圍裙 |
 | 候選 | 清潔用具角 | cleaning_corner | 1×1 | furniture | false | 掃把畚斗立於牆角 |

@@ -21,6 +21,7 @@ CATEGORY_LABELS = [
     ('rug', '地毯・地面'),
     ('tabletop', '桌上擺件・小物'),
     ('seasonal', '擺飾雜貨・季節'),
+    ('personal', '珍藏・私物'),
 ]
 
 # ── 碰撞格（對齊 bar-baked 場景 base.png：左上吧檯＋後吧台層架＋三張高腳椅烤進圖）──
