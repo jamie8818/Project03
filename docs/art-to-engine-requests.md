@@ -463,3 +463,19 @@ z=furniture 的咖啡器材/小型展示，現實中本來就擺吧檯上，開�
 **Tier C（複雜，可延後）**：已讀不回（對方留言10則未回）／過馬路請牽手（斑馬線毯＋兩人同日出席）
 
 **徽章素材**（美術另批交付 `public/cafe/badges/<id>.png`，含既有 13 個重做）：40×40 像素圓章，統一黃銅環＋奶油底＋中心 icon；未解鎖顯示灰階（引擎 CSS filter 即可，不用出灰版）。素材到貨前新成就先用 emoji 頂著上線，不互卡。
+
+## E17. 布丁圖鑑擴充 24→100 口味＋資料管線（JJ 需求 2026-07-10）— 內容與管線已交付，待引擎接線
+
+**內容源**：`docs/puddings.json`（100 款，手維護）→ `python3 scripts/build-puddings.py` → `src/data/puddings.gen.ts`（export `PUDDINGS_GEN: PuddingGen[]`＋`PUDDING_GEN_BY_ID`＋型別 `PuddingGen`/`RarityGen`/`PuddingVariant`）。已跑通、`npx tsc --noEmit` 過（gen 檔目前無人 import，尚未接線）。
+
+**引擎待辦**：
+1. **`src/data/fun.ts` 的 `PUDDINGS` 改吃 `PUDDINGS_GEN`**——現有 24 款 id/name/rarity/hue/sat/desc 已逐字驗證與舊資料一致（migrate 時用程式比對過，零落差），存檔相容不受影響。
+2. **`Rarity` 型別要擴充**：現有 `fun.ts` 是 `'N' | 'R' | 'SR'`，100 款新增了 **UR**（5 款，流星/極光/24K金箔/初雪/時間暫停，稀有度最高）。`rollRarity`／`rarityWeights`／`gachaRoll`／`mysteryReward` 這幾處目前寫死只認 N/R/SR 三個 key 的 weight 物件，要補上 UR key（權重數字沿用現有邏輯精神——UR 應該比 SR 更稀有，建議 UR 只在 `gachaRoll`/`mysteryReward` 等高機率場景給極低權重，或先用 0 讓 UR 暫時只出現在扭蛋大當たり，數字由引擎斟酌）；沒補的話新 UR 五款會抽不到。
+3. **扭蛋/圖鑑/招牌渲染從 emoji 換成美術基底圖**：每款布丁多了 `variant` 欄位（10 選 1：`classic`/`cream`/`cherry`/`sauce`/`layered`/`parfait`/`mochi`/`dust`/`star`/`deluxe`，`deluxe` 為 UR 專用），對應圖檔路徑 `public/cafe/pudding/<variant>.png`（10 張基底圖，美術並行製作中，交付前先接資料層、圖到了再接圖不互卡）；渲染時疊加既有的 `hue-rotate(hue)`／`saturate(sat)` CSS filter 上色，機制不變。
+4. **圖鑑 UI**：現有布丁圖鑑 grid 是 24 格假設的版面，100 格需要分頁或捲動，UI 設計交給引擎自行決定（建議至少能用 rarity 篩選，UR 稀少建議獨立一區展示）。
+5. **抽選權重維持現制**：`rarityWeights`／`gachaRoll` 的 N/R/SR 數字比例不變（只加 UR key），100 口味後同稀有度內選中特定口味的機率被稀釋、集滿週期變長，這是預期內的（E12 家具扭蛋是獨立池，不受影響）。
+6. **成就門檻連動（呼應 E16）**：`pudding-tycoon`（圖鑑集滿）／`double-perfect`（圖鑑＋扭蛋雙滿貫）兩個成就的判定門檻從 24 款改成 100 款。
+
+**資料統計**：N 50／R 30／SR 15／UR 5（現有 24 款分佈 N12/R8/SR4 不變，新增 76 款補齊 N38/R22/SR11/UR5）。`variant` 分佈：classic 11／sauce 11／cream 11／star 11／parfait 11／layered 10／dust 10／cherry 10／mochi 10／deluxe 5（deluxe 專屬 UR，其餘 9 種大致平均）。
+
+**品質把關**：76 款新 desc 分兩批交 codex 審過語氣一致性/重複句式/日語知識正確性/獵奇系好笑度，25 句依建議修訂（例如 `gyokuro` 原「一年只等這幾天的鮮」對玉露遮光栽培知識不準，改「覆下二十日的青」；`aurora` 原「北緯66度才有的甜」被指出極光緯度描述不準確，改「北境夜空的糖光」）。id/name 全數 100 款程式驗證唯一、無重複 desc。
