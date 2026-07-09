@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type PointerEvent as RPointerEvent, type SyntheticEvent } from 'react';
-import type { UserState } from '../types.ts';
+import type { UserId, UserState } from '../types.ts';
 import { USERS } from '../lib/store.ts';
 import { sfx } from '../lib/sounds.ts';
 import Buddy from './Buddy.tsx';
@@ -65,6 +65,7 @@ interface StageProps {
   shop: ShopState;
   attend: number;
   meDone: boolean;
+  user?: UserId; // 有給才畫 Q 版客人（E9）：meDone 畫我方、attend 含對方時畫對方；banner/裝潢不給＝不畫
   talk?: boolean;
   variant?: 'banner' | 'full';
   // 裝潢模式
@@ -82,7 +83,7 @@ interface StageProps {
 type Drag = { index: number; grabDx: number; grabDy: number; gx: number; gy: number; moved: boolean; startX: number; startY: number };
 const DRAG_THRESHOLD = 6; // 移動超過幾 px 才算「拖曳」，否則當「點一下」（避免觸控輕點誤判成搬移）
 
-function Stage({ shop, attend, meDone, talk, variant = 'full', editing, placing, placingFacing, placingIgnore = -1, selectedIndex, onCell, onItem, onMove, onBoard }: StageProps) {
+function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, placing, placingFacing, placingIgnore = -1, selectedIndex, onCell, onItem, onMove, onBoard }: StageProps) {
   const wrap = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   // 台詞帶序號 n：同句被連抽兩次時 key 仍變、泡泡動畫照樣重播（泡泡＝顯示幾秒自動淡出）
@@ -314,6 +315,17 @@ function Stage({ shop, attend, meDone, talk, variant = 'full', editing, placing,
             onClick={talk ? () => { sfx.correct(1); nextLine(); } : undefined}
           />
         </div>
+
+        {/* Q 版客人（E9）：今天有練的人坐鎮窗邊（我方 meDone、對方看 attend），跟店長同批繪序（引擎選省的）。
+            眨眼幀（*_blink.png）美術待補——到貨後在每張 img 上疊第二張 steps(1) keyframes 硬切即可。 */}
+        {user && (meDone || attend - (meDone ? 1 : 0) > 0) && (
+          <>
+            {meDone && <img className="cafe-guest guest-me" src={`/cafe/guests/${user}.png`} alt="我" draggable={false} />}
+            {attend - (meDone ? 1 : 0) > 0 && (
+              <img className="cafe-guest guest-peer" src={`/cafe/guests/${user === 'jj' ? 'yaxuan' : 'jj'}.png`} alt="對方" draggable={false} />
+            )}
+          </>
+        )}
 
         {/* 內側小家電（E4）：畫在店長之後、counter_front 之前＝下半身被正面板遮＝嵌在吧檯裡 */}
         {insideOrder.map(renderFurn)}
@@ -598,7 +610,7 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
         <b>🏮 日々喫茶 Lv.{lv}「{shopTitle(lv)}」</b>
       </div>
 
-      {mode !== 'decorate' && <Stage shop={shop} attend={attend} meDone={meDone} talk onBoard={() => setBoardOpen(true)} />}
+      {mode !== 'decorate' && <Stage shop={shop} attend={attend} meDone={meDone} user={me.user} talk onBoard={() => setBoardOpen(true)} />}
 
       <div className="seg" style={{ marginTop: 12 }}>
         <button className={mode === 'view' ? 'on' : ''} onClick={() => setMode('view')}>店面</button>
