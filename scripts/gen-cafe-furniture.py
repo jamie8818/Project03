@@ -10,7 +10,7 @@ import os, sys, json, subprocess
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-MANIFEST = os.path.join(ROOT, 'docs', 'cafe-catalog.json')
+MANIFEST = os.environ.get('CAFE_MANIFEST') or os.path.join(ROOT, 'docs', 'cafe-catalog.json')
 ANCHOR = os.path.join(ROOT, 'assets_src', 'cafe', 'anchor-furniture.png')  # v2 正交正面錨圖
 TMP = '/tmp/cafe-gen'
 CODEX = '/Applications/Codex.app/Contents/Resources/codex'
@@ -39,6 +39,16 @@ GRID = {
     'furniture7fix': (1, 1),
     # JJ 追加 6 件（楓之谷公仔3隻＋睡褲展示架＋復古電腦桌組＋落地版特斯拉），各自獨立 sheet
     'qfig3': (3, 1), 'pajama1': (1, 1), 'retrodesk1': (1, 1), 'teslafloor1': (1, 1),
+    # 台式復古 27 件（wishlist 圈選批）：furniture 分兩張、圓桌獨立一張、tabletop/wall 各一張
+    'furniture8': (4, 2), 'furniture8b': (1, 1), 'furniture9': (3, 3), 'surface5': (4, 2), 'wall7': (2, 2),
+    # ring_toss_stall 重生：codex 判定第一版像桌上酒瓶陳列，不像套圈圈攤位，單件重生強化竹籤掛獎品
+    'furniture9fix': (1, 1),
+    # papaya_milk 重生：codex 判定漸層不夠像木瓜牛奶，較像一般果汁，單件重生強化奶橘分層
+    'surface5fix': (1, 1),
+    # 搞笑惡搞 23 件（JJ 圈選批，category 按自然分類而非 personal）：furniture/surface 分兩張、wall 分兩張、rug 一張
+    'gagfurn1': (4, 2), 'gagfurn2': (4, 2), 'gagwall1': (2, 2), 'gagwall2': (2, 2), 'gagrug1': (1, 1),
+    # 搞笑惡搞重生批：codex 判定 4 件需修（撲滿太卡通/小費箱字太小/門沒傳達通牆感/鏡子招牌字太小）
+    'gagfix1': (2, 2),
 }
 
 DATA = json.load(open(MANIFEST))

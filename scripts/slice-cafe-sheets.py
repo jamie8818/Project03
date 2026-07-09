@@ -12,7 +12,7 @@ from PIL import Image, ImageDraw, ImageFilter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-MANIFEST = os.path.join(ROOT, 'docs', 'cafe-catalog.json')
+MANIFEST = os.environ.get('CAFE_MANIFEST') or os.path.join(ROOT, 'docs', 'cafe-catalog.json')
 SHEET_DIR = '/tmp/cafe-gen'                      # 生成的總表放這
 OUT = os.path.join(ROOT, 'assets_src', 'cafe', 'out')  # 切好的 staging
 
@@ -29,6 +29,10 @@ GRID = {
     'furniture5b': (3, 1), 'personalfix': (2, 2), 'furniture5c': (2, 1), 'furniture5d': (1, 1),
     'furniture6': (3, 2), 'furniture7': (3, 2), 'wall6': (1, 1), 'rug6': (1, 1),
     'furniture7fix': (1, 1),
+    'furniture8': (4, 2), 'furniture8b': (1, 1), 'furniture9': (3, 3), 'surface5': (4, 2), 'wall7': (2, 2),
+    'furniture9fix': (1, 1), 'surface5fix': (1, 1),
+    'gagfurn1': (4, 2), 'gagfurn2': (4, 2), 'gagwall1': (2, 2), 'gagwall2': (2, 2), 'gagrug1': (1, 1),
+    'gagfix1': (2, 2),
 }
 
 
