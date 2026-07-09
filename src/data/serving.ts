@@ -97,8 +97,8 @@ export function serveChoices(ex: Exchange, rng: () => number = Math.random): str
 // 資料＝美術 session 產的 docs/food-pool.json（單一來源，直接 import；圖在 public/baito/food/{id}.png）
 export interface FoodItem {
   id: string; // 內部 slug（英文，＝圖檔名，程式用它當 key）
-  ja: string; // 日文顯示名（客人氣泡與 TTS 用它）
-  kana: string; // 讀音（pre-lesson 卡顯示；異國/台式漢字料理是近似讀音，待校對）
+  ja: string; // 日文顯示名（客人氣泡/卡片顯示用；⚠️ 別餵 TTS——台式/異國漢字菜名會誤讀，臭豆腐→におい豆腐）
+  kana: string; // 讀音（pre-lesson 卡顯示＋TTS 唸這個；異國/台式漢字料理是近似讀音，待校對）
   zh: string; // 中文
   price: number;
   cuisine: string; // 菜系（台式/各國/日式/甜點/綜合/美式，metadata）
@@ -124,8 +124,8 @@ export function pickTodayFoods(
 
 // ── 點餐台詞（MVP：指名單品。ください／お願いします／ひとつ 都在課綱教過）──
 export interface OrderLine {
-  say: string; // 客人說的（TTS 直接讀）
-  kana: string; // 顯示讀音
+  say: string; // 客人說的（氣泡顯示；含漢字菜名）
+  kana: string; // 全假名句（TTS 唸這個——漢字菜名 TTS 會誤讀）
   zh: string;
 }
 // 台詞用全假名（お願い→おねがい），避免氣泡出現「漢字句＋讀音句」看起來重複；

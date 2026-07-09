@@ -409,10 +409,11 @@ function PreLesson({ foods, onStart, onExit }: { foods: FoodItem[]; onStart: () 
   const [i, setI] = useState(0);
   const f = foods[i];
   // iOS 只在使用者手勢裡才發得出聲：翻卡＝手勢，順便念出來；點卡片也能重聽。
+  // TTS 唸 kana 不唸漢字：台式/異國料理的漢字 TTS 會誤讀（臭豆腐→におい豆腐），kana 才是教的讀音
   const go = (n: number) => {
     const j = Math.max(0, Math.min(foods.length - 1, n));
     setI(j);
-    speakJa(foods[j].ja);
+    speakJa(foods[j].kana);
   };
 
   return (
@@ -421,7 +422,7 @@ function PreLesson({ foods, onStart, onExit }: { foods: FoodItem[]; onStart: () 
         <span>📖 今日のメニュー</span>
         <span>{i + 1}/{foods.length}</span>
       </div>
-      <div className="lesson-card" role="button" tabIndex={0} onClick={() => speakJa(f.ja)}>
+      <div className="lesson-card" role="button" tabIndex={0} onClick={() => speakJa(f.kana)}>
         <img className="lesson-art" src={f.art} alt={f.zh} draggable={false} />
         <div className="lesson-ja">{f.ja}</div>
         {f.kana !== f.ja && <div className="lesson-kana">{f.kana}</div>}
@@ -648,7 +649,7 @@ function ShiftPlay({
       commit(custsRef.current.map((c) => (c.id === cur.id ? patched : c)));
       sfx.correct(served.filter(Boolean).length);
       floatFor(cur.id, '✓', 0);
-      if (justRevealed) speakJa(custSay(patched).say);
+      if (justRevealed) speakJa(custSay(patched).kana); // 唸 kana 句（漢字菜名 TTS 會誤讀）
     }
   };
 
@@ -739,7 +740,7 @@ function ShiftPlay({
                   </span>
                 ))}
                 {c.mood === 'live' && (
-                  <button className="serve3-bubble" onClick={() => speakJa(say.say)} aria-label="聽客人說">
+                  <button className="serve3-bubble" onClick={() => speakJa(say.kana)} aria-label="聽客人說">
                     {c.wants.length > 1 && (
                       <span className="b-dots">
                         {c.wants.slice(0, c.reveal).map((_, i) => (
