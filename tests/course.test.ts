@@ -13,6 +13,7 @@ import {
   NEW_VOCAB_CAP,
   NEW_GRAMMAR_CAP,
   KANA_NEW_CAP,
+  kanaPhaseEta,
 } from '../src/lib/course.ts';
 
 const TODAY = '2026-07-08';
@@ -115,6 +116,19 @@ test('buildDailyPlan：五十音階段新卡是假名、無文法、配速 KANA_
   const pl = buildDailyPlan(sl, TODAY);
   assert.equal(pl.light, true);
   assert.equal(pl.newVocab.length, Math.ceil(KANA_NEW_CAP / 2), '輕量日假名減半');
+});
+
+test('kanaPhaseEta：剩餘假名數÷KANA_NEW_CAP 無條件進位；學完＝0', () => {
+  const s = initState('yaxuan', { hira: false, kata: false }, TODAY); // 142 字全沒學
+  const eta = kanaPhaseEta(s);
+  assert.equal(eta.remaining, 142);
+  assert.equal(eta.days, Math.ceil(142 / KANA_NEW_CAP));
+
+  const sh = initState('jj', { hira: true, kata: false }, TODAY); // 平假名種子＝只剩片假名 71
+  assert.equal(kanaPhaseEta(sh).remaining, 71);
+
+  const sb = initState('jj', { hira: true, kata: true }, TODAY); // 兩字系都熟＝0
+  assert.deepEqual(kanaPhaseEta(sb), { remaining: 0, days: 0 });
 });
 
 test('加練一輪繼續滴漏：首輪教過的卡進 cards 後，重算計畫接下一批不重複', () => {

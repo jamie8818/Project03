@@ -4,7 +4,7 @@ import { GACHA_COST, PUDDINGS, gachaRoll, luckOf, type Pudding } from '../data/f
 import { sfx } from '../lib/sounds.ts';
 import { useState } from 'react';
 import { DEFAULT_GOAL, lessonPace, type GoalLevel } from '../lib/goal.ts';
-import { inKanaPhase } from '../lib/course.ts';
+import { kanaPhaseEta } from '../lib/course.ts';
 import { HIRAGANA, KATAKANA } from '../data/kana.ts';
 import { isMastered } from '../lib/srs.ts';
 import { ACHIEVEMENTS, levelInfo } from '../lib/xp.ts';
@@ -86,6 +86,7 @@ export default function Dashboard({
   const pct = pace.total > 0 ? Math.min(100, Math.round((pace.done / pace.total) * 100)) : 0;
   const fmtDate = (d: string) => { const [y, m, dd] = d.split('-'); return `${y}/${+m}/${+dd}`; };
   const overdue = pace.daysLeft === 0 && pace.remaining > 0;
+  const kana = kanaPhaseEta(me); // 五十音先修 ETA（remaining=0＝已學完，不顯示）
 
   return (
     <div className="dashboard">
@@ -146,7 +147,7 @@ export default function Dashboard({
             ? `目標 ${goal.level} 的課都上完了，保持複習就好。`
             : overdue
               ? '目標日已經過了——按「改目標」訂個新日期吧，重點是不斷鏈。'
-              : <>要在 {fmtDate(goal.date)} 前完成 {goal.level}，接下來每週約 <b>{pace.weeklyNeeded.toFixed(1)} 課</b>{inKanaPhase(me) && '（五十音先修中，學完假名就開始上課）'}{goal.level === 'N4' && pace.weeklyNeeded > 3 && '。壓力太大的話，先把目標改成 N5 也完全 OK。'}</>}
+              : <>要在 {fmtDate(goal.date)} 前完成 {goal.level}，接下來每週約 <b>{pace.weeklyNeeded.toFixed(1)} 課</b>{kana.remaining > 0 && <>（五十音先修中：還剩 {kana.remaining} 個假名，照配速約 <b>{kana.days} 天</b>學完）</>}{goal.level === 'N4' && pace.weeklyNeeded > 3 && '。壓力太大的話，先把目標改成 N5 也完全 OK。'}</>}
         </p>
       </div>
 

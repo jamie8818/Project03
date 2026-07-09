@@ -45,6 +45,12 @@ export function inKanaPhase(state: UserState): boolean {
   return newCardOrder(state).some((id) => id.startsWith('h:') || id.startsWith('k:'));
 }
 
+/** 五十音先修 ETA：還剩幾個假名沒教、照 KANA_NEW_CAP 標準配速約幾天學完（儀表板顯示用）。 */
+export function kanaPhaseEta(state: UserState): { remaining: number; days: number } {
+  const remaining = newCardOrder(state).filter((id) => id.startsWith('h:') || id.startsWith('k:')).length;
+  return { remaining, days: Math.ceil(remaining / KANA_NEW_CAP) };
+}
+
 /** 目前在學的課＝第一個未完成的課（全完成回最後一課）。 */
 export function currentLesson(state: UserState): Lesson {
   return LESSONS.find((l) => !lessonComplete(l, state)) ?? LESSONS[LESSONS.length - 1];
