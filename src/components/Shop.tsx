@@ -37,7 +37,7 @@ import {
   type CafeItem,
   type Z層,
 } from '../lib/shop.ts';
-import { DEFAULT_SHOP, fetchShop, mergeBoard, pushBoard, pushShop, type BoardMsg, type Facing, type ShopState } from '../lib/shopstate.ts';
+import { DEFAULT_SHOP, fetchShop, mergeBoard, pushBoard, pushShop, type BoardMsg, type Facing, type PlacedItem, type ShopState } from '../lib/shopstate.ts';
 
 const STAGE_W = CAFE.w; // 576
 const STAGE_H = CAFE.h; // 416
@@ -431,20 +431,23 @@ export function ShopBanner({ me, peer, today, onOpen }: { me: UserState; peer: U
   );
 }
 
+const SHOP_GIFT_COINS = 350; // 店長私房錢：首次進店的開店禮金（引導最後一句發放，state 旗標防重複）
+
 const INTRO = [
   '歡迎光臨「日々喫茶」！這間店是你們兩個人共同經營的喔。',
   '練日文賺 XP 讓店升級解鎖新貨架；打工、對決賺金幣，金幣拿去商店買家具。',
   '買來的家具進「裝潢」模式擺進店裡：點托盤選一件→點格子放下；點店裡的家具可以搬走或收回。兩個人一起裝潢同一間店……拜託弄得可愛一點（合掌）。',
+  `啊、還有這個——我的私房錢 🪙${SHOP_GIFT_COINS}，拿去當開店資金，先去🛍商店挑點什麼吧。噓，這是我們之間的秘密。`,
 ];
 
 function ShopIntro({ onDone }: { onDone: () => void }) {
   const [step, setStep] = useState(0);
   return (
     <div className="shop-intro">
-      <Buddy mood={step === 2 ? 'cheer' : 'happy'} size={72} />
+      <Buddy mood={step >= 2 ? 'cheer' : 'happy'} size={72} />
       <p>{INTRO[step]}</p>
       <button className="primary" onClick={() => (step + 1 < INTRO.length ? setStep(step + 1) : onDone())}>
-        {step + 1 < INTRO.length ? '嗯嗯，然後呢 →' : '知道了，開工！'}
+        {step + 1 < INTRO.length ? '嗯嗯，然後呢 →' : '收下了，開工！'}
       </button>
     </div>
   );
@@ -574,7 +577,14 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
   if (!introSeen) {
     return (
       <div className="shop-page">
-        <ShopIntro onDone={() => { localStorage.setItem('nng:shop-intro3', '1'); setIntroSeen(true); }} />
+        <ShopIntro
+          onDone={() => {
+            localStorage.setItem('nng:shop-intro3', '1');
+            setIntroSeen(true);
+            // 店長私房錢：每帳號只發一次（state 旗標跨裝置同步；顯示與發放分開 gate，清 localStorage 重看引導不會重複領）
+            update((s) => (s.introGiftClaimed ? s : { ...s, coins: s.coins + SHOP_GIFT_COINS, introGiftClaimed: true }));
+          }}
+        />
       </div>
     );
   }
@@ -710,8 +720,11 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop }: { me: UserState; 
   const [selected, setSelected] = useState<number | null>(null); // 選取的「已擺」家具 index（就地旋轉/收回）
   const [sub, setSub] = useState<'furn' | 'sign'>('furn');
   const [catTab, setCatTab] = useState(0); // 托盤 category 分頁籤（E6）
+  // 收回模式（JJ 2026-07-09：家具多了逐件選取太慢）：點什麼收什麼；undoStack 記每步前的 layout 供復原
+  const [sweep, setSweep] = useState(false);
+  const [undoStack, setUndoStack] = useState<PlacedItem[][]>([]);
 
-  const select = (id: string | null) => { setPlacing(id); setFacing('front'); setSelected(null); };
+  const select = (id: string | null) => { setPlacing(id); setFacing('front'); setSelected(null); setSweep(false); };
   const placingItem = placing ? itemById(placing) : undefined;
   const canRotate = placingItem ? availableFacings(placingItem).length > 1 : false;
   const rotate = () => { if (placingItem) setFacing((f) => nextFacing(placingItem, f)); };
@@ -769,6 +782,26 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop }: { me: UserState; 
     sfx.wrong();
   };
   const removeSelected = () => { if (selected != null) { pickUp(selected); setSelected(null); } };
+  // ── 收回模式：點什麼收什麼；清空/復原都走 undoStack（存動作前的整份 layout）──
+  const enterSweep = () => { setSweep(true); setPlacing(null); setSelected(null); setUndoStack([]); };
+  const sweepPick = (i: number) => {
+    if (i < 0) return;
+    setUndoStack((st) => [...st, shop.layout]);
+    pickUp(i);
+  };
+  const sweepClearAll = () => {
+    if (shop.layout.length === 0) return;
+    setUndoStack((st) => [...st, shop.layout]);
+    saveShop({ ...shop, layout: [] });
+    sfx.wrong();
+  };
+  const sweepUndo = () => {
+    const prev = undoStack[undoStack.length - 1];
+    if (!prev) return;
+    setUndoStack((st) => st.slice(0, -1));
+    saveShop({ ...shop, layout: prev });
+    sfx.correct(1);
+  };
   // 拖曳把第 index 件搬到 (gx,gy)（是桌子的話桌上小物一起位移）；搬完保持選取可連續搬/轉
   const moveIndexTo = (index: number, gx: number, gy: number) => {
     const p = shop.layout[index], it = p ? itemById(p.id) : undefined;
@@ -788,8 +821,26 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop }: { me: UserState; 
 
   return (
     <>
-      <Stage shop={shop} attend={attend} meDone={meDone} editing placing={placing} placingFacing={facing} selectedIndex={selected} onCell={placeAt} onItem={selectPlaced} onMove={moveIndexTo} />
-      {placing ? (
+      <Stage
+        shop={shop}
+        attend={attend}
+        meDone={meDone}
+        editing
+        placing={placing}
+        placingFacing={facing}
+        selectedIndex={sweep ? null : selected}
+        onCell={sweep ? undefined : placeAt}
+        onItem={sweep ? sweepPick : selectPlaced}
+        onMove={sweep ? undefined : moveIndexTo}
+      />
+      {sweep ? (
+        <p className="hint">
+          🧺 收回模式：<b>點店裡的家具直接收回托盤</b>
+          {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={sweepClearAll}>🗑 全部清空</button>
+          {' · '}<button className="linkish" style={{ display: 'inline' }} disabled={undoStack.length === 0} onClick={sweepUndo}>↩ 復原（{undoStack.length}）</button>
+          {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={() => setSweep(false)}>完成</button>
+        </p>
+      ) : placing ? (
         <p className="hint">
           點（或拖到）綠格放下「{placingItem?.name}」
           {canRotate && <> · <button className="linkish" style={{ display: 'inline' }} onClick={rotate}>🔄 轉向（{FACING_LABEL[facing]}）</button></>}
@@ -804,7 +855,10 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop }: { me: UserState; 
           {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={() => setSelected(null)}>取消選取</button>
         </p>
       ) : (
-        <p className="hint">點托盤家具→擺進店裡；店裡的家具直接<b>拖拉搬移</b>，點一下＝選取（可 🔄 轉向／🗑 收回），再點一下或點空白＝取消。</p>
+        <p className="hint">
+          點托盤家具→擺進店裡；店裡的家具直接<b>拖拉搬移</b>，點一下＝選取（可 🔄 轉向／🗑 收回），再點一下或點空白＝取消。
+          {' '}<button className="linkish" style={{ display: 'inline' }} onClick={enterSweep}>🧺 收回模式</button>
+        </p>
       )}
 
       <div className="seg" style={{ marginTop: 8 }}>
