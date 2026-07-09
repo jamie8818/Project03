@@ -9,6 +9,7 @@ import os, json
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 MANIFEST = os.path.join(ROOT, 'docs', 'cafe-catalog.json')
+FLAVOR = os.path.join(ROOT, 'docs', 'cafe-flavor.json')
 GEN_TS = os.path.join(ROOT, 'src', 'data', 'cafe.gen.ts')
 
 COLS, ROWS, CELL = 18, 13, 32
@@ -60,6 +61,8 @@ def main():
     data = json.load(open(MANIFEST))
     items = data['items']
     blocked = build_blocked()
+    flavor_map = json.load(open(FLAVOR)) if os.path.exists(FLAVOR) else {}
+    flavor_map = {k: v for k, v in flavor_map.items() if not k.startswith('_')}
 
     L = []
     L.append('// 由 scripts/build-cafe-ts.py 從 docs/cafe-catalog.json 產出。改規格請改 manifest 再重跑，或直接手改本檔。')
@@ -83,6 +86,7 @@ def main():
     L.append('  spriteHeightTiles: number; // 視覺高度（格）＝footprint_w × naturalH/naturalW；引擎算桌面高度用（spriteH = spriteHeightTiles × CELL）')
     L.append('  facings?: Facing[]; // 實際畫了哪些向；省略＝front 單向（旋轉 no-op）。back/right 加檔 <id>_back/_right.png，left 缺則引擎鏡像 right')
     L.append("  hostType?: 'counter-inside'; // E4：吧檯內側小家電（嵌吧檯裡、下半身被 counter_front 遮）；省略＝一般家具/小物")
+    L.append('  flavor: string; // 一句話 flavor 文案（docs/cafe-flavor.json 來源，查無 id 則為空字串；引擎端空字串該行不渲染）')
     L.append('}')
     L.append('')
     L.append(f'export const CAFE = {{ w: {COLS * CELL}, h: {ROWS * CELL}, cols: {COLS}, rows: {ROWS}, cell: {CELL} }} as const;')
@@ -113,11 +117,12 @@ def main():
         if it.get('facings'):
             fac = ", facings: [" + ", ".join(f"'{f}'" for f in it['facings']) + "]"
         host = f", hostType: '{it['hostType']}'" if it.get('hostType') else ''
+        flavor = flavor_map.get(it['id'], '').replace("\\", "\\\\").replace("'", "\\'")
         L.append(
             f"  {{ id: '{it['id']}', category: '{it['category']}', z: '{it['z']}', w: {it['w']}, h: {it['h']}, "
             f"surface: {str(it['surface']).lower()}, spriteHeightTiles: {it['spriteHeightTiles']}, "
             f"name: '{it['name']}', sprite: '/cafe/catalog/{it['id']}.png', price: {it['price']}, "
-            f"lv: {it['lv']}, starter: {str(it['starter']).lower()}{fac}{host} }},"
+            f"lv: {it['lv']}, starter: {str(it['starter']).lower()}{fac}{host}, flavor: '{flavor}' }},"
         )
     L.append('];')
     L.append('')
