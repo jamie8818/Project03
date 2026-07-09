@@ -56,6 +56,7 @@ const BOARD_BTN = { left: 243, top: 12, width: 70, height: 50 };
 // E10 前牆掛件的渲染錨（base-fg 實測座標）：門面槽錨門頂、門旁牆槽錨前牆頂緣
 const FRONT_DOOR_TOP_Y = 341;
 const FRONT_WALL_TOP_Y = 373;
+const GUEST_FEET_Y = 226; // Q 版客人腳底 baseline（窗邊站位＋家具深度排序鍵；CSS .cafe-guest bottom 對應 416−226）
 
 // 店長熊貓站在吧檯「裡面」（檯後工作區）：上半身露在檯面上、下半身被 counter_front.png 正面板遮住。
 // 中心底部錨定；PANDA_TOP 拉高到檯後 → feet 落檯面前緣、頭露在檯面上（E2，preview 實測值，可微調）。
@@ -294,6 +295,12 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
     else if (rendersInside(displayLayout[i])) insideOrder.push(i); // 依實際落點/變體分流（E7），不是依 hostType 一刀切
     else aboveCounterOrder.push(i);
   }
+  // Q 版客人深度排序（E9 修訂）：以腳底 y 當 baseline 把 aboveCounter 逐件分割成「客人後/客人前」兩批
+  const beforeGuestOrder: number[] = [];
+  const afterGuestOrder: number[] = [];
+  for (const i of aboveCounterOrder) {
+    (frontRowOf(displayLayout[i]) * CELL <= GUEST_FEET_Y ? beforeGuestOrder : afterGuestOrder).push(i);
+  }
 
   return (
     <div className={`shop-wrap ${variant}`} ref={wrap} style={{ height: viewH * scale }}>
@@ -343,8 +350,25 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
           />
         </div>
 
-        {/* Q 版客人（E9）：今天有練的人坐鎮窗邊（我方 meDone、對方看 attend），跟店長同批繪序（引擎選省的）。
-            容器掛 idle 浮動；眨眼＝疊 *_blink.png 硬切 overlay（~3.5% 週期＝0.15s/0.18s，兩人週期+delay 錯開） */}
+        {/* 內側小家電（E4）：畫在店長之後、counter_front 之前＝下半身被正面板遮＝嵌在吧檯裡 */}
+        {insideOrder.map(renderFurn)}
+
+        {/* 吧檯正面板遮擋層（E2）：counter_front.png＝檯面前緣＋正面板＋銅角＋3 綠凳，畫在店長之後
+            ＝遮住店長下半身＝「站吧檯裡面」。恆全不透明（不隨裝潢模式變淡，和 base-fg 不同）；pointer 穿透。 */}
+        <img
+          className="cafe-counter-fg"
+          src="/cafe/counter_front.png"
+          width={STAGE_W}
+          height={STAGE_H}
+          alt=""
+          draggable={false}
+          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+        />
+
+        {/* 地板家具(L1)＋檯面小物(L2)：畫在吧檯正面板之上＝吧檯外家具擋住吧檯、且都畫在店長之上（店長在最後排）。E3
+            Q 版客人（E9）以腳底 baseline 加入深度排序（JJ 部署回報②）：前緣 y ≤ 腳底的家具畫客人後面、
+            大於的畫前面——逐件分割 aboveCounterOrder、不動 renderOrder 本身。 */}
+        {beforeGuestOrder.map(renderFurn)}
         {user && (meDone || attend - (meDone ? 1 : 0) > 0) && (
           <>
             {meDone && (
@@ -361,24 +385,7 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
             )}
           </>
         )}
-
-        {/* 內側小家電（E4）：畫在店長之後、counter_front 之前＝下半身被正面板遮＝嵌在吧檯裡 */}
-        {insideOrder.map(renderFurn)}
-
-        {/* 吧檯正面板遮擋層（E2）：counter_front.png＝檯面前緣＋正面板＋銅角＋3 綠凳，畫在店長之後
-            ＝遮住店長下半身＝「站吧檯裡面」。恆全不透明（不隨裝潢模式變淡，和 base-fg 不同）；pointer 穿透。 */}
-        <img
-          className="cafe-counter-fg"
-          src="/cafe/counter_front.png"
-          width={STAGE_W}
-          height={STAGE_H}
-          alt=""
-          draggable={false}
-          onError={(e) => { e.currentTarget.style.display = 'none'; }}
-        />
-
-        {/* 地板家具(L1)＋檯面小物(L2)：畫在吧檯正面板之上＝吧檯外家具擋住吧檯、且都畫在店長之上（店長在最後排）。E3 */}
-        {aboveCounterOrder.map(renderFurn)}
+        {afterGuestOrder.map(renderFurn)}
 
         {/* 招牌布丁「食品サンプル展示櫃」（E8 修訂）：門口右側立櫃，木櫃→像素布丁（套口味 hue/sat）→玻璃前板。
             畫在 base-fg 之下＝底緣被前景牆遮（正確景深）、不恆亮（裝潢模式跟其他靠牆家具一樣透出）。
