@@ -479,3 +479,5 @@ z=furniture 的咖啡器材/小型展示，現實中本來就擺吧檯上，開�
 **資料統計**：N 50／R 30／SR 15／UR 5（現有 24 款分佈 N12/R8/SR4 不變，新增 76 款補齊 N38/R22/SR11/UR5）。`variant` 分佈：classic 11／sauce 11／cream 11／star 11／parfait 11／layered 10／dust 10／cherry 10／mochi 10／deluxe 5（deluxe 專屬 UR，其餘 9 種大致平均）。
 
 **品質把關**：76 款新 desc 分兩批交 codex 審過語氣一致性/重複句式/日語知識正確性/獵奇系好笑度，25 句依建議修訂（例如 `gyokuro` 原「一年只等這幾天的鮮」對玉露遮光栽培知識不準，改「覆下二十日的青」；`aurora` 原「北緯66度才有的甜」被指出極光緯度描述不準確，改「北境夜空的糖光」）。id/name 全數 100 款程式驗證唯一、無重複 desc。
+
+**美術補註（變體 sprite 已交付 public/cafe/pudding/×10）**：cherry/deluxe 的紅色配料會跟著 hue-rotate 變色（白色系配料已設計為近白免疫）。codex 建議的「配料拆層固定原色」屬渲染機制變更、成本較高——引擎自行評估要不要做，v1 整張套色即可（配料變色當風格特性）。
