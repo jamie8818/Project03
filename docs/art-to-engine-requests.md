@@ -257,7 +257,7 @@ JJ 看 preview 判定吧檯檯沿太窄破圖，拍板改門口展示櫃。**互
 **動畫**：idle 上下浮動 2px/3s ease。眨眼（幀到貨後）：疊第二張 img、keyframes 每 4–7 秒 `steps(1)` 硬切閉眼 0.12–0.18s，兩人 animation-delay/週期錯開（如 4.3s/5.1s）。
 **可選加分（JJ 挑選中、不擋 v1）**：①點擊互動（點自己 sfx＋小跳；點對方→店長台詞「〈名字〉今天也有來喔」）②連續天數徽章（streak≥7 頭上☕、≥30 👑）。
 
-**✅ 引擎已接手完成（2026-07-10，靜態 v1）**：Stage 加 `user?: UserId` prop（店面檢視傳 `me.user`；banner/裝潢不傳＝不畫）；`meDone` 畫我方、`attend−(meDone?1:0)>0` 畫對方，身分 jj/yaxuan 對應。站位窗邊圖心 x≈418/458（本體間距 ~40px）、腳 y=226、顯示高 92px 底錨；繪序跟店長同批（counter_front 前）。idle 浮動 2px/3s、兩人 delay 錯開 1.3s。眨眼幀到貨後疊第二張 img steps(1) 即可（接口留好、程式註解標位）。可選加分①②未做（等 JJ 挑）。preview 驗證：單人/雙人同框、動畫跑、對方未完成正確缺席。
+**✅ 引擎已接手完成（2026-07-10，靜態 v1）**：Stage 加 `user?: UserId` prop（店面檢視傳 `me.user`；banner/裝潢不傳＝不畫）；`meDone` 畫我方、`attend−(meDone?1:0)>0` 畫對方，身分 jj/yaxuan 對應。站位窗邊圖心 x≈418/458（本體間距 ~40px）、腳 y=226、顯示高 92px 底錨；繪序跟店長同批（counter_front 前）。idle 浮動 2px/3s、兩人 delay 錯開 1.3s。**眨眼已接（2026-07-10，幀到貨 a0839df 後）**：容器化雙圖（浮動掛容器、blink overlay 硬切 keyframes ~3.5% 週期＝4.3s→0.15s／5.1s→0.18s、相位 delay 1.7s 錯開），Web Animations API 撥時驗證 90% 睜眼/98% 閉眼。可選加分①②未做（等 JJ 挑）。preview 驗證：單人/雙人同框、動畫跑、對方未完成正確缺席。
 
 ## E10. 前牆裝潢區：門＆門旁牆可掛（JJ 需求 2026-07-09）— manifest 已交付
 

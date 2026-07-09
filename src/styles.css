@@ -2127,20 +2127,37 @@ img.buddy {
 .sign-glass { bottom: 0; width: 36px; }
 
 /* Q 版客人（E9）：今天有練的人出現在窗邊。331×320 源圖、著地線 y=314≈畫布底；顯示高 92px。
-   idle 浮動 2px/3s，兩人 delay 錯開；眨眼幀到貨後疊第二張 img 用 steps(1) 硬切。 */
+   容器掛 idle 浮動（2px/3s、delay 錯開）；眨眼＝*_blink.png overlay 硬切
+   （keyframes 3.5% 週期可見：4.3s→0.15s、5.1s→0.18s，落在規格 0.12–0.18s） */
 .cafe-guest {
   position: absolute;
+  width: 95px; /* 331:320 @ h92 */
   height: 92px;
   bottom: 190px; /* 腳 y=226（窗邊帶 190–240） */
-  image-rendering: auto;
   pointer-events: none;
   animation: guest-bob 3s ease-in-out infinite;
+}
+.cafe-guest img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: auto;
 }
 .guest-me { left: 370px; } /* 圖心 x≈418（畫布含大片透明邊，角色本體僅中間 ~34px） */
 .guest-peer { left: 410px; animation-delay: 1.3s; } /* 圖心 x≈458，與我方本體間距 ~40px */
 @keyframes guest-bob {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-2px); }
+}
+.guest-blink { opacity: 0; }
+.guest-me .guest-blink { animation: guest-blink 4.3s linear infinite; }
+.guest-peer .guest-blink { animation: guest-blink 5.1s linear infinite 1.7s; } /* 週期＋相位都錯開 */
+@keyframes guest-blink {
+  0%, 96.4% { opacity: 0; }
+  96.5%, 99.9% { opacity: 1; } /* 硬切閉眼 ~3.5% 週期 */
+  100% { opacity: 0; }
 }
 
 /* 接地陰影（引擎畫在 footprint 前緣，全在家具 sprite 之下） */

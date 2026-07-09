@@ -344,12 +344,20 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
         </div>
 
         {/* Q 版客人（E9）：今天有練的人坐鎮窗邊（我方 meDone、對方看 attend），跟店長同批繪序（引擎選省的）。
-            眨眼幀（*_blink.png）美術待補——到貨後在每張 img 上疊第二張 steps(1) keyframes 硬切即可。 */}
+            容器掛 idle 浮動；眨眼＝疊 *_blink.png 硬切 overlay（~3.5% 週期＝0.15s/0.18s，兩人週期+delay 錯開） */}
         {user && (meDone || attend - (meDone ? 1 : 0) > 0) && (
           <>
-            {meDone && <img className="cafe-guest guest-me" src={`/cafe/guests/${user}.png`} alt="我" draggable={false} />}
+            {meDone && (
+              <div className="cafe-guest guest-me">
+                <img src={`/cafe/guests/${user}.png`} alt="我" draggable={false} />
+                <img className="guest-blink" src={`/cafe/guests/${user}_blink.png`} alt="" draggable={false} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+              </div>
+            )}
             {attend - (meDone ? 1 : 0) > 0 && (
-              <img className="cafe-guest guest-peer" src={`/cafe/guests/${user === 'jj' ? 'yaxuan' : 'jj'}.png`} alt="對方" draggable={false} />
+              <div className="cafe-guest guest-peer">
+                <img src={`/cafe/guests/${user === 'jj' ? 'yaxuan' : 'jj'}.png`} alt="對方" draggable={false} />
+                <img className="guest-blink" src={`/cafe/guests/${user === 'jj' ? 'yaxuan' : 'jj'}_blink.png`} alt="" draggable={false} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+              </div>
             )}
           </>
         )}
