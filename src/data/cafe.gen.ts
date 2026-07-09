@@ -349,6 +349,12 @@ export const CAFE_ITEMS: CafeItem[] = [
   { id: 'yakiniku_grill', category: 'personal', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.91, name: '日式烤肉爐', sprite: '/cafe/catalog/yakiniku_grill.png', price: 48, lv: 2, starter: false, flavor: '煙往你那邊飄，抱歉' },
   { id: 'melon_beer', category: 'personal', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 1.3, name: '哈密瓜啤酒', sprite: '/cafe/catalog/melon_beer.png', price: 44, lv: 2, starter: false, flavor: '大人的奶油蘇打' },
   { id: 'tinder_flame', category: 'personal', z: 'wall', w: 1, h: 1, surface: false, spriteHeightTiles: 1.0, name: 'Tinder 火焰霓虹燈牌', sprite: '/cafe/catalog/tinder_flame.png', price: 58, lv: 3, starter: false, frontWall: true, flavor: '滑一萬個只為滑到你一個>_^' },
+  { id: 'spicy_dry_noodle', category: 'personal', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.78, name: '超辣乾麵', sprite: '/cafe/catalog/spicy_dry_noodle.png', price: 38, lv: 1, starter: false, flavor: '先準備好飲料' },
+  { id: 'korean_chicken_feet', category: 'personal', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 1.0, name: '韓式辣雞爪', sprite: '/cafe/catalog/korean_chicken_feet.png', price: 38, lv: 1, starter: false, flavor: '炭香，必須要有炭香' },
+  { id: 'korean_blanket', category: 'personal', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 0.88, name: '韓國厚棉被', sprite: '/cafe/catalog/korean_blanket.png', price: 45, lv: 2, starter: false, flavor: '心比棉被還軟' },
+  { id: 'yimei_puff', category: 'personal', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.47, name: '義美小泡芙', sprite: '/cafe/catalog/yimei_puff.png', price: 38, lv: 1, starter: false, flavor: '小時候的味道（現在也吃）' },
+  { id: 'acoustic_guitar', category: 'personal', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 2.16, name: '木吉他', sprite: '/cafe/catalog/acoustic_guitar.png', price: 68, lv: 3, starter: false, flavor: '只會彈前奏' },
+  { id: 'character_balloon', category: 'personal', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 2.55, name: '卡通角色氣球', sprite: '/cafe/catalog/character_balloon.png', price: 72, lv: 3, starter: false, flavor: '阿姨要幫全家拿' },
 ];
 
 // 開局免費擺好的家具

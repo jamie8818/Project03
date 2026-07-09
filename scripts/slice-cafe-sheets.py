@@ -36,6 +36,7 @@ GRID = {
     'personal2': (3, 2), 'wall8': (1, 1),
     'personal2fix': (1, 1),
     'personal3': (3, 2),
+    'personal3fix': (3, 1),
 }
 
 

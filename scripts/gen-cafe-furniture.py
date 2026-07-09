@@ -55,6 +55,8 @@ GRID = {
     'personal2fix': (1, 1),
     # JJ 特注私藏第二批（另一組）6 件（category 全 personal）：furniture/surface 合一張 sheet
     'personal3': (3, 2),
+    # personal3 重生：codex 判定 korean_chicken_feet 缺煙霧、yimei_puff 比例過方、character_balloon 比例過矮，3 件單獨重生
+    'personal3fix': (3, 1),
 }
 
 DATA = json.load(open(MANIFEST))
