@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { UserId, UserState } from './types.ts';
-import { USERS, fetchRemote, initState, loadLocal, newer, normalize, pushRemote, saveLocal, touch } from './lib/store.ts';
+import { USERS, fetchRemote, initState, loadLocal, newer, normalize, pushRemote, pushRemoteNow, saveLocal, touch } from './lib/store.ts';
 import { tpeToday } from './lib/dates.ts';
 import Gate from './components/Gate.tsx';
 import Onboarding from './components/Onboarding.tsx';
@@ -89,11 +89,33 @@ export default function App() {
     };
   }, [authed, user]);
 
+  const pendingPush = useRef<UserState | null>(null); // debounce 期間還沒推上雲的最新 state
   const schedulePush = useCallback((s: UserState) => {
+    pendingPush.current = s;
     if (pushTimer.current) clearTimeout(pushTimer.current);
     pushTimer.current = setTimeout(() => {
+      pendingPush.current = null;
       pushRemote(s).then(() => setOffline(false)).catch(() => setOffline(true));
     }, 1500);
+  }, []);
+
+  // 切背景/關頁即刻推送：堵「debounce 1.5s 內關頁→馬上換裝置」會被 LWW 蓋掉的視窗。
+  // 失敗無妨——本機已存，下次開站比 updatedAt 較新會自動補推。
+  useEffect(() => {
+    const flush = () => {
+      const s = pendingPush.current;
+      if (!s) return;
+      pendingPush.current = null;
+      if (pushTimer.current) clearTimeout(pushTimer.current);
+      pushRemoteNow(s);
+    };
+    const onVis = () => { if (document.visibilityState === 'hidden') flush(); };
+    document.addEventListener('visibilitychange', onVis);
+    window.addEventListener('pagehide', flush);
+    return () => {
+      document.removeEventListener('visibilitychange', onVis);
+      window.removeEventListener('pagehide', flush);
+    };
   }, []);
 
   const update = useCallback(

@@ -126,6 +126,16 @@ export async function pushRemote(state: UserState): Promise<void> {
   });
 }
 
+/** 頁面切背景/關閉時的即刻推送：sendBeacon 在 unload 中仍保證送出（回 false＝排不進佇列，
+ *  退回 keepalive fetch）。堵「debounce 1.5s 內關頁→換裝置」的短暫沒存到視窗。 */
+export function pushRemoteNow(state: UserState): void {
+  const body = JSON.stringify({ user: state.user, state });
+  try {
+    if (navigator.sendBeacon?.('/api/progress', new Blob([body], { type: 'application/json' }))) return;
+  } catch { /* 某些瀏覽器對 Blob type 挑剔，退回 fetch */ }
+  fetch('/api/progress', { method: 'POST', headers: { 'content-type': 'application/json' }, body, keepalive: true }).catch(() => {});
+}
+
 /** 開站：拿遠端跟本機比 updatedAt，新的贏 */
 export function newer(a: UserState | null, b: UserState | null): UserState | null {
   if (!a) return b;
