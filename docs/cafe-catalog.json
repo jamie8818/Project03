@@ -2151,6 +2151,21 @@
       "starter": false,
       "sheet": "pil:standee",
       "desc": "紙板等身立牌：店長熊貓 happy 表情剪影（取自 public/cafe/shopkeeper/happy.png 既有插畫合成，不重繪角色本體），剪影外緣加一圈白色描邊營造印刷紙板剪裁感，背面下方露出一支簡單支撐架撐住立牌站立不倒，PIL 組裝生成、不經 codex 綠幕流程"
+    },
+    {
+      "id": "booth_round",
+      "category": "seating",
+      "z": "furniture",
+      "w": 3,
+      "h": 3,
+      "surface": false,
+      "spriteHeightTiles": 2.16,
+      "name": "圓形環繞卡座",
+      "price": 195,
+      "lv": 6,
+      "starter": false,
+      "sheet": "furniture3",
+      "desc": "大型圓桌環繞式絨布卡座，入口缺口朝正面、環繞座位＋中央圓桌，多人聚會用旗艦座位"
     }
   ]
 }
