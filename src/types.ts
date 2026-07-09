@@ -44,6 +44,7 @@ export interface UserState {
   foodMastery?: Record<string, number>; // 出餐版：食物庫的熟練度 foodId → 累積答對數（獨立於 cards SRS，供場間輪替抽選）
   // ── 今日課程 ──
   goal?: { level: 'N5' | 'N4'; date: string }; // 學習目標：等級＋達成日（儀表板配速用，可改）
+  cram?: { date: string; coins: number }; // 背單字：今日已領金幣（每日上限防刷，見 lib/cram.ts）
   lessonsPassed?: number[]; // 小測達標(≥70%)的課號＝該課真正學完（課程完成的門檻）
   lastSprintDate?: string; // 最後一次「一天一課衝刺」的日期（隔天＝消化日、不給新課）
   quizFail?: { no: number; date: string }; // 最後一次小測沒過的課與日期（隔天＝補強日）

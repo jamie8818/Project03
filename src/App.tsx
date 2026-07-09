@@ -6,6 +6,7 @@ import Gate from './components/Gate.tsx';
 import Onboarding from './components/Onboarding.tsx';
 import Session from './components/Session.tsx';
 import TodayHome from './components/TodayHome.tsx';
+import VocabCram from './components/VocabCram.tsx';
 import KanaChart from './components/KanaChart.tsx';
 import Library from './components/Library.tsx';
 import Arena from './components/Arena.tsx';
@@ -29,6 +30,7 @@ export default function App() {
   const [tab, setTab] = useState<Tab>('today');
   const [started, setStarted] = useState(false); // 今日課程：從首頁按開始才進 session
   const [sprintMode, setSprintMode] = useState(false);
+  const [cramming, setCramming] = useState(false); // 背單字（首頁入口的自選分類速記）
   const pushTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [toasts, setToasts] = useState<string[]>([]);
   const [sound, setSound] = useState(soundOn());
@@ -211,8 +213,10 @@ export default function App() {
               onFinished={refreshPeer}
               sprint={sprintMode}
             />
+          ) : cramming ? (
+            <VocabCram state={state} today={today} update={update} onExit={() => setCramming(false)} />
           ) : (
-            <TodayHome state={state} today={today} onStart={(sp) => { setSprintMode(sp); setStarted(true); }} />
+            <TodayHome state={state} today={today} onStart={(sp) => { setSprintMode(sp); setStarted(true); }} onCram={() => setCramming(true)} />
           ))}
         {tab === 'arena' && <Arena state={state} today={today} update={update} />}
         {tab === 'kana' && <KanaChart state={state} />}
@@ -236,7 +240,7 @@ export default function App() {
       </main>
 
       <nav className="tabbar">
-        <button className={tab === 'today' ? 'on' : ''} onClick={() => { setTab('today'); setStarted(false); }}>
+        <button className={tab === 'today' ? 'on' : ''} onClick={() => { setTab('today'); setStarted(false); setCramming(false); }}>
           <span className="tab-icon">✍️</span>今日練習
         </button>
         <button className={tab === 'arena' ? 'on' : ''} onClick={() => setTab('arena')}>

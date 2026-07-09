@@ -8,10 +8,12 @@ export default function TodayHome({
   state,
   today,
   onStart,
+  onCram,
 }: {
   state: UserState;
   today: string;
   onStart: (sprint: boolean) => void;
+  onCram: () => void;
 }) {
   const [sprint, setSprint] = useState(false);
   const plan = buildDailyPlan(state, today, sprint);
@@ -89,6 +91,11 @@ export default function TodayHome({
             ? '大概 10–15 分鐘。練完還想學，按「再來一份」就繼續教下一批。'
             : '今天大概 20 分鐘。大課會分 2–3 天，別急。'}
       </p>
+
+      {/* 背單字（自選分類速記）：跟每日課程互通，背過的進複習池 */}
+      <button className="tool" style={{ marginTop: 10 }} onClick={onCram}>
+        🗂 背單字 · 挑一類學 10 個＋小考拿金幣 →
+      </button>
     </div>
   );
 }
