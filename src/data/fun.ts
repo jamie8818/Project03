@@ -171,10 +171,10 @@ export const MYSTERY_XP = { perfect: 15, partial: 5 } as const;
 
 export const GACHA_COST = 30;
 export const COINS = {
-  daily: 10,
-  duelWin: 5,
+  daily: 50, // JJ 2026-07-09 調升（原 10）：每日完課是最該獎勵的行為
+  duelWin: 15, // 原 5
   mysteryPerfect: 15,
-  minigame: 3, // 聽寫/翻牌/挖空 過關
+  minigame: 10, // 聽寫/翻牌/挖空 過關（原 3）
   achievement: 20, // 每解一個成就
   bossClaim: 20,
 } as const; // 衝刺另計 score/50、打工另計營業額÷5（Games.tsx SHIFT_COIN_DIVISOR）、里程碑另計、背單字另計（lib/cram.ts）

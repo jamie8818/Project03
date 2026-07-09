@@ -1,6 +1,6 @@
 import type { UserState } from '../types.ts';
 import { USERS, displayStreak } from '../lib/store.ts';
-import { GACHA_COST, PUDDINGS, gachaRoll, luckOf, type Pudding } from '../data/fun.ts';
+import { COINS, GACHA_COST, PUDDINGS, gachaRoll, luckOf, type Pudding } from '../data/fun.ts';
 import { sfx } from '../lib/sounds.ts';
 import { useState } from 'react';
 import { DEFAULT_GOAL, lessonPace, type GoalLevel } from '../lib/goal.ts';
@@ -190,7 +190,7 @@ export default function Dashboard({
       <div className="badge-wall">
         <h3>🎰 布丁扭蛋機</h3>
         <p className="legend">
-          金幣：每日完成 +10、對決勝 +5、衝刺分÷50、神秘客全對 +15。一轉 {GACHA_COST} 金幣，出貨機率比每日掉落大方，10% 大當たり雙顆
+          金幣：每日完成 +{COINS.daily}、對決勝 +{COINS.duelWin}、小遊戲 +{COINS.minigame}、衝刺分÷50、神秘客全對 +{COINS.mysteryPerfect}。一轉 {GACHA_COST} 金幣，出貨機率比每日掉落大方，10% 大當たり雙顆
         </p>
         <div className="gacha-row">
           <span className="coin-chip">🪙 {me.coins}</span>
