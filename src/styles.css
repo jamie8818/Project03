@@ -2225,12 +2225,103 @@ img.buddy {
 .guest-blink { opacity: 0; }
 
 /* 粉圓貓（E15）：80×68 素材 1:1 直用（codex 校準過的相對尺度，別再縮放）；貓常常一動不動＝不加 idle 動畫 */
+/* 粉圓貓（E15 容器＋E18 動畫層）：呼吸掛 .cat-breathe 包裹層（B/fx 幀跟著一起呼吸）、
+   B 幀硬切疊層、pet/dodge 幀蓋 A、hand_pet 拍 3 下、❤ 飄升、💢、2s 迷你好感條、階級章 */
 .cafe-cat {
   position: absolute;
   width: 80px;
   height: 68px;
+  pointer-events: none;
+}
+.cafe-cat.cat-hit { pointer-events: auto; cursor: pointer; }
+.cat-breathe {
+  position: absolute;
+  inset: 0;
+  transform-origin: bottom center;
+  animation: cat-breathe 3s ease-in-out infinite;
+}
+.cat-breathe img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   image-rendering: auto;
   pointer-events: none;
+}
+.cat-b { opacity: 0; }
+.cat-b.on { opacity: 1; } /* JS 時序硬切（groom 舔毛循環／roll 伸懶腰／sit 歪頭；換位重置） */
+@keyframes cat-breathe {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.02); }
+}
+.cat-hand {
+  position: absolute;
+  width: 24px;
+  height: 20px;
+  left: 28px;
+  top: -6px;
+  pointer-events: none;
+  animation: cat-hand-pat 0.4s ease-in-out 3; /* 拍 3 下 ~1.2s */
+}
+@keyframes cat-hand-pat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+.cat-heart {
+  position: absolute;
+  left: 34px;
+  top: -4px;
+  font-size: 13px;
+  pointer-events: none;
+  animation: cat-heart-float 1.2s ease-out forwards; /* 飄升 20px＋淡出 */
+}
+@keyframes cat-heart-float {
+  0% { opacity: 0; transform: translateY(0); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-20px); }
+}
+.cat-anger {
+  position: absolute;
+  left: 46px;
+  top: -6px;
+  font-size: 14px;
+  pointer-events: none;
+  animation: cat-anger-pop 0.8s ease forwards;
+}
+@keyframes cat-anger-pop {
+  0% { opacity: 0; transform: scale(0.6); }
+  25% { opacity: 1; transform: scale(1.15); }
+  75% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; }
+}
+.cat-affection-bar {
+  position: absolute;
+  left: 50%;
+  top: -8px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2px;
+  pointer-events: none;
+  animation: dg-in 0.2s ease;
+}
+.cat-affection-bar i {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: rgba(255, 250, 240, 0.55);
+  border: 1px solid var(--line-strong, #6b4a2e);
+}
+.cat-affection-bar i.on { background: #e0566b; }
+.cat-tier {
+  position: absolute;
+  left: 50%;
+  top: -4px;
+  transform: translateX(-50%);
+  font-size: 9px;
+  letter-spacing: 1px;
+  opacity: 0.85;
+  pointer-events: none;
+  white-space: nowrap;
 }
 .guest-me .guest-blink { animation: guest-blink 4.3s linear infinite; }
 .guest-peer .guest-blink { animation: guest-blink 5.1s linear infinite 1.7s; } /* 週期＋相位都錯開 */

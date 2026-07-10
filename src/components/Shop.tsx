@@ -43,6 +43,7 @@ import {
   type Z層,
 } from '../lib/shop.ts';
 import { DEFAULT_SHOP, fetchShop, mergeBoard, pushBoard, pushShop, type BoardMsg, type Facing, type PlacedItem, type ShopState } from '../lib/shopstate.ts';
+import { AFFECTION_START, affectionTier, petCat, type PetOutcome } from '../lib/cat.ts';
 
 const STAGE_W = CAFE.w; // 576
 const STAGE_H = CAFE.h; // 416
@@ -97,12 +98,14 @@ interface StageProps {
   onMove?: (index: number, gx: number, gy: number) => void; // 拖曳：把第 index 件搬到 (gx,gy)
   onBoard?: () => void; // 點牆上伝言板黑板（僅店面檢視模式；有給才畫可點黑板）
   onEditGuestLine?: () => void; // E14：點自己的 Q 版客人 → 開自訂台詞編輯（有給才可點）
+  onPetCat?: () => { outcome: PetOutcome; value: number } | null; // E18/E19：摸粉圓（好感判定在 ShopPage，回分支＋新好感值）
+  catValue?: number; // 目前好感值（頭頂階級章；不給＝不顯示）
 }
 
 type Drag = { index: number; grabDx: number; grabDy: number; gx: number; gy: number; moved: boolean; startX: number; startY: number };
 const DRAG_THRESHOLD = 6; // 移動超過幾 px 才算「拖曳」，否則當「點一下」（避免觸控輕點誤判成搬移）
 
-function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, placing, placingFacing, placingIgnore = -1, selectedIndex, onCell, onItem, onMove, onBoard, onEditGuestLine }: StageProps) {
+function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, placing, placingFacing, placingIgnore = -1, selectedIndex, onCell, onItem, onMove, onBoard, onEditGuestLine, onPetCat, catValue }: StageProps) {
   const wrap = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   // 台詞帶序號 n：同句被連抽兩次時 key 仍變、泡泡動畫照樣重播（泡泡＝顯示幾秒自動淡出）
@@ -141,6 +144,67 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
   const [fgOk, setFgOk] = useState(true); // 前景層（門/牆去背圖）是否存在；美術還沒出時 onError 關掉
   // E15 粉圓貓：不受 meDone/attend 影響、開店永遠在；每分鐘重算 10 分鐘檔位
   const [catSpot, setCatSpot] = useState(catSpotNow);
+  // E18 粉圓動畫：B 幀差分（JS 隨機時序、時距互質防同步；換位重置）＋摸頭互動 fx
+  const [catB, setCatB] = useState(false);
+  const [catFx, setCatFx] = useState<{ kind: 'pet' | 'dodge' | 'angry' | 'hand' | 'bar'; n: number; value: number } | null>(null);
+  const catFxTimers = useRef<number[]>([]);
+  useEffect(() => {
+    setCatB(false);
+    const timers: number[] = [];
+    const later = (fn: () => void, ms: number) => { timers.push(window.setTimeout(fn, ms)); };
+    const pose = CAT_SPOTS[catSpot].pose;
+    if (pose === 'groom') {
+      // 舔毛循環：B/A 0.4s 交替 ×3（共 2.4s）→ 停 3–5s 隨機 → 重觸發
+      const cycle = () => {
+        let flips = 0;
+        const flip = () => {
+          setCatB((b) => !b);
+          flips++;
+          if (flips < 6) later(flip, 400);
+          else { setCatB(false); later(cycle, 3000 + Math.random() * 2000); }
+        };
+        flip();
+      };
+      later(cycle, 1700);
+    } else if (pose === 'roll') {
+      // 伸懶腰：每 15–30s 隨機一次，B 幀定格 1s
+      const stretch = () => { setCatB(true); later(() => setCatB(false), 1000); later(stretch, 15000 + Math.random() * 15000); };
+      later(stretch, 15000 + Math.random() * 15000);
+    } else {
+      // 歪頭：每 5–8s 一次，B 幀 0.6s
+      const tilt = () => { setCatB(true); later(() => setCatB(false), 600); later(tilt, 5000 + Math.random() * 3000); };
+      later(tilt, 5000 + Math.random() * 3000);
+    }
+    return () => timers.forEach(clearTimeout);
+  }, [catSpot]);
+  useEffect(() => () => catFxTimers.current.forEach(clearTimeout), []);
+  const clickCat = () => {
+    if (!onPetCat || catFx) return; // fx 播放中不重入（點擊仍會在下次生效；連摸視窗 60s 綽綽有餘）
+    const res = onPetCat();
+    if (!res) return;
+    catFxTimers.current.forEach(clearTimeout);
+    catFxTimers.current = [];
+    const t = (fn: () => void, ms: number) => catFxTimers.current.push(window.setTimeout(fn, ms));
+    const n = Date.now();
+    if (res.outcome === 'pet') {
+      sfx.correct(1);
+      setCatFx({ kind: 'pet', n, value: res.value });
+      t(() => setCatFx({ kind: 'bar', n: n + 1, value: res.value }), 1200); // 爽臉收尾 → 2s 迷你好感條
+      t(() => setCatFx(null), 3200);
+    } else if (res.outcome === 'angry') {
+      sfx.wrong();
+      setCatFx({ kind: 'angry', n, value: res.value });
+      t(() => setCatFx(null), 800);
+    } else if (res.outcome === 'cooldown') {
+      // 冷卻內的無效摸：只給拍手輕量回饋（不擲骰不加分）
+      setCatFx({ kind: 'hand', n, value: res.value });
+      t(() => setCatFx(null), 1200);
+    } else {
+      // dodge / sulk：撇頭 0.8s，無 ❤、手省略（撲空）
+      setCatFx({ kind: 'dodge', n, value: res.value });
+      t(() => setCatFx(null), 800);
+    }
+  };
   useEffect(() => {
     const iv = setInterval(() => setCatSpot(catSpotNow()), 60000);
     return () => clearInterval(iv);
@@ -422,15 +486,37 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
               )}
             </Fragment>
           ) : null;
+          const hideOnErr = (e: SyntheticEvent<HTMLImageElement>) => { e.currentTarget.style.display = 'none'; };
+          const tierBadge = catValue != null ? affectionTier(catValue).badge : '';
           const catJsx = (
-            <img
+            <div
               key="cat"
-              className="cafe-cat"
-              src={`/cafe/cat/${cat.pose}.png`}
-              alt="粉圓"
-              draggable={false}
+              className={`cafe-cat ${talk && onPetCat ? 'cat-hit' : ''}`}
               style={{ left: cat.x - 40, bottom: STAGE_H - cat.y - 6 }}
-            />
+              title={talk && onPetCat ? '摸摸粉圓' : undefined}
+              onClick={talk && onPetCat ? clickCat : undefined}
+            >
+              <div className="cat-breathe">
+                <img className="cat-a" src={`/cafe/cat/${cat.pose}.png`} alt="粉圓" draggable={false} />
+                {/* B 幀差分（E18）：硬切疊層，缺檔 onError 隱藏＝維持 A 幀 */}
+                <img className={`cat-b ${catB && !catFx ? 'on' : ''}`} src={`/cafe/cat/${cat.pose}_b.png`} alt="" draggable={false} onError={hideOnErr} />
+                {catFx?.kind === 'pet' && <img className="cat-fx" src={`/cafe/cat/${cat.pose}_pet.png`} alt="" draggable={false} onError={hideOnErr} />}
+                {(catFx?.kind === 'dodge' || catFx?.kind === 'angry') && (
+                  <img className="cat-fx" src={`/cafe/cat/${cat.pose}_dodge.png`} alt="" draggable={false} onError={hideOnErr} />
+                )}
+              </div>
+              {(catFx?.kind === 'pet' || catFx?.kind === 'hand') && (
+                <img key={catFx.n} className="cat-hand" src="/cafe/cat/hand_pet.png" alt="" draggable={false} onError={hideOnErr} />
+              )}
+              {catFx?.kind === 'pet' && <span key={`h${catFx.n}`} className="cat-heart">❤</span>}
+              {catFx?.kind === 'angry' && <span key={`a${catFx.n}`} className="cat-anger">💢</span>}
+              {catFx?.kind === 'bar' && (
+                <span className="cat-affection-bar">
+                  {[0, 1, 2, 3, 4].map((i) => <i key={i} className={i < Math.round(catFx.value / 20) ? 'on' : ''} />)}
+                </span>
+              )}
+              {!catFx && tierBadge && <span className="cat-tier">{tierBadge}</span>}
+            </div>
           );
           const ents = [
             ...(guestsJsx ? [{ y: GUEST_FEET_Y, jsx: guestsJsx }] : []),
@@ -724,7 +810,24 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
         <b>🏮 日々喫茶 Lv.{lv}「{shopTitle(lv)}」</b>
       </div>
 
-      {mode !== 'decorate' && <Stage shop={shop} attend={attend} meDone={meDone} user={me.user} talk onBoard={() => setBoardOpen(true)} onEditGuestLine={() => setLineEditOpen(true)} />}
+      {mode !== 'decorate' && (
+        <Stage
+          shop={shop}
+          attend={attend}
+          meDone={meDone}
+          user={me.user}
+          talk
+          onBoard={() => setBoardOpen(true)}
+          onEditGuestLine={() => setLineEditOpen(true)}
+          catValue={me.catAffection?.value ?? AFFECTION_START[me.user]}
+          onPetCat={() => {
+            // E19 摸頭判定：純函式擲骰 → 寫回 state（跟既有同步管道走）
+            const res = petCat(me.catAffection, me.user, Date.now());
+            update((s) => ({ ...s, catAffection: res.next }));
+            return { outcome: res.outcome, value: res.next.value };
+          }}
+        />
+      )}
       {lineEditOpen && (
         <GuestLineEditor
           initial={shop.guestLines?.[me.user] ?? ''}
