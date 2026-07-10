@@ -1,4 +1,40 @@
-# 日々喫茶 Shop · 引擎 session 交接（2026-07-09 第二輪更新）
+# 日々喫茶／日文站 · 引擎 session 交接
+
+**➡️ 新 session 從 §0（2026-07-10 大輪總結）開始讀，蓋過下方 07-09 的內容（僅坑清單 §6 仍然全部有效）。**
+
+## §0 ⚠️ 2026-07-10 引擎大輪總結（單一 session 三十多個 commit，讀這節就夠）
+
+### 0.1 目前狀態
+- branch `nihongo-teaching-injection`、HEAD `f479a85`、`tsc -b` 零錯、`npm test` **119/119**、`npm run build` 過。
+- **commit 後必雙推**：`git push origin nihongo-teaching-injection && git push mirror nihongo-teaching-injection`（iCloud 事故守則）。
+- 美術 session 會**直接 commit 進共用 repo**（不再走「worker 交清單」），開工前先 `git pull`＋`git log` 看有沒有插隊 commit；他們的 dev server 在 port 5273，引擎用 `.claude/launch.json` 的 `nihongo-engine`（5281）。
+- **JJ 會即時在 preview 視窗裡玩**（dev /api/shop 記憶體假資料會被他改），驗證時 seed 前先想一下會不會蓋掉他正在看的東西。
+
+### 0.2 本輪完成（依主題）
+**學習機制**：五十音配速 `KANA_NEW_CAP=10`＋「再來一份」改繼續滴漏下一批（12f3d0d）；**人生首輪超迷你 `FIRST_RUN_CAP=3`**＝只教あいう、完成即回正常配速（f479a85）；目標卡改課數制＋可改目標（N5/N4＋日期，40c1ce4）＋五十音先修 ETA（1bd41af）；背單字 VocabCram（首頁入口、挑分類 10 個＋小考）金幣 ×1.5 上限 45/日（4cb5581）。
+**經濟**：打工營業額 ÷5 入金幣（baca009）；每日完課 +50／對決 +15／小遊戲 +10（b535464）；店長私房錢 350（首次進店引導發、state 旗標 `introGiftClaimed` 防重複）。
+**存檔**：切背景/關頁 sendBeacon 即刻推送堵 1.5s debounce 視窗（4b1eb87）；**KV 快照備份** `bk:<key>:<日期>`、30 分節流、TTL 14 天，回復手順見 `docs/kv-backup.md`（21cb078，worker 改）。線上 prod KV 目前是**空的**（查證過），正式開玩前裝置端 localStorage 記得清。
+**喫茶店（美術需求 E5–E19 全接完，完成註記都回填在 `art-to-engine-requests.md` 各節）**：E5 台詞 SHOP_LINES_GEN／E6 分頁籤／E7 counter-inside 加法＋嵌入⇄檯面切換（`PlacedItem.top`）／E8修訂 門口食品サンプル展示櫃／E9 Q版客人（116px、腳底 y=215 吧檯前、深度排序 baseline、眨眼、E14 自訂台詞 `ShopState.guestLines`＋worker 按鍵合併）／E10 前牆掛件（虛擬列 `FRONT_WALL_ROW=12`）／E11 counterTop 檯面權／E12 珍藏轉蛋機（80 金幣、動態不重複池、完売鎖機）／E13 flavor 四處顯示／E15+E18 粉圓貓（4 點位 10 分鐘輪換、呼吸/B幀/摸頭）／E17 布丁百味（100 款+UR+variant 圖）／E16 成就 Tier A 17 條＋Tier B 9 條（`UserState.meta` 計數袋）。
+**E19 好感度**：`src/lib/cat.ts` 純函式（賭氣→連摸→冷卻→擲骰），存 `UserState.catAffection`。
+**裝潢 UX**：收回模式（點什麼收什麼＋全部清空＋復原 undoStack）；出餐托盤溢出修（minmax(0,1fr)）；出餐 TTS 改唸 kana（臭豆腐誤讀）。
+**直覺式導引（1ddb3c2 起）**：分頁漸進解鎖（完成 1 輪開進度+五十音、2 輪開對戰場+教材庫，`tabUnlocked`）＋coach mark 系統（`src/components/Coach.tsx`，全域單顆、localStorage 旗標、鏈＝開始→進度→店橫幅→商店→分類都能逛→珍藏用轉蛋→裝潢→黑板）＋裝潢幽靈手示範（含說明標籤）＋文字減量（onboarding 導覽砍除、店長引導 5→1 句）。像素鎖/指示手素材在 `public/cafe/ui/`。
+
+### 0.3 未完/待辦
+1. **夜市出餐難度分級（唯一沒做完的已討論項）**：JJ 拍板「一開始純單品，2 份/複數種隨課程進度慢慢加」。規格調查做完：`buildOrder`（`src/data/serving.ts`）現在從第一場就 12% 三品/30% 雙品；課綱「と/も」在 **L16** 教。建議：`buildOrder` 加 progress 參數（`courseProgress(state).done`），L16 前全單品、L16 後開雙品、再往後開三品——具體門檻 JJ 沒定案，實作前跟他確認。
+2. **JJ 覆核清單**（照單先做、改常數即生效）：①粉圓好感起始亞軒 15/JJ 5（`lib/cat.ts AFFECTION_START`）②貓奴認證綁好感 100 ③首輪 3 假名（`FIRST_RUN_CAP`）。
+3. E9 可選加分②連續天數徽章（streak≥7 ☕/≥30 👑）JJ 沒挑；E16 Tier C 兩條（已讀不回/過馬路請牽手）可延後。
+4. **徽章像素化**：`public/cafe/badges/` 40 枚已到貨，成就 icon 目前仍是 emoji——確認是否要換 img 渲染（xp.ts Achievement.icon＋Dashboard 徽章牆），美術單 E16 說「素材到貨前 emoji 頂著不互卡」。
+5. **部署**：worker 有兩處後端改動（E14 guestLines 合併＋KV 快照備份）→ 下次部署必須 `npx wrangler deploy`。部署由美術監工統一執行，引擎不動手。
+
+### 0.4 本輪新增的坑（舊坑見 §6，全部仍有效）
+- **合成 pointer 事件**：`setPointerCapture` 對假 pointerId 會 throw（Stage 已包 try/catch；測 serve3 要先 monkeypatch `Element.prototype.setPointerCapture`）；pointerdown/up 同 tick dispatch 會讀到舊 state（React 18 非同步 flush）→ down/up 之間隔 200ms。
+- **coach mark 全域佔位**：dismiss 必須釋放 `active`（Coach.tsx 已修）；同畫面兩顆 coach 接棒要把 dismiss 綁在會觸發 re-render 的 setState 上。
+- **測試裡 fresh initState 會撞首輪 cap**：`sessionsDone=0` ＝ FIRST_RUN_CAP=3，要測標準配速先 `s.sessionsDone = 1`。
+- **美術素材常比需求單先落地**（他們動很快），接線前 `ls public/cafe/<目錄>` 看一眼，能直接吃正式素材就不用寫後備。
+
+---
+
+# （以下為 2026-07-09 第二輪交接，歷史參考）
 
 > 給下一個「引擎 session」的單一入口。本輪引擎完成 review 10 findings **全數 10 條**（#1 走方案B：伝言板獨立 KV）＋E4 吧檯拆層接手＋§A manifest 切換。
 > 聖經＝`docs/shop-v2-spec.md`；美術→引擎需求＝`docs/art-to-engine-requests.md`（E1–E4 全 ✅）；引擎→美術＝`docs/engine-to-art-requests.md`。
