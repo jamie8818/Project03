@@ -489,3 +489,24 @@ z=furniture 的咖啡器材/小型展示，現實中本來就擺吧檯上，開�
 **✅ 引擎已接手完成（2026-07-10）**：①`fun.ts` PUDDINGS 改吃 `PUDDINGS_GEN`（type Pudding=PuddingGen、含 variant 欄）②`Rarity` 擴 UR；權重全點位補齊——日掉落 streak≥30 {45/39/15/1}、≥7 {60/32/7.5/0.5}、素人 UR 0；扭蛋首顆 {49/34/15/2}、大當たり第二顆 {38/39/20/3}；神秘客 {0/68/28/4}（rollRarity 迭代含 UR）③渲染五點全換 variant 基底圖套色（圖鑑格/扭蛋出貨卡/每日掉落卡/招牌展示櫃/托盤縮圖；圖鑑未擁有＝黑剪影同轉蛋機語言）④圖鑑加稀有度篩選籤（全部/N/R/SR/UR 各帶收集進度）⑤配料拆層未做（v1 整張套色照美術補註）。preview 驗證 100 格/籤帶進度/UR 5 款（meteor/aurora/gold_leaf24k/first_snow/time_stop）/variant 圖套色/扭蛋出貨卡。成就門檻連動由 E16 動態綁 PUDDINGS.length。
 
 **美術補註（變體 sprite 已交付 public/cafe/pudding/×10）**：cherry/deluxe 的紅色配料會跟著 hue-rotate 變色（白色系配料已設計為近白免疫）。codex 建議的「配料拆層固定原色」屬渲染機制變更、成本較高——引擎自行評估要不要做，v1 整張套色即可（配料變色當風格特性）。
+
+## E18. 粉圓貓小動畫：呼吸＋三姿勢差分幀（JJ 需求 2026-07-10）
+
+**素材**：`public/cafe/cat/{groom_b,roll_b,sit_b}.png`，沿用 E15 三姿勢主圖同畫布 80×68、同對位（著地線不變）。做法比照 E9 客人眨眼幀＝PIL 手術（區域平移／旋轉貼回），逐像素 diff 驗證**改動區以外差異＝0**：
+- `groom_b.png`：舔毛動作幀。整塊頭部（耳＋額＋眼＋鼻，含少量頸部/衣領重疊）下移 2px，模擬低頭舔毛的瞬間；改動矩形 (20,15)-(48,36)，矩形外 diff pixels＝0，矩形內差異 446px。
+- `roll_b.png`：伸懶腰幀。前掌區塊往身體外（左上）平移 (-3,-2)、後掌區塊往外（右下）平移 (+3,+3)，模擬四肢外展；改動矩形共兩塊 (32,28)-(49,42) 與 (50,29)-(68,47)，矩形外 diff pixels＝0，矩形內差異 194px。
+- `sit_b.png`：歪頭幀。頭部整塊（含雙耳，範圍 (20,10)-(62,37)）旋轉 4°＋右移 2px 貼回，縫隙（1 處，(50,36) 附近）以原圖對應像素補平，無破洞；矩形外 diff pixels＝0，矩形內差異 437px。
+
+三張皆保留 `public/cafe/cat/{sit,groom,roll}.png` 原檔不動；A/B 對照＋GIF（0.5s 交替）已過 codex 前景審：sit＝過、groom＝過、roll＝勉強過（codex 指出翻肚時肚子/後腳銜接略有跳動感，建議加一張過渡幀；本批維持 A/B 雙幀硬切架構未加中間幀，與 E9 眨眼同一設計語言，判斷可接受）。
+
+**引擎待辦**：
+1. **呼吸（CSS、四姿勢常駐，含 E15 idle）**：貓 sprite 套 `transform-origin: bottom; animation: cat-breathe 3s ease-in-out infinite`，`@keyframes cat-breathe { 0%,100% { transform: scaleY(1.00); } 50% { transform: scaleY(1.02); } }`。躺姿（roll）套同一組即有睡覺呼吸感，不用另外做。
+2. **B 幀疊圖**（沿用 E9 眨眼的雙圖 `<img>` 疊層＋`steps(1)` 硬切架構，非 CSS sprite-sheet）：
+   - `groom`：舔毛循環——B 幀 0.4s ↔ A 幀 0.4s，連續交替 3 次（共 2.4s），停 3–5s 隨機，再重觸發。
+   - `roll`：伸懶腰——每 15–30s 隨機觸發一次，B 幀定格顯示 1s 後切回 A。
+   - `sit`：歪頭——每 5–8s 觸發一次，B 幀顯示 0.6s 後切回 A。
+   - 三組時距刻意用互質感數字，避免跟呼吸動畫（3s 週期）或彼此對齊同步。
+3. **缺檔防呆**：`*_b.png` 若 404，`onError` 隱藏該 img（不換底圖也不報錯），同 E9 眨眼做法——貓維持只顯示 A 幀。
+4. **換位相容**：E15 換位機制（每分鐘 `spotIndex` 重算、瞬移不轉場）不變；動畫計時器（B 幀觸發、呼吸週期）在換位當下重置即可，不用做跨換位的狀態延續。
+
+**QC**：三張 B 幀 diff 驗證數據見上；GIF 預覽＋codex 審語見上；本批未動 A 幀原檔、未動除 `public/cafe/cat/*_b.png` 與本節以外的檔案。
