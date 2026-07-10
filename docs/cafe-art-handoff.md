@@ -8,7 +8,32 @@
 
 昭和喫茶商店「日々喫茶」的美術＋擺放引擎大改版（Stardew 式假3D 家具站進 2D 俯視格）。
 新場景、30 件家具正交重生＋四向 turnaround、拆套、新店長、牆上留言黑板都做完了。
-**➡️ 新 session 從 §0.8 開始讀（2026-07-09 晚最新總結，蓋過 §0.5/§0.6/§4）。**
+**➡️ 新 session 從 §0.9 開始讀（2026-07-10 收官交接，蓋過 §0.5–0.8 全部）。**
+
+## 0.9 ⚠️ 收官交接（2026-07-10 深夜；新美術監工 session 的唯一入口，§0.5–0.8 僅當歷史）
+
+### 現況一句話
+catalog **233 件**（句句有 flavor）、布丁 **100 味**（variant×hue）、粉圓貓完全體（3姿勢×4狀態幀＋摸頭好感度＋8點位輪換）、動畫家具 12 件、成就 38＋像素徽章 40、Q 版客人（眨眼/自訂台詞/吧檯前）、直覺式導引、app icon 布丁版。**需求管線 E1–E21 全閉環**、線上版本 `840c9c4c`、工作區乾淨、雙遠端同步（GitHub `jamie8818/Project03` private＋`~/Project03-mirror.git`，**commit 後兩個都 push**）。
+
+### 工作模型（JJ 拍板，照做）
+- **Fable 監工＋Sonnet workers**：監工派工/驗收/統一 commit/部署；worker 生產、**絕不執行 git**（交檔案清單）。
+- **codex＝眼睛和畫手**：生圖/看圖全委 codex，**一律前景跑**（timeout 600000ms、`< /dev/null`、`-i` 後 `--`、401 重跑）——「背景跑＋停下等通知」是 worker 最常見死法，brief 第一條就要禁。
+- **manifest 排隊制**：多 worker 並行時 sprite 先做、`cafe-catalog.json` 最後動；動前 `git status` 查 clean、dirty 輪詢 2 分×30 分、逾時交條目 JSON 給監工 merge。幾何小件監工直接 PIL 手繪＋codex 審（斑馬線/交通錐/掛鎖/抓柱前例）。
+- **中途追加需求＝砍掉重開新單**，不走 SendMessage（有 worker 把追加訊息當 prompt injection 拒收——警覺正確，別為難它們）。
+- **文件編輯後必 grep 驗證有改到**（cat_scratcher 勘誤事故：regex 沒命中原文靜默白改，害引擎照舊文件跳過接線）。
+- **進程重啟會殺 worker**：中間產物一律落 scratchpad（三次中斷全靠留檔零損失）；復活流程＝磁碟盤點→倖存品驗收入庫→缺件補產。
+- 尺度紀律：桌面小物/飲品 sHT ≤1.1（華麗長杯 ≤1.35）、驗收必查（agent 會放水，melon_beer 2.09 前例）。flavor 語氣見記憶 `content-voice-puns`（幹話基調＋俗語劫持諧音無配額）。
+- 引擎 session＝「Café art engine session」（`local_f51b4fbc-2604-449e-8ef0-01a61526eda4`，send_message 溝通；需求走 `art-to-engine-requests.md` E 系列編號）。部署＝監工跑 `npm run deploy`（先 `npm test`；新資產 404＝CDN 延遲，等 10 秒重試）。
+
+### 掛件（都不擋現狀）
+1. **JJ 待覆核**：E19 起始好感亞軒15/JJ5、cat-person 成就綁好感100——已上線、否決改常數。
+2. 粉圓第四姿勢（等 JJ 給圖）、E14 像素版 💬、連續天數徽章頭頂顯示、12px 迷你指示手（要用時另畫勿縮）。
+3. E16 Tier C 成就 2 條（已讀不回/牽手過馬路）延後；布丁配料拆層固定原色（可選、v1 整張套色）。
+4. wishlist v2 剩 ~40 候選；動畫家具可加波次（anim 欄機制通用）。
+5. 雜務：GitHub token 換 90 天期、備份清理（`~/Project03-rescue*`＋`.git-broken-20260709/` 約 800MB，穩定後刪）。
+
+### 素材目錄地圖（§1–2 之外新增的）
+`public/cafe/` 下：`catalog/`（233 件＋`_anim` 差分幀）、`cat/`（粉圓 13 檔）、`guests/`（Q版兩人＋blink）、`pudding/`（10 變體）、`badges/`（40 枚＋模板）、`gacha/`（機台 5 件）、`sign/`（樣品櫃 3 件＋棄用 stand/dome）、`ui/`（lock/hand_point）。內容源：`docs/cafe-flavor.json`（263 句）、`docs/puddings.json`（100 味）、`docs/shop-lines.json`（702 句）——各有 build 腳本產 `src/data/*.gen.ts`。工法庫在 scratchpad 會隨進程消失，關鍵的已進 `scripts/`（fix-shopkeeper-pose/normalize-facing-height）。
 
 ## 0.5 ⚠️ 最新修正與待交付（2026-07-08 核對後補；讀這節，蓋過 §4/§6 過時內容）
 
