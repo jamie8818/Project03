@@ -215,7 +215,9 @@ export default {
       const board = mergeBoard(mergeBoard(own, cur.board), body.board);
       await env.PROGRESS.put('shop-board', JSON.stringify(board));
       const newest = !cur.updatedAt || String(body.updatedAt || '') >= cur.updatedAt ? body : cur;
-      const merged = { ...newest, stock };
+      // E14 客人自訂台詞：按鍵合併（每人只寫自己的鍵；舊客戶端不帶此欄位＝保留現值不掉資料）
+      const guestLines = { ...(cur.guestLines || {}), ...(body.guestLines || {}) };
+      const merged = { ...newest, stock, guestLines };
       delete merged.owned; // 清掉舊欄位
       delete merged.board; // board 不再落在 shop-decor
       await env.PROGRESS.put('shop-decor', JSON.stringify(merged));

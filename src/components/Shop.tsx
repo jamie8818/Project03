@@ -86,12 +86,13 @@ interface StageProps {
   onItem?: (index: number) => void; // 點一下已擺家具＝選取切換（index<0＝點空白處取消選取）
   onMove?: (index: number, gx: number, gy: number) => void; // 拖曳：把第 index 件搬到 (gx,gy)
   onBoard?: () => void; // 點牆上伝言板黑板（僅店面檢視模式；有給才畫可點黑板）
+  onEditGuestLine?: () => void; // E14：點自己的 Q 版客人 → 開自訂台詞編輯（有給才可點）
 }
 
 type Drag = { index: number; grabDx: number; grabDy: number; gx: number; gy: number; moved: boolean; startX: number; startY: number };
 const DRAG_THRESHOLD = 6; // 移動超過幾 px 才算「拖曳」，否則當「點一下」（避免觸控輕點誤判成搬移）
 
-function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, placing, placingFacing, placingIgnore = -1, selectedIndex, onCell, onItem, onMove, onBoard }: StageProps) {
+function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, placing, placingFacing, placingIgnore = -1, selectedIndex, onCell, onItem, onMove, onBoard, onEditGuestLine }: StageProps) {
   const wrap = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   // 台詞帶序號 n：同句被連抽兩次時 key 仍變、泡泡動畫照樣重播（泡泡＝顯示幾秒自動淡出）
@@ -101,8 +102,26 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
   const saySignLine = () => {
     const pud = PUDDING_BY_ID[shop.sign];
     if (!pud) return;
+    setGuestBubble(null); // 全域單氣泡：店長開口就關客人的
     setLine((l) => ({ t: { text: `本日の看板プリン：${pud.name}！`, pose: 'love' as const }, n: l.n + 1 }));
   };
+
+  // E14：客人氣泡（點了才彈、~4s 自動收；全域同時只有一個氣泡＝彈出時抑制店長碎念）
+  const [guestBubble, setGuestBubble] = useState<{ who: 'me' | 'peer'; text: string; n: number } | null>(null);
+  const guestBubbleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const popGuestBubble = (who: 'me' | 'peer', text: string) => {
+    if (guestBubbleTimer.current) clearTimeout(guestBubbleTimer.current);
+    setGuestBubble((b) => ({ who, text, n: (b?.n ?? 0) + 1 }));
+    guestBubbleTimer.current = setTimeout(() => setGuestBubble(null), 4200);
+  };
+  useEffect(() => () => { if (guestBubbleTimer.current) clearTimeout(guestBubbleTimer.current); }, []);
+  const peerId = user === 'jj' ? 'yaxuan' : 'jj';
+  const peerName = USERS.find((u) => u.id === peerId)?.name ?? '';
+  const clickPeerGuest = () => {
+    sfx.correct(0);
+    popGuestBubble('peer', shop.guestLines?.[peerId] || `${peerName}今天也有來喔`);
+  };
+  const clickMyGuest = () => { sfx.correct(0); onEditGuestLine?.(); };
   // sprite 長寬比快取（naturalH/naturalW）：只給「非 front 向」的 host 算視覺高度用——
   // manifest 的 spriteHeightTiles 只定義 front 圖（§A 實測：table_square 右向 0.73 vs manifest 1.47），
   // 旋轉向仍得等實圖載入校正；front 向直接吃 manifest、決定性免等圖。
@@ -346,7 +365,7 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
             height={PANDA_H}
             alt="店長"
             draggable={false}
-            onClick={talk ? () => { sfx.correct(1); nextLine(); } : undefined}
+            onClick={talk ? () => { sfx.correct(1); setGuestBubble(null); nextLine(); } : undefined}
           />
         </div>
 
@@ -372,15 +391,19 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
         {user && (meDone || attend - (meDone ? 1 : 0) > 0) && (
           <>
             {meDone && (
-              <div className="cafe-guest guest-me">
+              <div className={`cafe-guest guest-me ${talk ? 'guest-hit' : ''}`} onClick={talk ? clickMyGuest : undefined} title={talk ? '點我設定一句台詞' : undefined}>
                 <img src={`/cafe/guests/${user}.png`} alt="我" draggable={false} />
                 <img className="guest-blink" src={`/cafe/guests/${user}_blink.png`} alt="" draggable={false} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                {!!shop.guestLines?.[user] && <span className="guest-dot">💬</span>}
+                {guestBubble?.who === 'me' && <span key={guestBubble.n} className="guest-bubble">{guestBubble.text}</span>}
               </div>
             )}
             {attend - (meDone ? 1 : 0) > 0 && (
-              <div className="cafe-guest guest-peer">
-                <img src={`/cafe/guests/${user === 'jj' ? 'yaxuan' : 'jj'}.png`} alt="對方" draggable={false} />
-                <img className="guest-blink" src={`/cafe/guests/${user === 'jj' ? 'yaxuan' : 'jj'}_blink.png`} alt="" draggable={false} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+              <div className={`cafe-guest guest-peer ${talk ? 'guest-hit' : ''}`} onClick={talk ? clickPeerGuest : undefined}>
+                <img src={`/cafe/guests/${peerId}.png`} alt="對方" draggable={false} />
+                <img className="guest-blink" src={`/cafe/guests/${peerId}_blink.png`} alt="" draggable={false} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                {!!shop.guestLines?.[peerId] && <span className="guest-dot">💬</span>}
+                {guestBubble?.who === 'peer' && <span key={guestBubble.n} className="guest-bubble">{guestBubble.text}</span>}
               </div>
             )}
           </>
@@ -468,7 +491,7 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
           </button>
         )}
 
-        {talk && <span className="shop-bubble" key={line.n}>{line.t.text}</span>}
+        {talk && !guestBubble && <span className="shop-bubble" key={line.n}>{line.t.text}</span>}
         {!meDone && !editing && <span className="shop-closed-sign">準備中</span>}
       </div>
     </div>
@@ -592,6 +615,7 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
   const [shop, setShop] = useState<ShopState | null>(null);
   const [mode, setMode] = useState<Mode>('view');
   const [boardOpen, setBoardOpen] = useState(false);
+  const [lineEditOpen, setLineEditOpen] = useState(false); // E14：自訂台詞編輯面板
   const [introSeen, setIntroSeen] = useState(() => localStorage.getItem('nng:shop-intro3') === '1');
 
   useEffect(() => {
@@ -657,7 +681,19 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
         <b>🏮 日々喫茶 Lv.{lv}「{shopTitle(lv)}」</b>
       </div>
 
-      {mode !== 'decorate' && <Stage shop={shop} attend={attend} meDone={meDone} user={me.user} talk onBoard={() => setBoardOpen(true)} />}
+      {mode !== 'decorate' && <Stage shop={shop} attend={attend} meDone={meDone} user={me.user} talk onBoard={() => setBoardOpen(true)} onEditGuestLine={() => setLineEditOpen(true)} />}
+      {lineEditOpen && (
+        <GuestLineEditor
+          initial={shop.guestLines?.[me.user] ?? ''}
+          onSave={(t) => {
+            // 只寫自己的鍵（worker 按鍵合併），空字串＝清除台詞（💬 熄滅、對方點到顯示預設句）
+            saveShop({ ...shop, guestLines: { ...(shop.guestLines ?? {}), [me.user]: t } });
+            setLineEditOpen(false);
+            sfx.correct(1);
+          }}
+          onClose={() => setLineEditOpen(false)}
+        />
+      )}
 
       <div className="seg" style={{ marginTop: 12 }}>
         <button className={mode === 'view' ? 'on' : ''} onClick={() => setMode('view')}>店面</button>
@@ -670,6 +706,31 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
       {mode === 'decorate' && <DecoratePanel me={me} attend={attend} meDone={meDone} shop={shop} saveShop={saveShop} />}
 
       {boardOpen && <DengonBoard me={me} board={shop.board ?? []} onSend={sendBoard} onClose={() => setBoardOpen(false)} />}
+    </div>
+  );
+}
+
+// ── Q 版客人自訂台詞編輯（E14）：每人一句 ≤20 字，對方點你的客人會看到 ──
+function GuestLineEditor({ initial, onSave, onClose }: { initial: string; onSave: (text: string) => void; onClose: () => void }) {
+  const [draft, setDraft] = useState(initial);
+  return (
+    <div className="dengon-overlay" onPointerDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="guestline-panel">
+        <b>我的 Q 版台詞</b>
+        <p className="hint" style={{ margin: '4px 0' }}>對方點你的 Q 版客人會看到這句（清空＝取消台詞）</p>
+        <input
+          className="guestline-input"
+          value={draft}
+          maxLength={20}
+          placeholder="20 字以內，說點什麼吧…"
+          onChange={(e) => setDraft(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) onSave(draft.trim().slice(0, 20)); }}
+        />
+        <div style={{ display: 'flex', gap: 8, marginTop: 10, justifyContent: 'center' }}>
+          <button className="primary" onClick={() => onSave(draft.trim().slice(0, 20))}>掛上去</button>
+          <button className="linkish" onClick={onClose}>取消</button>
+        </div>
+      </div>
     </div>
   );
 }

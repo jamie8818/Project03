@@ -79,7 +79,9 @@ function devApi(): Plugin {
               // 舊客戶端夾帶的 board 併進 shop-board；shop-decor 不再存 board（同 worker）
               const board = boardUnion(b.board);
               store['shop-board'] = board;
-              const merged = { ...b, stock };
+              // E14 客人自訂台詞按鍵合併（同 worker）
+              const guestLines = { ...((cur.guestLines as Record<string, string>) ?? {}), ...((b.guestLines as Record<string, string>) ?? {}) };
+              const merged = { ...b, stock, guestLines };
               delete (merged as Record<string, unknown>).owned;
               delete (merged as Record<string, unknown>).board;
               store['shop-decor'] = merged;

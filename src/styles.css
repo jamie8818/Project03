@@ -2151,6 +2151,54 @@ img.buddy {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-2px); }
 }
+/* E14 自訂台詞互動：talk 模式可點；💬 指示點（有設台詞才亮）；氣泡點了才彈、4s 收 */
+.cafe-guest.guest-hit { pointer-events: auto; cursor: pointer; }
+.guest-dot {
+  position: absolute;
+  top: -4px;
+  right: 26px;
+  font-size: 11px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+  animation: none;
+}
+.guest-bubble {
+  position: absolute;
+  bottom: calc(100% - 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 180px; /* 比店長氣泡窄（E14 規格） */
+  width: max-content;
+  background: rgba(255, 250, 240, 0.94);
+  border: 2px solid #6b4a2e;
+  border-radius: 10px 10px 10px 2px;
+  color: #4a331a;
+  font-size: 13px;
+  line-height: 1.4;
+  padding: 5px 9px;
+  pointer-events: none;
+  z-index: 6;
+  animation: bubble-cycle 4.2s ease forwards; /* 沿用店長節奏、較短 */
+}
+.guestline-panel {
+  background: var(--card, #fffaf0);
+  border: 2px solid var(--line-strong, #6b4a2e);
+  border-radius: 14px;
+  padding: 16px 18px;
+  width: min(320px, 86vw);
+  text-align: center;
+}
+.guestline-input {
+  width: 100%;
+  margin-top: 8px;
+  font-size: 15px;
+  padding: 8px 10px;
+  box-sizing: border-box;
+  border: 2px solid var(--line, #d8c8ae);
+  border-radius: 8px;
+  background: #fff;
+  color: #2a1b10;
+}
+
 .guest-blink { opacity: 0; }
 .guest-me .guest-blink { animation: guest-blink 4.3s linear infinite; }
 .guest-peer .guest-blink { animation: guest-blink 5.1s linear infinite 1.7s; } /* 週期＋相位都錯開 */

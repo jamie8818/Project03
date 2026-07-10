@@ -23,6 +23,7 @@ export interface PlacedItem {
 
 export interface ShopState {
   stock: Record<string, number>; // 各家具已購「數量」（共有庫存；同一件可買多個，擺出的會從托盤消耗）
+  guestLines?: Partial<Record<'jj' | 'yaxuan', string>>; // E14：Q 版客人自訂台詞（每人一句 ≤20 字；worker 按鍵合併、各自只寫自己的鍵）
   sign: string; // 招牌布丁 id，'' = 無
   layout: PlacedItem[]; // 已擺放家具（可含重複 id）
   board: BoardMsg[]; // 伝言板留言串（append-only，union 合併）
@@ -59,7 +60,8 @@ export function normalizeShop(s: (Partial<ShopState> & { owned?: string[] }) | n
   // 首次（KV 全空、沒有 layout 欄位）給預設佈置；已存在 layout（含空陣列）則尊重使用者擺放
   const layout = !s || raw.layout === undefined ? STARTER_LAYOUT.map((p) => ({ ...p })) : raw.layout;
   const board = Array.isArray(raw.board) ? raw.board : [];
-  return { stock, sign: raw.sign ?? '', layout, board, updatedAt: raw.updatedAt ?? '' };
+  const guestLines = raw.guestLines && typeof raw.guestLines === 'object' ? { ...raw.guestLines } : {};
+  return { stock, guestLines, sign: raw.sign ?? '', layout, board, updatedAt: raw.updatedAt ?? '' };
 }
 
 export async function fetchShop(): Promise<ShopState> {
