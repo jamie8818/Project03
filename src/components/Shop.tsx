@@ -1071,10 +1071,21 @@ function ShopPanel({ me, lv, shop, update, commitShop }: { me: UserState; lv: nu
   return (
     <>
       <div className="coin-bar"><span className="coin-chip">🪙 {me.coins}</span></div>
-      <div className="seg">
+      {/* 首購教學（JJ 追加）：先框分類列「都能逛」→ 點過任一分類後指珍藏籤「用轉蛋」（同畫面接棒：
+          dismiss 綁在會觸發 re-render 的 setTab 上，珍藏 coach 的 render 條件才會重新評估） */}
+      <div className="seg" style={{ position: 'relative' }}>
         {CATEGORY_LABELS.map(([key, label], i) => (
-          <button key={key} className={tab === i ? 'on' : ''} onClick={() => { setTab(i); setMsg(''); }}>{label}</button>
+          <button
+            key={key}
+            className={tab === i ? 'on' : ''}
+            style={key === 'personal' ? { position: 'relative' } : undefined}
+            onClick={() => { dismissCoach('shop-cats'); if (key === 'personal') dismissCoach('shop-gacha'); setTab(i); setMsg(''); }}
+          >
+            {label}
+            {key === 'personal' && coachSeen('shop-cats') && <Coach id="shop-gacha" label="這區用轉蛋開" dy={-4} />}
+          </button>
         ))}
+        <Coach id="shop-cats" label="每種分類都逛得到" dy={-4} />
       </div>
       {msg && <p className="hint">{msg}</p>}
       {CATEGORY_LABELS[tab][0] === 'personal' ? (
