@@ -27,6 +27,23 @@ async function isAuthed(request, env) {
 const json = (obj, status = 200, headers = {}) =>
   new Response(JSON.stringify(obj), { status, headers: { 'content-type': 'application/json; charset=utf-8', ...headers } });
 
+// ── 近期存檔備份：主存檔寫入時順手留「當天快照」bk:<key>:<YYYY-MM-DD>（台北日界），
+//    同一天 30 分鐘最多備份一次（metadata.at 節流）、TTL 14 天自動過期＝免清理。
+//    回復手順見 docs/kv-backup.md（wrangler get 備份 → put 回原 key）。──
+const BK_TTL_S = 60 * 60 * 24 * 14;
+const BK_MIN_GAP_MS = 30 * 60e3;
+async function backupSnapshot(env, key, value) {
+  try {
+    const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Taipei' });
+    const bk = `bk:${key}:${today}`;
+    const cur = await env.PROGRESS.getWithMetadata(bk);
+    if (cur && cur.value !== null && cur.metadata && Date.now() - cur.metadata.at < BK_MIN_GAP_MS) return;
+    await env.PROGRESS.put(bk, value, { expirationTtl: BK_TTL_S, metadata: { at: Date.now() } });
+  } catch {
+    // 備份失敗不影響主寫入
+  }
+}
+
 // ── 歌詞抓取（B 方案：uta-net → j-lyric，站改版就會失效，屆時退回貼歌詞）──
 const UA = {
   'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36',
@@ -131,7 +148,7 @@ ${lyrics.slice(0, 4000)}
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
 
@@ -166,7 +183,9 @@ export default {
       if (existing && existing.updatedAt > state.updatedAt) {
         return json({ ok: false, stale: true, serverUpdatedAt: existing.updatedAt }, 409);
       }
-      await env.PROGRESS.put(`progress:${user}`, JSON.stringify(state));
+      const payload = JSON.stringify(state);
+      await env.PROGRESS.put(`progress:${user}`, payload);
+      ctx.waitUntil(backupSnapshot(env, `progress:${user}`, payload)); // 備份不擋回應
       return json({ ok: true });
     }
 
@@ -183,7 +202,9 @@ export default {
       if (!body || typeof body !== 'object') return json({ error: 'bad body' }, 400);
       const [own, decor] = await Promise.all([env.PROGRESS.get('shop-board', 'json'), env.PROGRESS.get('shop-decor', 'json')]);
       const board = mergeBoard(mergeBoard(own, decor && decor.board), body.board);
-      await env.PROGRESS.put('shop-board', JSON.stringify(board));
+      const boardJson = JSON.stringify(board);
+      await env.PROGRESS.put('shop-board', boardJson);
+      ctx.waitUntil(backupSnapshot(env, 'shop-board', boardJson));
       return json({ ok: true, board });
     }
 
@@ -220,7 +241,9 @@ export default {
       const merged = { ...newest, stock, guestLines };
       delete merged.owned; // 清掉舊欄位
       delete merged.board; // board 不再落在 shop-decor
-      await env.PROGRESS.put('shop-decor', JSON.stringify(merged));
+      const mergedJson = JSON.stringify(merged);
+      await env.PROGRESS.put('shop-decor', mergedJson);
+      ctx.waitUntil(backupSnapshot(env, 'shop-decor', mergedJson));
       return json({ ok: true, saved: true, current: { ...merged, board } });
     }
 
