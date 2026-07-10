@@ -630,7 +630,7 @@ z=furniture 的咖啡器材/小型展示，現實中本來就擺吧檯上，開�
 
 **素材確認**：4 件家具素材＋manifest 已交付（front only，無需新素材，已過 codex review 皆 PASS），id 分別為 `cat_bed`／`cat_tower`／`cat_bowl`／`teaser_stand`，皆 `category:'seating'`（走一般分類頁籤、可逛可買，不進私藏轉蛋池，JJ 指定）。sHT 分別 0.72／2.27／0.55／1.86。
 
-**⚠️ `cat_scratcher` 核對結果：catalog 目前查無此 id，也查無任何「巨大貓抓板柱」惡搞家具**（已搜過 `cafe-catalog.json` 全 232 件、`cafe-furniture-wishlist.md`／`cafe-furniture-wishlist-v2.md` 全文，關鍵字「抓」「scratch」「貓抓」「scratcher」均無命中）。這件目前不存在，本節「磨爪」點位**暫無法接線**——設計先寫在下面備用，等這件家具真的生產入庫（id 待定）後，引擎只要照下面同一套模式加一行 mapping 即可，不用再回來問美術。
+**✅ `cat_scratcher` 已入庫（監工補產，commit 7d94f17，catalog 233 件）**——上述核對當時屬實（該件確實還沒生產），現已補齊：64×96、sHT 1.5、furniture 1×1。「磨爪」點位可以接了：照下面模式加一行 mapping，`pose='groom'`、錨柱旁（建議 x＝柱中心 ±10px、腳底 y＝該件 front row baseline）。
 
 **① 擴充輪換點位（動態＋固定合併一池）**
 
@@ -643,7 +643,7 @@ function furnitureCatSpots(layout: PlacedItem[]) {
     if (p.id === 'cat_bed')   spots.push(bedSpot(p));    // pose: 'roll'
     if (p.id === 'cat_tower') spots.push(towerSpot(p));  // pose: 'sit'
     if (p.id === 'cat_bowl')  spots.push(bowlSpot(p));   // pose: 'sit'
-    // if (p.id === 'cat_scratcher') spots.push(scratcherSpot(p)); // pose: 'groom'，待該家具入庫
+    if (p.id === 'cat_scratcher') spots.push(scratcherSpot(p)); // pose: 'groom'——已入庫，解除註解
   }
   return spots;
 }
