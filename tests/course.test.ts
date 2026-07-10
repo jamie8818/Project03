@@ -45,6 +45,7 @@ test('masteryPct：只算精熟(ivl≥14)的課綱卡、防進度幻覺', () => 
 
 test('buildDailyPlan：分開 cap 單字/文法、文法等單字教完、帶本課會話小測', () => {
   const s = initState('jj', { hira: true, kata: true }, TODAY);
+  s.sessionsDone = 1; // 非人生首輪
   const p0 = buildDailyPlan(s, TODAY);
   assert.equal(p0.inKana, false);
   assert.equal(p0.lessonNo, 1);
@@ -104,6 +105,7 @@ test('課序：每天新內容只從當前課出、不跨課搶跑（Codex 抓�
 
 test('buildDailyPlan：五十音階段新卡是假名、無文法、配速 KANA_NEW_CAP', () => {
   const s = initState('yaxuan', { hira: false, kata: false }, TODAY);
+  s.sessionsDone = 1; // 非人生首輪
   const p = buildDailyPlan(s, TODAY);
   assert.equal(p.inKana, true);
   assert.ok(p.newVocab.every((id) => id.startsWith('h:') || id.startsWith('k:')), '五十音階段新卡是假名');
@@ -112,10 +114,21 @@ test('buildDailyPlan：五十音階段新卡是假名、無文法、配速 KANA_
 
   // 輕量日（到期複習多）照樣減半
   const sl = initState('jj', { hira: true, kata: false }, TODAY); // 平假名種子 71 張
+  sl.sessionsDone = 1; // 非人生首輪
   for (const id of Object.keys(sl.cards)) sl.cards[id] = { ...sl.cards[id], due: TODAY };
   const pl = buildDailyPlan(sl, TODAY);
   assert.equal(pl.light, true);
   assert.equal(pl.newVocab.length, Math.ceil(KANA_NEW_CAP / 2), '輕量日假名減半');
+});
+
+test('人生第一輪超迷你：只教 FIRST_RUN_CAP=3（あいう），完成後回正常配速', () => {
+  const s = initState('yaxuan', { hira: false, kata: false }, TODAY);
+  const first = buildDailyPlan(s, TODAY);
+  assert.deepEqual(first.newVocab, ['h:あ', 'h:い', 'h:う']);
+  assert.equal(first.newGrammar.length, 0);
+  s.sessionsDone = 1; // 完成首輪（含當天再來一份）→ 正常 10
+  const after = buildDailyPlan(s, TODAY);
+  assert.equal(after.newVocab.length, KANA_NEW_CAP);
 });
 
 test('kanaPhaseEta：剩餘假名數÷KANA_NEW_CAP 無條件進位；學完＝0', () => {
@@ -133,6 +146,7 @@ test('kanaPhaseEta：剩餘假名數÷KANA_NEW_CAP 無條件進位；學完＝0'
 
 test('加練一輪繼續滴漏：首輪教過的卡進 cards 後，重算計畫接下一批不重複', () => {
   const s = initState('yaxuan', { hira: false, kata: false }, TODAY);
+  s.sessionsDone = 1; // 完成過首輪（加練場景）
   const p1 = buildDailyPlan(s, TODAY);
   // 模擬首輪教完：newVocab 全部建卡（Session 的 gradeQuiz 會 newCard+grade）
   for (const id of p1.newVocab) s.cards[id] = grade(newCard(id, TODAY), true, TODAY);

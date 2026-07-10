@@ -28,8 +28,9 @@ test('JJ（平假名已熟）：新卡先出片假名、種子卡不重複', () 
   assert.ok(order.every((id) => !s.cards[id]));
 });
 
-test('亞軒（都不熟）：新卡先平假名、第一天 session 是 10 教學＋測驗＋一句（五十音配速 KANA_NEW_CAP）', () => {
+test('亞軒（都不熟）：新卡先平假名、標準日 session 是 10 教學＋測驗＋一句（五十音配速 KANA_NEW_CAP）', () => {
   const s = initState('yaxuan', { hira: false, kata: false }, TODAY);
+  s.sessionsDone = 1; // 非人生首輪（首輪超迷你另測）
   // 比照 Session.tsx 實際接線：課程計畫算好配速再餵給 buildSession
   const daily = buildDailyPlan(s, TODAY);
   const plan = buildSession(s, TODAY, rng, { newIds: [...daily.newVocab, ...daily.newGrammar] });
