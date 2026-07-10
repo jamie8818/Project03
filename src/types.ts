@@ -47,6 +47,7 @@ export interface UserState {
   cram?: { date: string; coins: number }; // 背單字：今日已領金幣（每日上限防刷，見 lib/cram.ts）
   introGiftClaimed?: boolean; // 喫茶店首次引導的店長私房錢（350🪙）是否已領（每帳號一次）
   catAffection?: { value: number; lastPetAt: number; pets: number[]; sulkUntil: number }; // 粉圓好感度（E19；未初始化＝lib/cat.ts 起始值）
+  meta?: Record<string, number>; // 輕量計數/旗標袋（E16 Tier B 成就：pandaClicks/nightOwl/spendDay…；日期鍵存 YYYYMMDD 數字）
   lessonsPassed?: number[]; // 小測達標(≥70%)的課號＝該課真正學完（課程完成的門檻）
   lastSprintDate?: string; // 最後一次「一天一課衝刺」的日期（隔天＝消化日、不給新課）
   quizFail?: { no: number; date: string }; // 最後一次小測沒過的課與日期（隔天＝補強日）

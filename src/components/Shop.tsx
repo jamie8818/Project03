@@ -1,7 +1,8 @@
 import { Fragment, useEffect, useRef, useState, type PointerEvent as RPointerEvent, type ReactNode, type SyntheticEvent } from 'react';
 import type { UserId, UserState } from '../types.ts';
 import { USERS } from '../lib/store.ts';
-import { setShopSnapshot } from '../lib/xp.ts';
+import { addDailyAmount, bumpDailyStreak, bumpMeta, setShopSnapshot } from '../lib/xp.ts';
+import { addDays, tpeToday } from '../lib/dates.ts';
 import { sfx } from '../lib/sounds.ts';
 import Buddy from './Buddy.tsx';
 import { PUDDING_BY_ID, PUDDINGS } from '../data/fun.ts';
@@ -100,12 +101,13 @@ interface StageProps {
   onEditGuestLine?: () => void; // E14：點自己的 Q 版客人 → 開自訂台詞編輯（有給才可點）
   onPetCat?: () => { outcome: PetOutcome; value: number } | null; // E18/E19：摸粉圓（好感判定在 ShopPage，回分支＋新好感值）
   catValue?: number; // 目前好感值（頭頂階級章；不給＝不顯示）
+  onPandaTalk?: () => void; // E16 Tier B：點店長換句的計數回呼（查水表/頭號粉絲）
 }
 
 type Drag = { index: number; grabDx: number; grabDy: number; gx: number; gy: number; moved: boolean; startX: number; startY: number };
 const DRAG_THRESHOLD = 6; // 移動超過幾 px 才算「拖曳」，否則當「點一下」（避免觸控輕點誤判成搬移）
 
-function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, placing, placingFacing, placingIgnore = -1, selectedIndex, onCell, onItem, onMove, onBoard, onEditGuestLine, onPetCat, catValue }: StageProps) {
+function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, placing, placingFacing, placingIgnore = -1, selectedIndex, onCell, onItem, onMove, onBoard, onEditGuestLine, onPetCat, catValue, onPandaTalk }: StageProps) {
   const wrap = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   // 台詞帶序號 n：同句被連抽兩次時 key 仍變、泡泡動畫照樣重播（泡泡＝顯示幾秒自動淡出）
@@ -442,7 +444,7 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
             height={PANDA_H}
             alt="店長"
             draggable={false}
-            onClick={talk ? () => { sfx.correct(1); setGuestBubble(null); nextLine(); } : undefined}
+            onClick={talk ? () => { sfx.correct(1); setGuestBubble(null); nextLine(); onPandaTalk?.(); } : undefined}
           />
         </div>
 
@@ -746,6 +748,12 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
     fetchShop().then((s) => { setShopSnapshot(s); setShop(s); }).catch(() => setShop(DEFAULT_SHOP));
   }, []);
 
+  // E16 Tier B「極簡主義」：今天完成練習且開店看時 layout 空 → 記連續日（同日冪等；斷鏈重置）
+  useEffect(() => {
+    if (!shop || !meDone || shop.layout.length > 0) return;
+    update((s) => bumpDailyStreak(s, 'minDay', 'minStreak', today, addDays(today, -1)));
+  }, [shop?.layout.length, meDone]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // 裝潢用：樂觀更新，推上去後用伺服器合併結果校正（撿到對方買的東西＋對方的留言）。
   // stock 是單調 max，直接採伺服器值；board 用 union 再合一次，避免蓋掉本地剛送、伺服器還沒收到的訊。
   const saveShop = (next: ShopState) => {
@@ -826,6 +834,7 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
             update((s) => ({ ...s, catAffection: res.next }));
             return { outcome: res.outcome, value: res.next.value };
           }}
+          onPandaTalk={() => update((s) => bumpMeta(s, 'pandaClicks'))}
         />
       )}
       {lineEditOpen && (
@@ -910,7 +919,7 @@ function GachaCorner({ me, shop, update, commitShop }: { me: UserState; shop: Sh
       setMsg('沒轉成：連線失敗，金幣沒扣，等等再試一次');
       return;
     }
-    update((s) => ({ ...s, coins: s.coins - PERSONAL_GACHA_COST }));
+    update((s) => addDailyAmount(addDailyAmount({ ...s, coins: s.coins - PERSONAL_GACHA_COST }, 'spendDay', 'spendAmt', PERSONAL_GACHA_COST, tpeToday()), 'gachaDay', 'gachaCount', 1, tpeToday()));
     setPrize(pick);
     sfx.correct(1);
     window.setTimeout(() => setPhase('drop'), 450); // shake 0.4s 播完掉蛋
@@ -1027,7 +1036,7 @@ function ShopPanel({ me, lv, shop, update, commitShop }: { me: UserState; lv: nu
       setBuying(false);
       return;
     }
-    update((s) => ({ ...s, coins: s.coins - item.price }));
+    update((s) => addDailyAmount({ ...s, coins: s.coins - item.price }, 'spendDay', 'spendAmt', item.price, tpeToday()));
     sfx.unlock();
     setMsg(`買了「${item.name}」！已放進裝潢托盤（庫存 ×${owned}）`);
     setBuying(false);

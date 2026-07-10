@@ -88,7 +88,36 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'zoo-keeper', icon: '🦁', name: '動物園', desc: '鯊魚＋店長立牌＋任一公仔同框', check: () => placed('shark_plush') && placed('standee_shopkeeper') && (placed('figure_chiikawa') || placed('figure_hachiware') || placed('figure_usagi')) },
   { id: 'couch-potato', icon: '📺', name: '沙發馬鈴薯', desc: '布丁沙發配木紋電視', check: () => placed('pudding_sofa') && placed('tv_wooden_retro') },
   { id: 'regular-100', icon: '☕', name: '老主顧', desc: '累積完成 100 場練習', check: (s) => s.sessionsDone >= 100 },
+  // ── Tier B（輕量計數器，E16 第二批；計數存 s.meta，觸點見各呼叫端）──
+  { id: 'panda-clicks-50', icon: '🚰', name: '查水表', desc: '點店長 50 次', check: (s) => metaOf(s, 'pandaClicks') >= 50 },
+  { id: 'line-fan-100', icon: '🎙️', name: '熊貓的頭號粉絲', desc: '點店長聽滿 100 句台詞', check: (s) => metaOf(s, 'pandaClicks') >= 100 }, // 同計數雙門檻（點一下＝聽一句）
+  { id: 'night-owl', icon: '🦉', name: '凌晨的執念', desc: '在凌晨 0–4 點完成每日練習', check: (s) => metaOf(s, 'nightOwl') >= 1 },
+  { id: 'jetlag', icon: '🌗', name: '時差經營', desc: '清晨 6–9 與深夜 23 點都完成過練習', check: (s) => metaOf(s, 'jetEarly') >= 1 && metaOf(s, 'jetLate') >= 1 },
+  { id: 'big-spender', icon: '💸', name: '一擲千金', desc: '單日花費 500 金幣', check: (s) => metaOf(s, 'spendAmt') >= 500 },
+  { id: 'gacha-addict', icon: '🌀', name: '扭蛋沼', desc: '單日轉 5 次珍藏轉蛋', check: (s) => metaOf(s, 'gachaCount') >= 5 },
+  { id: 'minimalist', icon: '🍃', name: '極簡主義', desc: '連 3 天開店時店裡空無一物', check: (s) => metaOf(s, 'minStreak') >= 3 },
+  { id: 'duo-streak-7', icon: '👥', name: '雙人全勤', desc: '兩人同一天都完成、連續 7 天', check: (s) => metaOf(s, 'duoStreak') >= 7 },
+  { id: 'cat-person', icon: '🐈', name: '貓奴認證', desc: '粉圓好感度養到 100', check: (s) => (s.catAffection?.value ?? 0) >= 100 }, // E19 連動：取代「點 20 次」（連摸會生氣，次數≠感情）
 ];
+
+// ── Tier B 計數工具：meta 是輕量計數/旗標袋；日期鍵用 YYYYMMDD 數字（Record<string,number> 塞得下）──
+export const metaOf = (s: UserState, key: string): number => s.meta?.[key] ?? 0;
+export const dayNum = (d: string): number => Number(d.replace(/-/g, ''));
+export const bumpMeta = (s: UserState, key: string, by = 1): UserState =>
+  ({ ...s, meta: { ...(s.meta ?? {}), [key]: metaOf(s, key) + by } });
+/** 單日累計量（跨日自動歸零重計）：big-spender／gacha-addict 用 */
+export function addDailyAmount(s: UserState, dayKey: string, amtKey: string, amount: number, today: string): UserState {
+  const dn = dayNum(today);
+  const sameDay = s.meta?.[dayKey] === dn;
+  return { ...s, meta: { ...(s.meta ?? {}), [dayKey]: dn, [amtKey]: (sameDay ? metaOf(s, amtKey) : 0) + amount } };
+}
+/** 連續日 streak（同日冪等；昨天有記錄 +1、斷鏈重置 1）：minimalist／duo-streak 用 */
+export function bumpDailyStreak(s: UserState, dayKey: string, streakKey: string, today: string, yesterday: string): UserState {
+  const dn = dayNum(today);
+  if (s.meta?.[dayKey] === dn) return s; // 今天記過＝冪等
+  const streak = s.meta?.[dayKey] === dayNum(yesterday) ? metaOf(s, streakKey) + 1 : 1;
+  return { ...s, meta: { ...(s.meta ?? {}), [dayKey]: dn, [streakKey]: streak } };
+}
 
 /** 回傳這次新解鎖的成就 id（不改 state，呼叫端自己寫回） */
 export function newlyUnlocked(s: UserState): string[] {

@@ -466,6 +466,8 @@ z=furniture 的咖啡器材/小型展示，現實中本來就擺吧檯上，開�
 **Tier B（要加輕量計數器，次做）**：panda-clicks-50 查水表（點店長50次）／night-owl 凌晨的執念（0-4點完成任務，記完成時戳）／big-spender 一擲千金（單日花費500，日花費計數）／minimalist 極簡主義（連3天開店且 layout 空）／duo-streak-7 雙人全勤（兩人同天完成連續7天）／line-fan-100 熊貓的頭號粉絲（台詞輪播100句）／gacha-addict 扭蛋沼（單日轉5次）／cat-person 貓奴認證（點粉圓20次，依賴E15）／jetlag 時差經營（清晨6-9與深夜23-24各完成過）
 **Tier C（複雜，可延後）**：已讀不回（對方留言10則未回）／過馬路請牽手（斑馬線毯＋兩人同日出席）
 
+**✅ Tier B 引擎已接手完成（2026-07-10，與 E18/E19 同批）**：`UserState.meta` 輕量計數袋＋工具（bumpMeta/addDailyAmount 跨日歸零/bumpDailyStreak 同日冪等）。9 條全上：查水表/頭號粉絲（同計數 pandaClicks 雙門檻 50/100，點店長換句計；不計自動輪播避免每 8s 寫存檔）、夜貓/時差（completeSession 注入台北時制 hour 記旗標，可測試）、一擲千金（購買+轉蛋單日花費累計）、扭蛋沼（單日轉數）、極簡主義（今日完成且開店看時 layout 空→連續日）、雙人全勤（App 層兩人同日完成→連續日）、貓奴認證（改綁 E19 好感 100，照單）。單元測試 +2（工具函式/時段旗標）；preview 實測 pandaClicks 49→50 解鎖查水表 toast+20🪙 全管線。
+
 **徽章素材**（美術另批交付 `public/cafe/badges/<id>.png`，含既有 13 個重做）：40×40 像素圓章，統一黃銅環＋奶油底＋中心 icon；未解鎖顯示灰階（引擎 CSS filter 即可，不用出灰版）。素材到貨前新成就先用 emoji 頂著上線，不互卡。
 
 **✅ 引擎已接手完成 Tier A（2026-07-10）**：①xp.ts 用模組級 `setShopSnapshot(shop)` 橋接 ShopState（App 成就偵測簽名不動；Shop 端 fetch/saveShop/commitShop 餵最新店況＋輕觸 user state 觸發重評；沒逛過店＝店鋪型一律未達成）②Tier A 17 條全上（couch-potato 照勘誤＝pudding_sofa+tv_wooden_retro；成就 id 全數對過 catalog 228 存在）③pudding-tycoon／double-perfect 門檻動態綁 `PUDDINGS.length`（E17 後＝100）④徽章 icon 換 `badges/<id>.png` 像素章（onError 退 emoji 不破圖；未解鎖 CSS 灰階）。計數註記：既有學習型實為 12（非 13），12+17＝現 29 枚。Tier B（9 條輕量計數器）/Tier C（2 條）依單延後。npm test 109/109；preview 實測 3 鯊魚+1200 金幣→miser/first-deco/shark-keeper 即時解鎖+60 獎金、29 枚像素章全渲染。

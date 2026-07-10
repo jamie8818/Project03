@@ -90,8 +90,9 @@ export function touch(state: UserState): UserState {
   return { ...state, updatedAt: new Date().toISOString() };
 }
 
-/** 完成一輪：累計分鐘、更新 streak（台北日界）、一句往前推 */
-export function completeSession(state: UserState, minutes: number, today: string = tpeToday()): UserState {
+/** 完成一輪：累計分鐘、更新 streak（台北日界）、一句往前推。
+ *  hour（台北時制 0-23，可注入供測試）記 Tier B 時段旗標：夜貓 0-4／時差清晨 6-9／時差深夜 23。 */
+export function completeSession(state: UserState, minutes: number, today: string = tpeToday(), hour?: number): UserState {
   const s = { ...state };
   s.totalMinutes = Math.round((s.totalMinutes + minutes) * 10) / 10;
   s.sessionsDone += 1;
@@ -100,6 +101,12 @@ export function completeSession(state: UserState, minutes: number, today: string
     s.streak = s.lastDoneDate === addDays(today, -1) ? s.streak + 1 : 1;
     s.lastDoneDate = today;
   }
+  const h = hour ?? Number(new Date().toLocaleString('en-US', { hour: 'numeric', hour12: false, timeZone: 'Asia/Taipei' })) % 24;
+  const meta = { ...(s.meta ?? {}) };
+  if (h <= 4) meta.nightOwl = 1;
+  if (h >= 6 && h <= 9) meta.jetEarly = 1;
+  if (h === 23) meta.jetLate = 1;
+  s.meta = meta;
   return touch(s);
 }
 

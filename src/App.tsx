@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { UserId, UserState } from './types.ts';
 import { USERS, fetchRemote, initState, loadLocal, newer, normalize, pushRemote, pushRemoteNow, saveLocal, touch } from './lib/store.ts';
-import { tpeToday } from './lib/dates.ts';
+import { addDays, tpeToday } from './lib/dates.ts';
 import Gate from './components/Gate.tsx';
 import Onboarding from './components/Onboarding.tsx';
 import Session from './components/Session.tsx';
@@ -11,7 +11,7 @@ import KanaChart from './components/KanaChart.tsx';
 import Library from './components/Library.tsx';
 import Arena from './components/Arena.tsx';
 import Dashboard from './components/Dashboard.tsx';
-import { ACHIEVEMENTS, levelInfo, newlyUnlocked } from './lib/xp.ts';
+import { ACHIEVEMENTS, bumpDailyStreak, levelInfo, newlyUnlocked } from './lib/xp.ts';
 import { COINS } from './data/fun.ts';
 import { setSoundOn, sfx, soundOn } from './lib/sounds.ts';
 
@@ -141,6 +141,14 @@ export default function App() {
     setToasts((t) => [...t, ...names]);
     update((s) => ({ ...s, achievements: [...s.achievements, ...unlocked], coins: s.coins + unlocked.length * COINS.achievement }));
   }, [state, update]);
+
+  // E16 Tier B「雙人全勤」：兩人同一天都完成 → 記連續日（同日冪等；在有 peer 資料的畫面自然觸發）
+  useEffect(() => {
+    if (!state || !peer) return;
+    const today = tpeToday();
+    if (state.lastDoneDate !== today || peer.lastDoneDate !== today) return;
+    update((s) => bumpDailyStreak(s, 'duoDay', 'duoStreak', today, addDays(today, -1)));
+  }, [state?.lastDoneDate, peer?.lastDoneDate]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // 升級偵測
   useEffect(() => {

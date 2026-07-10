@@ -130,3 +130,43 @@ test('completeSession：streak 連續加一、斷鏈歸一、同日不重複計'
   assert.equal(displayStreak(s, addDays(TODAY, 5)), 1);
   assert.equal(displayStreak(s, addDays(TODAY, 9)), 0); // 幾天沒練，顯示歸零
 });
+
+// ── E16 Tier B：meta 計數工具＋時段旗標 ──
+import { addDailyAmount, bumpDailyStreak, bumpMeta, dayNum, metaOf } from '../src/lib/xp.ts';
+
+test('Tier B meta 工具：bump／單日量跨日歸零／連續日冪等與斷鏈', () => {
+  let s = initState('jj', { hira: true, kata: true }, TODAY);
+  s = bumpMeta(s, 'pandaClicks');
+  s = bumpMeta(s, 'pandaClicks', 2);
+  assert.equal(metaOf(s, 'pandaClicks'), 3);
+
+  // 單日量：同日累計、跨日歸零重計
+  s = addDailyAmount(s, 'spendDay', 'spendAmt', 300, '2026-07-06');
+  s = addDailyAmount(s, 'spendDay', 'spendAmt', 250, '2026-07-06');
+  assert.equal(metaOf(s, 'spendAmt'), 550);
+  s = addDailyAmount(s, 'spendDay', 'spendAmt', 100, '2026-07-07');
+  assert.equal(metaOf(s, 'spendAmt'), 100, '跨日歸零');
+  assert.equal(metaOf(s, 'spendDay'), dayNum('2026-07-07'));
+
+  // 連續日：同日冪等、連續 +1、斷鏈重置 1
+  s = bumpDailyStreak(s, 'duoDay', 'duoStreak', '2026-07-06', '2026-07-05');
+  s = bumpDailyStreak(s, 'duoDay', 'duoStreak', '2026-07-06', '2026-07-05'); // 同日再記＝冪等
+  assert.equal(metaOf(s, 'duoStreak'), 1);
+  s = bumpDailyStreak(s, 'duoDay', 'duoStreak', '2026-07-07', '2026-07-06');
+  assert.equal(metaOf(s, 'duoStreak'), 2, '連續日 +1');
+  s = bumpDailyStreak(s, 'duoDay', 'duoStreak', '2026-07-10', '2026-07-09');
+  assert.equal(metaOf(s, 'duoStreak'), 1, '斷鏈重置');
+});
+
+test('Tier B 時段旗標：completeSession 注入 hour 記夜貓/時差', () => {
+  let s = initState('jj', { hira: true, kata: true }, TODAY);
+  s = completeSession(s, 5, TODAY, 3); // 凌晨 3 點
+  assert.equal(metaOf(s, 'nightOwl'), 1);
+  assert.equal(metaOf(s, 'jetEarly'), 0);
+  s = completeSession(s, 5, TODAY, 7); // 清晨 7 點
+  assert.equal(metaOf(s, 'jetEarly'), 1);
+  s = completeSession(s, 5, TODAY, 23); // 深夜 23 點
+  assert.equal(metaOf(s, 'jetLate'), 1);
+  s = completeSession(s, 5, TODAY, 14); // 下午不動旗標
+  assert.equal(metaOf(s, 'nightOwl') + metaOf(s, 'jetEarly') + metaOf(s, 'jetLate'), 3);
+});
