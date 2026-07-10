@@ -30,7 +30,7 @@ catalog **233 件**（句句有 flavor）、布丁 **100 味**（variant×hue）
 2. 粉圓第四姿勢（等 JJ 給圖）、E14 像素版 💬、連續天數徽章頭頂顯示、12px 迷你指示手（要用時另畫勿縮）。
 3. E16 Tier C 成就 2 條（已讀不回/牽手過馬路）延後；布丁配料拆層固定原色（可選、v1 整張套色）。
 4. wishlist v2 剩 ~40 候選；動畫家具可加波次（anim 欄機制通用）。
-5. 雜務：GitHub token 換 90 天期、備份清理（`~/Project03-rescue*`＋`.git-broken-20260709/` 約 800MB，穩定後刪）。
+5. 雜務：GitHub token 換 90 天期。～～備份清理～～✅ 已清（2026-07-10：`~/Project03-rescue`＋`~/Project03-rescue-20260709`＋`.git-broken-20260709/` 共約 531MB，刪前驗證 fsck 乾淨、雙遠端同步 `308e607`、檔名級比對零獨有檔案）。
 
 ### 素材目錄地圖（§1–2 之外新增的）
 `public/cafe/` 下：`catalog/`（233 件＋`_anim` 差分幀）、`cat/`（粉圓 13 檔）、`guests/`（Q版兩人＋blink）、`pudding/`（10 變體）、`badges/`（40 枚＋模板）、`gacha/`（機台 5 件）、`sign/`（樣品櫃 3 件＋棄用 stand/dome）、`ui/`（lock/hand_point）。內容源：`docs/cafe-flavor.json`（263 句）、`docs/puddings.json`（100 味）、`docs/shop-lines.json`（702 句）——各有 build 腳本產 `src/data/*.gen.ts`。工法庫在 scratchpad 會隨進程消失，關鍵的已進 `scripts/`（fix-shopkeeper-pose/normalize-facing-height）。
