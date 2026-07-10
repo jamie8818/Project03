@@ -4,8 +4,8 @@
 
 ## §0 ⚠️ 2026-07-10 引擎大輪總結（單一 session 三十多個 commit，讀這節就夠）
 
-### 0.1 目前狀態
-- branch `nihongo-teaching-injection`、HEAD `f479a85`、`tsc -b` 零錯、`npm test` **119/119**、`npm run build` 過。
+### 0.1 目前狀態（2026-07-10 深夜三更：E20/E21 亦完）
+- branch `nihongo-teaching-injection`、HEAD `d669302`、`tsc -b` 零錯、`npm test` **120/120**、`npm run build` 過。
 - **commit 後必雙推**：`git push origin nihongo-teaching-injection && git push mirror nihongo-teaching-injection`（iCloud 事故守則）。
 - 美術 session 會**直接 commit 進共用 repo**（不再走「worker 交清單」），開工前先 `git pull`＋`git log` 看有沒有插隊 commit；他們的 dev server 在 port 5273，引擎用 `.claude/launch.json` 的 `nihongo-engine`（5281）。
 - **JJ 會即時在 preview 視窗裡玩**（dev /api/shop 記憶體假資料會被他改），驗證時 seed 前先想一下會不會蓋掉他正在看的東西。
@@ -18,13 +18,15 @@
 **E19 好感度**：`src/lib/cat.ts` 純函式（賭氣→連摸→冷卻→擲骰），存 `UserState.catAffection`。
 **裝潢 UX**：收回模式（點什麼收什麼＋全部清空＋復原 undoStack）；出餐托盤溢出修（minmax(0,1fr)）；出餐 TTS 改唸 kana（臭豆腐誤讀）。
 **直覺式導引（1ddb3c2 起）**：分頁漸進解鎖（完成 1 輪開進度+五十音、2 輪開對戰場+教材庫，`tabUnlocked`）＋coach mark 系統（`src/components/Coach.tsx`，全域單顆、localStorage 旗標、鏈＝開始→進度→店橫幅→商店→分類都能逛→珍藏用轉蛋→裝潢→黑板）＋裝潢幽靈手示範（含說明標籤）＋文字減量（onboarding 導覽砍除、店長引導 5→1 句）。像素鎖/指示手素材在 `public/cafe/ui/`。
+**E20 動畫家具＋E21 貓生態系（02313fe＋d669302）**：E20＝`AnimOverlay`（Shop.tsx 模組級）疊 `<id>_anim.png`、renderFurn 四分支全接（furniture 僅 front 未鏡像疊）；loop＝CSS steps(1) 各半週期＋負 delay 依 (gx,gy,i) 座標種子定相位（多實例錯開）；occasional＝JS 排程（period×0.6–1.4→0.6s）。E21＝貓輪換池動態化：固定 4＋layout 導出（cat_bed 窩睡 roll+scale0.9／cat_tower 頂平台 sit／cat_bowl 碗邊 sit 借 `surfaceBottomFor`（自 renderFurn surface 分支抽出共用）／cat_scratcher 柱旁 groom）；`catSpotNow` 改回傳 10 分鐘窗號、`% 池長` 在使用端＝收回即消；teaser_stand 被動 `TEASER_BONUS=0.05` 進 `petCat`（cap `PET_ACCEPT_CAP=0.95`）。驗證技巧：**池長操縱**——算 `W=floor(now/600000)` 對各池長取模，擺對應數量貓家具讓 idx 落到目標動態位，可精確驗任一點位座標。
 
 ### 0.3 未完/待辦（2026-07-10 晚間更新：1/2/4 已結案）
 1. ~~夜市出餐難度分級~~ ✅ 已完成（4f8bb09，寫上輪交接時漏記）：`maxOrderItems`（`src/data/serving.ts`）L16 前全單品、L16（教と/も）起 42% 雙品、L20（N5 完課）起再開 12% 三品。**門檻 JJ 2026-07-10 拍板照現值**；若日後玩起來 L16 跳太抖，備案＝L16–L17 先 0.25、L18 起 0.42。
 2. ~~JJ 覆核清單~~ ✅ 三項 JJ 2026-07-10 均確認照現值：①粉圓好感起始亞軒 15/JJ 5（`lib/cat.ts AFFECTION_START`）②貓奴認證綁好感 100（xp.ts cat-person）③首輪 3 假名（`FIRST_RUN_CAP=3`）。程式碼本來就是這組值，零改動。
 3. E9 可選加分②連續天數徽章（streak≥7 ☕/≥30 👑）JJ 沒挑；E16 Tier C 兩條（已讀不回/過馬路請牽手）可延後——**注意素材已先到貨**（`badges/unread-messages.png`、`crosswalk-hand-in-hand.png`），要做時直接接。
 4. ~~徽章像素化~~ ✅ 已完成：徽章牆本來就是 img＋onError 退 emoji（上輪已接，交接漏記）；本輪補了 PersonCard 頭像列佩戴徽章同款接法（Dashboard.tsx `.worn-mini`）。成就解鎖 toast 是純文字佇列，emoji 留用（美術單 E16 認可）。38 條成就素材全齊。
-5. **部署**：worker 有兩處後端改動（E14 guestLines 合併＋KV 快照備份）→ 下次部署必須 `npx wrangler deploy`。部署由美術監工統一執行，引擎不動手。
+5. **部署**：worker 有兩處後端改動（E14 guestLines 合併＋KV 快照備份）→ 下次部署必須 `npx wrangler deploy`。部署由美術監工統一執行，引擎不動手。最後一批（E20+E21+磨爪，前端 only）已知會美術待部署。
+6. **引擎隊列目前清空**：E5–E21 全接完、完成註記全數回填 `art-to-engine-requests.md`。等美術下一批需求或 JJ 新指示。
 
 ### 0.4 本輪新增的坑（舊坑見 §6，全部仍有效）
 - **合成 pointer 事件**：`setPointerCapture` 對假 pointerId 會 throw（Stage 已包 try/catch；測 serve3 要先 monkeypatch `Element.prototype.setPointerCapture`）；pointerdown/up 同 tick dispatch 會讀到舊 state（React 18 非同步 flush）→ down/up 之間隔 200ms。
