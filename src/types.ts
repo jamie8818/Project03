@@ -50,6 +50,8 @@ export interface UserState {
   meta?: Record<string, number>; // 輕量計數/旗標袋（E16 Tier B 成就：pandaClicks/nightOwl/spendDay…；日期鍵存 YYYYMMDD 數字）
   lessonsPassed?: number[]; // 小測達標(≥70%)的課號＝該課真正學完（課程完成的門檻）
   lastSprintDate?: string; // 最後一次「一天一課衝刺」的日期（隔天＝消化日、不給新課）
+  login?: { last: string; days: number; furn: number }; // 每日登入：最後簽到日/累積天數/已入庫熊貓家具數（lib/login.ts）
+  catGuardAt?: string; // 貓顧店：上次粉圓幫忙護 streak 的日期（7 天冷卻，lib/store.ts）
   quizFail?: { no: number; date: string }; // 最後一次小測沒過的課與日期（隔天＝補強日）
 }
 

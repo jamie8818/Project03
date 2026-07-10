@@ -13,6 +13,8 @@ import Arena from './components/Arena.tsx';
 import Dashboard from './components/Dashboard.tsx';
 import { ACHIEVEMENTS, bumpDailyStreak, levelInfo, newlyUnlocked } from './lib/xp.ts';
 import { COINS } from './data/fun.ts';
+import { applyLogin, type LoginResult } from './lib/login.ts';
+import { LOGIN_COINS } from './data/panda-mail.ts';
 import { setSoundOn, sfx, soundOn } from './lib/sounds.ts';
 import Coach, { PixelLock, dismissCoach, tabUnlocked, type TabId } from './components/Coach.tsx';
 
@@ -38,6 +40,7 @@ export default function App() {
   const prevLevel = useRef<number | null>(null);
   const [wiggle, setWiggle] = useState<TabId | null>(null); // 點鎖住分頁的搖頭回饋
   const prevSessions = useRef<number | null>(null); // 解鎖 toast 用
+  const [mail, setMail] = useState<LoginResult | null>(null); // 每日登入：熊貓店長來信
 
   // 金鑰隨連結（?k=…）：有就自動登入並收進 localStorage，之後 cookie 掉了也能自我修復
   useEffect(() => {
@@ -144,6 +147,19 @@ export default function App() {
     setToasts((t) => [...t, ...names]);
     update((s) => ({ ...s, achievements: [...s.achievements, ...unlocked], coins: s.coins + unlocked.length * COINS.achievement }));
   }, [state, update]);
+
+  // 每日登入（熊貓店長來信）：遠端同步完才結算，避免另一台裝置今天簽過被重複入帳。
+  // 同日冪等由 login.last 把關；家具實際入庫在 Shop（素材到貨才發）。
+  useEffect(() => {
+    if (!state || !remoteChecked) return;
+    const today = tpeToday();
+    if (state.login?.last === today) return;
+    const r = applyLogin(state, today);
+    if (!r) return;
+    setMail(r);
+    sfx.unlock();
+    update((s) => applyLogin(s, today)?.state ?? s);
+  }, [state, remoteChecked, update]);
 
   // E16 Tier B「雙人全勤」：兩人同一天都完成 → 記連續日（同日冪等；在有 peer 資料的畫面自然觸發）
   useEffect(() => {
@@ -311,6 +327,20 @@ export default function App() {
           );
         })}
       </nav>
+      {mail && (
+        <div className="dengon-overlay" onClick={() => setMail(null)}>
+          <div className="mail-panel" onClick={(e) => e.stopPropagation()}>
+            <div className="mail-head">📮 熊貓店長來信<span className="mail-day">簽到第 {mail.days} 天</span></div>
+            <p className="mail-body">{mail.letter}</p>
+            <p className="mail-reward">
+              🪙 零用錢 +{LOGIN_COINS}
+              {mail.coins > LOGIN_COINS && ` ＋ 轉蛋基金 +${mail.coins - LOGIN_COINS}`}
+            </p>
+            {mail.gift && <p className="mail-reward">📦 本週禮物「{mail.gift.name}」寄到店裡了，到貨自動入庫</p>}
+            <button className="primary" onClick={() => setMail(null)}>知道了啦</button>
+          </div>
+        </div>
+      )}
       {toasts.length > 0 && <div className="toast">{toasts[0]}</div>}
     </div>
   );

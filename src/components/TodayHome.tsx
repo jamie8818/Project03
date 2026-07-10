@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { UserState } from '../types.ts';
 import { buildDailyPlan, courseProgress, masteryPct } from '../lib/course.ts';
+import { catGuardBridges, displayStreak } from '../lib/store.ts';
 import Coach, { dismissCoach } from './Coach.tsx';
 
 // 「今日課程」每日固定入口：課程/掌握度雙進度＋今天的份＋開始＋一天一課衝刺。
@@ -22,6 +23,8 @@ export default function TodayHome({
   const n5 = masteryPct(state, 'N5');
   const n4 = masteryPct(state, 'N4');
   const doneToday = state.lastDoneDate === today;
+  const streak = displayStreak(state, today);
+  const guarding = !doneToday && catGuardBridges(state, today); // 昨天漏了、粉圓正在代守（今天完成就接回）
   const lessonName = plan.inKana ? '五十音（基礎假名）' : plan.lessonTitle;
   const pct = (n: number) => `${Math.max(0, Math.min(100, n))}%`;
 
@@ -50,6 +53,15 @@ export default function TodayHome({
             N5 {n5}%{n4 > 0 ? ` · N4 ${n4}%` : ''}
           </span>
         </div>
+        {streak > 0 && (
+          <div style={row}>
+            <span className="hint" style={{ width: 48, margin: 0 }}>連續</span>
+            <span style={{ flex: 1, textAlign: 'left', fontSize: '0.9rem' }}>
+              🔥 {streak} 天
+              {guarding && <span className="hint" style={{ margin: '0 0 0 8px' }}>🐈 粉圓昨天幫你顧了店，今天完成就不斷</span>}
+            </span>
+          </div>
+        )}
       </div>
 
       <div style={{ fontSize: '1.05rem', fontWeight: 600, margin: '14px 0 2px' }}>{lessonName}</div>

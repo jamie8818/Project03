@@ -5,8 +5,7 @@ import { PHRASES } from '../data/phrases.ts';
 import { buildSession, isWordCard, isGrammarCard, quizChoices, wordInfo } from '../lib/session.ts';
 import { grammarByCardId, CURRICULUM_GRAMMAR, lessonByNo } from '../data/curriculum.ts';
 import { grade, isDue, newCard } from '../lib/srs.ts';
-import { completeSession, displayStreak } from '../lib/store.ts';
-import { addDays } from '../lib/dates.ts';
+import { completeSession, displayStreak, nextStreakOf } from '../lib/store.ts';
 import { COINS, MYSTERY_XP, drawOmikuji, dropPudding, dueStreakMilestone, luckOf, mysteryReward, mysteryToday, type Pudding } from '../data/fun.ts';
 import { duelQuestions } from '../lib/seeded.ts';
 import { taughtKana, taughtWords } from '../lib/taught.ts';
@@ -60,7 +59,7 @@ export default function Session({ state, today, update, onFinished, sprint = fal
       const minutes = Math.max(0.5, Math.round((elapsed.current / 60000) * 10) / 10);
       // 掉布丁：每天「首次」完成才掉（加練不重複掉，防刷）；稀有率用完成後的 streak
       const firstToday = state.lastDoneDate !== today;
-      const nextStreak = !firstToday ? state.streak : state.lastDoneDate === addDays(today, -1) ? state.streak + 1 : 1;
+      const nextStreak = nextStreakOf(state, today); // 含貓顧店橋接，跟 completeSession 同一套算法
       const dropped = firstToday ? dropPudding(nextStreak) : null;
       // 連續里程碑獎金（首次完成、命中且未領過才給）
       const milestone = firstToday ? dueStreakMilestone(nextStreak, state.claimedStreaks) : null;

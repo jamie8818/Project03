@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useRef, useState, type CSSProperties, type PointerEvent as RPointerEvent, type ReactNode, type SyntheticEvent } from 'react';
 import type { UserId, UserState } from '../types.ts';
 import { USERS } from '../lib/store.ts';
+import { grantableGifts } from '../lib/login.ts';
 import { addDailyAmount, bumpDailyStreak, bumpMeta, setShopSnapshot } from '../lib/xp.ts';
 import { addDays, tpeToday } from '../lib/dates.ts';
 import { sfx } from '../lib/sounds.ts';
@@ -702,6 +703,8 @@ export function ShopBanner({ me, peer, today, onOpen }: { me: UserState; peer: U
   );
 }
 
+const CATALOG_IDS = new Set(CAFE_ITEMS.map((it) => it.id)); // 週禮物補發用：判斷素材是否已入庫
+
 const SHOP_GIFT_COINS = 350; // 店長私房錢：首次進店的開店禮金（引導最後一句發放，state 旗標防重複）
 
 const INTRO = [
@@ -806,6 +809,22 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
   useEffect(() => {
     fetchShop().then((s) => { setShopSnapshot(s); setShop(s); }).catch(() => setShop(DEFAULT_SHOP));
   }, []);
+
+  // 每日登入週禮物（熊貓店長來信）：進店補發已賺到、素材已進 catalog 的家具（照順序、遇缺即停）。
+  // 共有 stock +1、推送成功才記 furn；失敗＝下次進店再補發。
+  useEffect(() => {
+    if (!shop) return;
+    const gifts = grantableGifts(me, CATALOG_IDS);
+    if (gifts.length === 0) return;
+    const next = { ...shop, stock: { ...shop.stock } };
+    for (const g of gifts) next.stock[g.id] = (next.stock[g.id] ?? 0) + 1;
+    pushShop(next)
+      .then((res) => {
+        setShop((prev) => (prev ? { ...prev, stock: res.current?.stock ?? next.stock } : prev));
+        update((s) => (s.login ? { ...s, login: { ...s.login, furn: s.login.furn + gifts.length } } : s));
+      })
+      .catch(() => {});
+  }, [shop === null]); // eslint-disable-line react-hooks/exhaustive-deps -- 只在首次載到店況後結算一次
 
   // E16 Tier B「極簡主義」：今天完成練習且開店看時 layout 空 → 記連續日（同日冪等；斷鏈重置）
   useEffect(() => {

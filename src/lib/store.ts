@@ -1,6 +1,6 @@
 import type { PeerSummary, UserId, UserState } from '../types.ts';
 import { introOrder } from '../data/kana.ts';
-import { addDays, tpeToday } from './dates.ts';
+import { addDays, daysBetween, tpeToday } from './dates.ts';
 import { seededCard } from './srs.ts';
 
 export const USERS: { id: UserId; name: string }[] = [
@@ -98,7 +98,9 @@ export function completeSession(state: UserState, minutes: number, today: string
   s.sessionsDone += 1;
   s.phraseIdx += 1;
   if (s.lastDoneDate !== today) {
-    s.streak = s.lastDoneDate === addDays(today, -1) ? s.streak + 1 : 1;
+    const bridged = catGuardBridges(s, today);
+    s.streak = nextStreakOf(s, today);
+    if (bridged) s.catGuardAt = today;
     s.lastDoneDate = today;
   }
   const h = hour ?? Number(new Date().toLocaleString('en-US', { hour: 'numeric', hour12: false, timeZone: 'Asia/Taipei' })) % 24;
@@ -110,10 +112,29 @@ export function completeSession(state: UserState, minutes: number, today: string
   return touch(s);
 }
 
-/** streak 顯示值：昨天以前斷了就歸零（狀態裡的值等下次完成才重算） */
-export function displayStreak(s: Pick<UserState, 'streak' | 'lastDoneDate'>, today: string = tpeToday()): number {
+// ── 貓顧店（每日登入系統配套）：漏一天可由粉圓代守一次，7 天冷卻；漏兩天以上救不了 ──
+
+type StreakView = Pick<UserState, 'streak' | 'lastDoneDate' | 'catGuardAt'>;
+
+/** 粉圓還能出勤嗎（沒用過或距上次 ≥7 天） */
+export const catGuardReady = (s: Pick<UserState, 'catGuardAt'>, today: string): boolean =>
+  !s.catGuardAt || daysBetween(s.catGuardAt, today) >= 7;
+
+/** 今天完成的話，粉圓要不要幫忙補昨天的洞（最後完成日＝前天、且冷卻已過） */
+export const catGuardBridges = (s: StreakView, today: string): boolean =>
+  s.lastDoneDate === addDays(today, -2) && catGuardReady(s, today);
+
+/** 今天完成後 streak 會變成的值（含貓顧店橋接）；Session 的掉落稀有率/里程碑預估也用它 */
+export function nextStreakOf(s: StreakView, today: string): number {
+  if (s.lastDoneDate === today) return s.streak;
+  return s.lastDoneDate === addDays(today, -1) || catGuardBridges(s, today) ? s.streak + 1 : 1;
+}
+
+/** streak 顯示值：昨天以前斷了就歸零（前天斷、但粉圓還能救＝照常顯示，等今天完成橋回來） */
+export function displayStreak(s: StreakView, today: string = tpeToday()): number {
   if (!s.lastDoneDate) return 0;
   if (s.lastDoneDate === today || s.lastDoneDate === addDays(today, -1)) return s.streak;
+  if (catGuardBridges(s, today)) return s.streak;
   return 0;
 }
 
