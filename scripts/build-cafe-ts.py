@@ -88,6 +88,7 @@ def main():
     L.append("  hostType?: 'counter-inside'; // E4：吧檯內側小家電（嵌吧檯裡、下半身被 counter_front 遮）；省略＝一般家具/小物")
     L.append("  frontWall?: boolean; // E10：可掛門/門旁前牆（畫在 base-fg 之上）；省略＝只能掛後牆")
     L.append("  counterTop?: boolean; // E11：z=furniture 但可放吧檯檯面格（加法，地板照舊可放）")
+    L.append("  anim?: { mode: 'loop' | 'occasional'; period: number }; // E20：疊 <id>_anim.png 動畫；loop=固定週期雙態交替，occasional=隨機間隔短暫顯示；省略＝靜態無動畫")
     L.append('  flavor: string; // 一句話 flavor 文案（docs/cafe-flavor.json 來源，查無 id 則為空字串；引擎端空字串該行不渲染）')
     L.append('}')
     L.append('')
@@ -121,6 +122,9 @@ def main():
         host = f", hostType: '{it['hostType']}'" if it.get('hostType') else ''
         host += ', frontWall: true' if it.get('frontWall') else ''
         host += ', counterTop: true' if it.get('counterTop') else ''
+        if it.get('anim'):
+            a = it['anim']
+            host += f", anim: {{ mode: '{a['mode']}', period: {a['period']} }}"
         flavor = flavor_map.get(it['id'], '').replace("\\", "\\\\").replace("'", "\\'")
         L.append(
             f"  {{ id: '{it['id']}', category: '{it['category']}', z: '{it['z']}', w: {it['w']}, h: {it['h']}, "

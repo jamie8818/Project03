@@ -584,6 +584,46 @@ z=furniture 的咖啡器材/小型展示，現實中本來就擺吧檯上，開�
 - E18：呼吸 scaleY 1.00–1.02/3s 掛包裹層（B/fx 幀同步呼吸）；B 幀 JS 隨機時序（groom 0.4s×6 交替+停 3–5s／roll 15–30s 隨機定格 1s／sit 5–8s 顯示 0.6s，互質時距、換位 useEffect 重置）；缺檔 onError 隱藏。摸頭：pet＝hand_pet 拍3下+爽臉 1.2s+❤ 飄升+2s 五格好感條；dodge/sulk＝撇頭 0.8s 無❤手省略；angry＝撇頭+💢；cooldown＝只拍手輕回饋。階級章常駐貓頭頂（fx 播放時讓位）。E15「點貓冒…」可選設計依單作廢。
 - preview 實測：pet/cooldown/angry（−3+賭氣300s+pets 清空）/sulk 必拒（無💢不扣分）四分支＋好感條 3/5 格＝61/100；呼吸/B 幀/階級章渲染確認。cat-person 成就改綁好感 100（Tier B 同批）。
 
+## E20. 家具動畫幀：12 件會動的家具（JJ 需求 2026-07-10）— 素材已交付
+
+**概念**：12 件家具各補了一張 `<id>_anim.png`（跟 `<id>.png` front 同尺寸、同畫布），畫的是同一件家具的「動一下」瞬間（魚游動一格／鐘擺鐘針轉了一點／扇葉轉了一格／燈泡明暗互換／燭火搖曳……）。引擎端純疊圖交替播放即可，不需要 sprite sheet 或逐幀動畫框架。
+
+**素材清單**（`public/cafe/catalog/` 與 `assets_src/cafe/out/` 皆已放好，manifest 已加 `anim` 欄，見下）：
+
+| id | 動了什麼 | mode | period(秒) |
+|---|---|---|---|
+| `aquarium_60cm` | 魚位置/氣泡 | loop | 2.2 |
+| `goldfish_bowl` | 兩尾金魚位置 | loop | 2.8 |
+| `pudding_aquarium` | 布丁位置 | loop | 1.6 |
+| `cuckoo_clock` | 鐘擺／鳥探頭 | loop | 1.0 |
+| `wall_clock` | 時針/分針角度 | loop | 1.0 |
+| `fan_standing_retro` | 扇葉轉 45° | loop | 0.16 |
+| `tv_wooden_retro` | 螢幕雪花噪點重排 | loop | 0.24 |
+| `neon_coffee_sign` | 字體光暈擴散＋提亮 | loop | 1.4 |
+| `bar_string_lights` | 燈泡奇偶明暗互換 | loop | 0.9 |
+| `candle` | 燭火形變＋微位移 | loop | 0.5 |
+| `syphon_gas_lamp` | 燈座光暈強弱 | loop | 1.8 |
+| `furin_wind_chime` | 鈴舌偏擺＋短冊飄 | occasional | 6 |
+
+**manifest 格式**（`docs/cafe-catalog.json` 已加，`scripts/build-cafe-ts.py` 已透傳到 `src/data/cafe.gen.ts` 的 `CafeItem.anim`）：
+
+```json
+"anim": { "mode": "loop" | "occasional", "period": 2.2 }
+```
+
+- `mode: "loop"`：家具動畫常駐輪播，front 幀與 anim 幀各佔 `period/2` 秒交替顯示（`steps(1)` 硬切，不要 tween 過渡，維持像素風格）。
+- `mode: "occasional"`：平時只顯示 front 靜態幀，每隔隨機間隔（`period` 秒 ±40%）才短暫切到 anim 幀顯示 0.6 秒，然後切回 front。用於「偶爾才動一下」的家具（目前只有風鈴，未來可能還有）。
+
+**引擎接線建議**：
+1. 渲染家具時，若 `it.anim` 存在，額外疊一張 `<id>_anim.png`（跟 front 同一個定位錨點、同尺寸，直接疊在 front 正上方即可，不用另算座標）。
+2. `<id>_anim.png` 用 `onError` 防呆隱藏（避免美術漏交或檔名手誤時 404 圖示洩漏）。
+3. `loop` 用 CSS `animation: steps(1)` 做兩幀硬切交替（`0%–50%` 顯示 front／`50%–100%` 顯示 anim，或反過來用兩個疊圖各自 `opacity` 在 `steps(1)` 下切換），週期＝`period`。
+4. `occasional` 用 JS 定時器排程：每次等待 `period × (0.6~1.4 隨機)` 秒，切到 anim 幀顯示 0.6 秒後切回 front，再重新排程下一次等待。
+5. **多實例要錯開相位**：同一 `id` 家具擺了不只一件時（例如場上有三個魚缸），每個實例的動畫起始相位要各自隨機（例如渲染時用該 `PlacedItem` 的 `gx,gy` 或一個穩定 id 做 seed 算一個 0–period 的隨機初始 offset），不要全部同步跳動——否則三個魚缸會像同一顆心跳，很假。
+6. 全部用 CSS animation/transition 做，不要上 JS rAF 逐幀改 DOM（家具數量可能不少，CSS steps 動畫交給瀏覽器合成層跑，效能與省電都比較好）。
+
+**範圍**：只加了 `anim` 疊圖與 manifest 欄位，家具本體 sprite（front／back／right 等既有向）、footprint、host 邏輯完全不變，不影響既有擺放/碰撞/E4/E10/E11 等機制。
+
 ## E21. 粉圓生態系家具影響 NPC 行為：動態輪換點位＋逗貓棒被動加成（JJ 拍板，2026-07-10）
 
 **概念**：呼應 E15 粉圓常駐系統，這批新增 4 件「粉圓生態系」家具（`cat_bed`／`cat_tower`／`cat_bowl`／`teaser_stand`，見 `docs/cafe-furniture-wishlist.md`「粉圓生態系」節、`docs/cafe-catalog.json`）第一次讓**家具擺放影響 NPC（貓）行為**：擺出對應家具＝解鎖新的貓輪換點位，收回＝點位消失。純資料驅動、**不新增存檔欄位**——這 3 個點位每次都是從當下 `ShopState.layout: PlacedItem[]`（已存在）即時算出來的，跟 E15 固定 4 點位的差異只在於這幾個是動態的，不是寫死常數。
