@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useRef, useState, type PointerEvent as RPointerEvent, type ReactNode, type SyntheticEvent } from 'react';
 import type { UserId, UserState } from '../types.ts';
 import { USERS } from '../lib/store.ts';
+import { setShopSnapshot } from '../lib/xp.ts';
 import { sfx } from '../lib/sounds.ts';
 import Buddy from './Buddy.tsx';
 import { PUDDING_BY_ID, PUDDINGS } from '../data/fun.ts';
@@ -655,13 +656,16 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
   const [introSeen, setIntroSeen] = useState(() => localStorage.getItem('nng:shop-intro3') === '1');
 
   useEffect(() => {
-    fetchShop().then(setShop).catch(() => setShop(DEFAULT_SHOP));
+    fetchShop().then((s) => { setShopSnapshot(s); setShop(s); }).catch(() => setShop(DEFAULT_SHOP));
   }, []);
 
   // 裝潢用：樂觀更新，推上去後用伺服器合併結果校正（撿到對方買的東西＋對方的留言）。
   // stock 是單調 max，直接採伺服器值；board 用 union 再合一次，避免蓋掉本地剛送、伺服器還沒收到的訊。
   const saveShop = (next: ShopState) => {
     setShop(next);
+    // E16 店鋪型成就：餵最新店況給 xp.ts snapshot，並輕觸 user state 讓 App 的成就偵測重評
+    setShopSnapshot(next);
+    update((s) => ({ ...s }));
     pushShop(next)
       .then((res) => {
         const cur = res.current;
@@ -691,7 +695,9 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
   const commitShop = async (next: ShopState): Promise<void> => {
     const res = await pushShop(next);
     const cur = res.current;
-    setShop(cur ? { ...next, stock: cur.stock ?? next.stock, board: cur.board ? mergeBoard(next.board, cur.board) : next.board } : next);
+    const merged = cur ? { ...next, stock: cur.stock ?? next.stock, board: cur.board ? mergeBoard(next.board, cur.board) : next.board } : next;
+    setShopSnapshot(merged); // E16：購買/扭蛋後成就重評（呼叫端隨後的 update 會觸發偵測）
+    setShop(merged);
   };
 
   if (!introSeen) {

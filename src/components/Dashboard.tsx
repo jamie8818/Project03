@@ -180,7 +180,18 @@ export default function Dashboard({
                 title={a.desc}
                 onClick={() => got && update((s) => ({ ...s, wornBadge: worn ? '' : a.id }))}
               >
-                <span className="b-icon">{a.icon}</span>
+                {/* E16：icon 換像素徽章（badges/<id>.png 40×40），缺檔退回 emoji 不破圖 */}
+                <img
+                  className="b-badge"
+                  src={`/cafe/badges/${a.id}.png`}
+                  alt=""
+                  draggable={false}
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    (e.currentTarget.nextElementSibling as HTMLElement | null)?.style.removeProperty('display');
+                  }}
+                />
+                <span className="b-icon" style={{ display: 'none' }}>{a.icon}</span>
                 <span className="b-name">{worn ? '佩戴中' : a.name}</span>
               </button>
             );

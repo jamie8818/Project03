@@ -1050,6 +1050,18 @@ img.buddy {
   filter: none;
 }
 
+/* E16 像素徽章（badges/<id>.png 40×40 黃銅圓章）：未解鎖灰階、解鎖全彩（免出灰版素材） */
+.badge .b-badge {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  image-rendering: auto;
+  filter: grayscale(1) opacity(0.35);
+}
+.badge.unlocked .b-badge {
+  filter: none;
+}
+
 .badge .b-name {
   font-size: 9px;
   color: var(--ink-soft);
