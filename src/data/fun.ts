@@ -82,59 +82,30 @@ export function drawOmikuji(rng: () => number = Math.random): { luck: string; ka
 
 export const luckOf = (id: string): Luck => LUCKS.find((l) => l.id === id) ?? LUCKS[2];
 
-// ── 布丁圖鑑 ──
+// ── 布丁圖鑑（E17：24→100 味，資料源 docs/puddings.json → puddings.gen.ts；改內容重跑 build-puddings.py）──
 
-export type Rarity = 'N' | 'R' | 'SR';
+import { PUDDINGS_GEN, type PuddingGen, type RarityGen } from './puddings.gen.ts';
+export type { PuddingVariant } from './puddings.gen.ts';
 
-export interface Pudding {
-  id: string;
-  name: string;
-  rarity: Rarity;
-  hue: number; // CSS hue-rotate 角度（🍮 變色）
-  sat?: number; // 飽和度倍率
-  desc: string;
-}
+export type Rarity = RarityGen; // 'N' | 'R' | 'SR' | 'UR'（E17 新增 UR 5 款，權重要含 UR 否則抽不到）
+export type Pudding = PuddingGen; // 舊 24 款已逐字驗證與 gen 一致，存檔相容
 
-export const PUDDINGS: Pudding[] = [
-  { id: 'plain', name: '原味布丁', rarity: 'N', hue: 0, desc: '一切的起點' },
-  { id: 'caramel', name: '焦糖布丁', rarity: 'N', hue: -15, desc: '店長的最愛，苦一點才是大人' },
-  { id: 'milk', name: '牛奶布丁', rarity: 'N', hue: 0, sat: 0.25, desc: '溫柔的白' },
-  { id: 'choco', name: '巧克力布丁', rarity: 'N', hue: -30, sat: 0.7, desc: '心情不好就吃這個' },
-  { id: 'coffee', name: '咖啡布丁', rarity: 'N', hue: -25, sat: 0.5, desc: '喫茶店的靈魂' },
-  { id: 'banana', name: '香蕉布丁', rarity: 'N', hue: 8, desc: 'ばなな，唸起來就好吃' },
-  { id: 'honey', name: '蜂蜜布丁', rarity: 'N', hue: 5, desc: '甜上加甜，犯規' },
-  { id: 'kinako', name: '黃豆粉布丁', rarity: 'N', hue: -8, sat: 0.6, desc: '樸實的和風' },
-  { id: 'strawberry', name: '草莓布丁', rarity: 'N', hue: -60, desc: 'いちご！' },
-  { id: 'lemon', name: '檸檬布丁', rarity: 'N', hue: 18, desc: '酸酸的，像答錯的感覺' },
-  { id: 'chestnut', name: '栗子布丁', rarity: 'N', hue: -12, sat: 0.55, desc: '秋天限定的心情' },
-  { id: 'blacksugar', name: '黑糖布丁', rarity: 'N', hue: -20, sat: 0.4, desc: '沖繩的風' },
-  { id: 'matcha', name: '抹茶布丁', rarity: 'R', hue: 70, desc: '宇治直送（設定上）' },
-  { id: 'sakura', name: '櫻花布丁', rarity: 'R', hue: -80, sat: 0.7, desc: '春天限定的浪漫' },
-  { id: 'mango', name: '芒果布丁', rarity: 'R', hue: 12, sat: 1.2, desc: '台南人認證' },
-  { id: 'taro', name: '紫芋布丁', rarity: 'R', hue: -130, sat: 0.8, desc: '紫得很高貴' },
-  { id: 'melon', name: '哈密瓜布丁', rarity: 'R', hue: 55, desc: '喫茶店傳統藝能' },
-  { id: 'peach', name: '白桃布丁', rarity: 'R', hue: -45, sat: 0.6, desc: '岡山的驕傲' },
-  { id: 'blueberry', name: '藍莓布丁', rarity: 'R', hue: -160, sat: 0.7, desc: '對眼睛好（藉口）' },
-  { id: 'ujikintoki', name: '宇治金時布丁', rarity: 'R', hue: 90, sat: 0.8, desc: '抹茶與紅豆的婚禮' },
-  { id: 'rainbow', name: '彩虹布丁', rarity: 'SR', hue: 180, sat: 1.4, desc: '傳說中雨後才做得出來' },
-  { id: 'gold', name: '黃金布丁', rarity: 'SR', hue: 3, sat: 1.6, desc: '金光閃閃，捨不得吃' },
-  { id: 'starry', name: '星空布丁', rarity: 'SR', hue: -200, sat: 1.1, desc: '把夜空舀一勺進杯子' },
-  { id: 'panda', name: '店長特製布丁', rarity: 'SR', hue: -18, sat: 0.35, desc: '店長認真做的唯一一款，吃過的人都說「ぽ〜う」' },
-];
+export const PUDDINGS: Pudding[] = PUDDINGS_GEN;
 
 export const PUDDING_BY_ID: Record<string, Pudding> = Object.fromEntries(PUDDINGS.map((p) => [p.id, p]));
 
-/** 稀有率隨 streak 提升：素人 → 一週 → 一個月 */
+/** 稀有率隨 streak 提升：素人 → 一週 → 一個月。UR＝比 SR 更稀：streak≥7 才開一絲機率 */
 export function rarityWeights(streak: number): Record<Rarity, number> {
-  if (streak >= 30) return { N: 45, R: 40, SR: 15 };
-  if (streak >= 7) return { N: 60, R: 32, SR: 8 };
-  return { N: 80, R: 18, SR: 2 };
+  if (streak >= 30) return { N: 45, R: 39, SR: 15, UR: 1 };
+  if (streak >= 7) return { N: 60, R: 32, SR: 7.5, UR: 0.5 };
+  return { N: 80, R: 18, SR: 2, UR: 0 };
 }
 
+const RARITY_ORDER = ['N', 'R', 'SR', 'UR'] as const;
 function rollRarity(w: Record<Rarity, number>, rng: () => number): Rarity {
-  const total = w.N + w.R + w.SR;
+  const total = RARITY_ORDER.reduce((s, k) => s + w[k], 0);
   let r = rng() * total;
-  for (const k of ['N', 'R', 'SR'] as const) {
+  for (const k of RARITY_ORDER) {
     r -= w[k];
     if (r <= 0) return k;
   }
@@ -162,7 +133,7 @@ export function mysteryToday(user: string, date: string): boolean {
 
 /** 神秘客獎勵：全對保底 R 起跳（R70/SR30） */
 export function mysteryReward(rng: () => number = Math.random): Pudding {
-  return pickByRarity(rollRarity({ N: 0, R: 70, SR: 30 }, rng), rng);
+  return pickByRarity(rollRarity({ N: 0, R: 68, SR: 28, UR: 4 }, rng), rng);
 }
 
 export const MYSTERY_XP = { perfect: 15, partial: 5 } as const;
@@ -200,9 +171,9 @@ export interface GachaResult {
 }
 
 export function gachaRoll(rng: () => number = Math.random): GachaResult {
-  const first = pickByRarity(rollRarity({ N: 50, R: 35, SR: 15 }, rng), rng);
-  const jackpot = rng() < 0.1; // 10% 大當たり再送一顆
-  return jackpot ? { puddings: [first, pickByRarity(rollRarity({ N: 40, R: 40, SR: 20 }, rng), rng)], jackpot } : { puddings: [first], jackpot };
+  const first = pickByRarity(rollRarity({ N: 49, R: 34, SR: 15, UR: 2 }, rng), rng);
+  const jackpot = rng() < 0.1; // 10% 大當たり再送一顆（第二顆 UR 率更高＝大當たり才有的期待感）
+  return jackpot ? { puddings: [first, pickByRarity(rollRarity({ N: 38, R: 39, SR: 20, UR: 3 }, rng), rng)], jackpot } : { puddings: [first], jackpot };
 }
 
 // ── 週間 Boss（Wave 3）──

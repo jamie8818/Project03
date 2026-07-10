@@ -231,7 +231,7 @@ export default function Session({ state, today, update, onFinished, sprint = fal
         </div>
         {drop && (
           <div className={`pudding-drop r-${drop.rarity}`}>
-            <span className="pud" style={{ filter: `hue-rotate(${drop.hue}deg) saturate(${drop.sat ?? 1})` }}>🍮</span>
+            <img className="pud-img" src={`/cafe/pudding/${drop.variant}.png`} alt="" draggable={false} style={{ filter: `hue-rotate(${drop.hue}deg) saturate(${drop.sat ?? 1})` }} />
             <div className="pd-body">
               <b>
                 獲得「{drop.name}」<i className="rarity">{drop.rarity}</i>

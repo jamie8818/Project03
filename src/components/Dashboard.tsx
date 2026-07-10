@@ -1,6 +1,6 @@
 import type { UserState } from '../types.ts';
 import { USERS, displayStreak } from '../lib/store.ts';
-import { COINS, GACHA_COST, PUDDINGS, gachaRoll, luckOf, type Pudding } from '../data/fun.ts';
+import { COINS, GACHA_COST, PUDDINGS, gachaRoll, luckOf, type Pudding, type Rarity } from '../data/fun.ts';
 import { sfx } from '../lib/sounds.ts';
 import { useState } from 'react';
 import { DEFAULT_GOAL, lessonPace, type GoalLevel } from '../lib/goal.ts';
@@ -72,6 +72,7 @@ export default function Dashboard({
 }) {
   const [gachaGot, setGachaGot] = useState<Pudding[] | null>(null);
   const [shopOpen, setShopOpen] = useState(false);
+  const [pudTab, setPudTab] = useState<'all' | Rarity>('all'); // E17：圖鑑 100 味的稀有度篩選
   const goal = me.goal ?? DEFAULT_GOAL;
   // 目標編輯（等級 N5/N4＋達成日）；null＝非編輯中
   const [goalDraft, setGoalDraft] = useState<{ level: GoalLevel; date: string } | null>(null);
@@ -217,7 +218,7 @@ export default function Dashboard({
             {gachaGot.length > 1 && <b className="jackpot">🎉 大当たり！</b>}
             {gachaGot.map((p, i) => (
               <div key={i} className={`pudding-drop r-${p.rarity}`}>
-                <span className="pud" style={{ filter: `hue-rotate(${p.hue}deg) saturate(${p.sat ?? 1})` }}>🍮</span>
+                <img className="pud-img" src={`/cafe/pudding/${p.variant}.png`} alt="" draggable={false} style={{ filter: `hue-rotate(${p.hue}deg) saturate(${p.sat ?? 1})` }} />
                 <div className="pd-body">
                   <b>
                     {p.name}
@@ -235,15 +236,31 @@ export default function Dashboard({
         <h3>
           🍮 布丁圖鑑（{PUDDINGS.filter((p) => (me.puddings?.[p.id] ?? 0) > 0).length}/{PUDDINGS.length}）
         </h3>
-        <p className="legend">每天完成練習掉一顆，連續天數越高越容易掉稀有口味</p>
+        <p className="legend">每天完成練習掉一顆，連續天數越高越容易掉稀有口味；UR 是傳說級，扭蛋大當たり比較有機會</p>
+        {/* E17：100 味太多，按稀有度篩選（各籤帶已收集進度） */}
+        <div className="seg" style={{ margin: '6px 0' }}>
+          {(['all', 'N', 'R', 'SR', 'UR'] as const).map((r) => {
+            const pool = r === 'all' ? PUDDINGS : PUDDINGS.filter((p) => p.rarity === r);
+            const got = pool.filter((p) => (me.puddings?.[p.id] ?? 0) > 0).length;
+            return (
+              <button key={r} className={pudTab === r ? 'on' : ''} onClick={() => setPudTab(r)}>
+                {r === 'all' ? '全部' : r}（{got}/{pool.length}）
+              </button>
+            );
+          })}
+        </div>
         <div className="pud-grid">
-          {PUDDINGS.map((p) => {
+          {(pudTab === 'all' ? PUDDINGS : PUDDINGS.filter((p) => p.rarity === pudTab)).map((p) => {
             const n = me.puddings?.[p.id] ?? 0;
             return (
               <div key={p.id} className={`pud-cell r-${p.rarity} ${n > 0 ? 'got' : ''}`} title={n > 0 ? `${p.name}：${p.desc}` : '？？？'}>
-                <span className="pud" style={n > 0 ? { filter: `hue-rotate(${p.hue}deg) saturate(${p.sat ?? 1})` } : undefined}>
-                  🍮
-                </span>
+                <img
+                  className="pud-img"
+                  src={`/cafe/pudding/${p.variant}.png`}
+                  alt=""
+                  draggable={false}
+                  style={n > 0 ? { filter: `hue-rotate(${p.hue}deg) saturate(${p.sat ?? 1})` } : undefined}
+                />
                 <small>{n > 0 ? p.name.replace('布丁', '') : '？？？'}</small>
                 {n > 0 && p.desc && <small className="pud-desc">{p.desc}</small>}
                 {n > 1 && <i className="pud-count">×{n}</i>}

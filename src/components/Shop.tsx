@@ -458,7 +458,7 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
             <img className="sign-case" src="/cafe/sign/case_body.png" alt="" draggable={false} />
             <img
               className="sign-pudding"
-              src="/cafe/sign/pudding.png"
+              src={`/cafe/pudding/${PUDDING_BY_ID[shop.sign].variant}.png`}
               alt={PUDDING_BY_ID[shop.sign].name}
               draggable={false}
               style={{ filter: `hue-rotate(${PUDDING_BY_ID[shop.sign].hue}deg) saturate(${PUDDING_BY_ID[shop.sign].sat ?? 1})` }}
@@ -1147,8 +1147,8 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop }: { me: UserState; 
           {ownedPuddings.length === 0 && <p className="hint">還沒收集到布丁——每天完成練習會掉布丁。</p>}
           {ownedPuddings.map((p) => (
             <button key={p.id} className={`tray-item ${shop.sign === p.id ? 'on' : ''}`} onClick={() => saveShop({ ...shop, sign: p.id })}>
-              {/* 縮圖比照正式渲染用 pudding.png 套色（E8 需求 5；不疊 stand/dome，小圖示意即可） */}
-              <img className="tray-pud" src="/cafe/sign/pudding.png" alt="" draggable={false} style={{ filter: `hue-rotate(${p.hue}deg) saturate(${p.sat ?? 1})` }} />
+              {/* 縮圖比照正式渲染用 variant 基底圖套色（E17；不疊櫃體，小圖示意即可） */}
+              <img className="tray-pud" src={`/cafe/pudding/${p.variant}.png`} alt="" draggable={false} style={{ filter: `hue-rotate(${p.hue}deg) saturate(${p.sat ?? 1})` }} />
               <small>{p.name.replace('布丁', '')}</small>
             </button>
           ))}

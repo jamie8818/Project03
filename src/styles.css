@@ -1668,6 +1668,17 @@ img.buddy {
   font-size: 34px;
 }
 
+/* E17：布丁渲染從 🍮 emoji 換 variant 基底圖（public/cafe/pudding/<variant>.png 56×56），
+   hue-rotate/saturate 套色機制不變 */
+.pud-img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  image-rendering: auto;
+}
+.pud-cell .pud-img { width: 38px; height: 38px; }
+.pud-cell:not(.got) .pud-img { filter: brightness(0); opacity: 0.22; } /* 未擁有＝剪影（同轉蛋機語言） */
+
 .pudding-drop {
   display: flex;
   align-items: center;
@@ -2123,7 +2134,7 @@ img.buddy {
   pointer-events: none;
 }
 .sign-case { bottom: 0; width: 36px; }
-.sign-pudding { bottom: 26px; width: 24px; } /* 中層架上（preview 對圖微調） */
+.sign-pudding { bottom: 26px; width: 22px; } /* 中層架上；E17 換 56×56 方形 variant 基底圖後略縮避免頂到上框 */
 .sign-glass { bottom: 0; width: 36px; }
 
 /* Q 版客人（E9）：今天有練的人出現在窗邊。331×320 源圖、著地線 y=314≈畫布底；顯示高 92px。
