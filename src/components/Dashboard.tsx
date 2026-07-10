@@ -24,7 +24,20 @@ function PersonCard({ s, today, me }: { s: UserState; today: string; me: boolean
       <div className="person-head">
         <span className="person-name">
           {me && <Buddy mood={doneToday ? 'happy' : 'sleep'} size={30} />} {name}
-          {s.wornBadge && <span title={ACHIEVEMENTS.find((a) => a.id === s.wornBadge)?.name}>{ACHIEVEMENTS.find((a) => a.id === s.wornBadge)?.icon}</span>}
+          {s.wornBadge && (
+            <span className="worn-mini" title={ACHIEVEMENTS.find((a) => a.id === s.wornBadge)?.name}>
+              <img
+                src={`/cafe/badges/${s.wornBadge}.png`}
+                alt=""
+                draggable={false}
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  (e.currentTarget.nextElementSibling as HTMLElement | null)?.style.removeProperty('display');
+                }}
+              />
+              <span style={{ display: 'none' }}>{ACHIEVEMENTS.find((a) => a.id === s.wornBadge)?.icon}</span>
+            </span>
+          )}
           <small>（Lv.{levelInfo(s.xp ?? 0).level}）</small>
         </span>
         <span className={`today-badge ${doneToday ? 'ok' : ''}`}>

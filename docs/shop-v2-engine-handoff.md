@@ -19,11 +19,11 @@
 **裝潢 UX**：收回模式（點什麼收什麼＋全部清空＋復原 undoStack）；出餐托盤溢出修（minmax(0,1fr)）；出餐 TTS 改唸 kana（臭豆腐誤讀）。
 **直覺式導引（1ddb3c2 起）**：分頁漸進解鎖（完成 1 輪開進度+五十音、2 輪開對戰場+教材庫，`tabUnlocked`）＋coach mark 系統（`src/components/Coach.tsx`，全域單顆、localStorage 旗標、鏈＝開始→進度→店橫幅→商店→分類都能逛→珍藏用轉蛋→裝潢→黑板）＋裝潢幽靈手示範（含說明標籤）＋文字減量（onboarding 導覽砍除、店長引導 5→1 句）。像素鎖/指示手素材在 `public/cafe/ui/`。
 
-### 0.3 未完/待辦
-1. **夜市出餐難度分級（唯一沒做完的已討論項）**：JJ 拍板「一開始純單品，2 份/複數種隨課程進度慢慢加」。規格調查做完：`buildOrder`（`src/data/serving.ts`）現在從第一場就 12% 三品/30% 雙品；課綱「と/も」在 **L16** 教。建議：`buildOrder` 加 progress 參數（`courseProgress(state).done`），L16 前全單品、L16 後開雙品、再往後開三品——具體門檻 JJ 沒定案，實作前跟他確認。
-2. **JJ 覆核清單**（照單先做、改常數即生效）：①粉圓好感起始亞軒 15/JJ 5（`lib/cat.ts AFFECTION_START`）②貓奴認證綁好感 100 ③首輪 3 假名（`FIRST_RUN_CAP`）。
-3. E9 可選加分②連續天數徽章（streak≥7 ☕/≥30 👑）JJ 沒挑；E16 Tier C 兩條（已讀不回/過馬路請牽手）可延後。
-4. **徽章像素化**：`public/cafe/badges/` 40 枚已到貨，成就 icon 目前仍是 emoji——確認是否要換 img 渲染（xp.ts Achievement.icon＋Dashboard 徽章牆），美術單 E16 說「素材到貨前 emoji 頂著不互卡」。
+### 0.3 未完/待辦（2026-07-10 晚間更新：1/2/4 已結案）
+1. ~~夜市出餐難度分級~~ ✅ 已完成（4f8bb09，寫上輪交接時漏記）：`maxOrderItems`（`src/data/serving.ts`）L16 前全單品、L16（教と/も）起 42% 雙品、L20（N5 完課）起再開 12% 三品。**門檻 JJ 2026-07-10 拍板照現值**；若日後玩起來 L16 跳太抖，備案＝L16–L17 先 0.25、L18 起 0.42。
+2. ~~JJ 覆核清單~~ ✅ 三項 JJ 2026-07-10 均確認照現值：①粉圓好感起始亞軒 15/JJ 5（`lib/cat.ts AFFECTION_START`）②貓奴認證綁好感 100（xp.ts cat-person）③首輪 3 假名（`FIRST_RUN_CAP=3`）。程式碼本來就是這組值，零改動。
+3. E9 可選加分②連續天數徽章（streak≥7 ☕/≥30 👑）JJ 沒挑；E16 Tier C 兩條（已讀不回/過馬路請牽手）可延後——**注意素材已先到貨**（`badges/unread-messages.png`、`crosswalk-hand-in-hand.png`），要做時直接接。
+4. ~~徽章像素化~~ ✅ 已完成：徽章牆本來就是 img＋onError 退 emoji（上輪已接，交接漏記）；本輪補了 PersonCard 頭像列佩戴徽章同款接法（Dashboard.tsx `.worn-mini`）。成就解鎖 toast 是純文字佇列，emoji 留用（美術單 E16 認可）。38 條成就素材全齊。
 5. **部署**：worker 有兩處後端改動（E14 guestLines 合併＋KV 快照備份）→ 下次部署必須 `npx wrangler deploy`。部署由美術監工統一執行，引擎不動手。
 
 ### 0.4 本輪新增的坑（舊坑見 §6，全部仍有效）

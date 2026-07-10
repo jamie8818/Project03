@@ -1062,6 +1062,14 @@ img.buddy {
   filter: none;
 }
 
+/* 頭像列佩戴中徽章縮版（同素材縮 20px，缺檔退 emoji） */
+.worn-mini img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  vertical-align: -4px;
+}
+
 .badge .b-name {
   font-size: 9px;
   color: var(--ink-soft);
