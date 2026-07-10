@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type PointerEvent as RPointerEvent, type SyntheticEvent } from 'react';
+import { Fragment, useEffect, useRef, useState, type PointerEvent as RPointerEvent, type ReactNode, type SyntheticEvent } from 'react';
 import type { UserId, UserState } from '../types.ts';
 import { USERS } from '../lib/store.ts';
 import { sfx } from '../lib/sounds.ts';
@@ -57,6 +57,15 @@ const BOARD_BTN = { left: 243, top: 12, width: 70, height: 50 };
 const FRONT_DOOR_TOP_Y = 341;
 const FRONT_WALL_TOP_Y = 373;
 const GUEST_FEET_Y = 215; // Q 版客人腳底 baseline（吧檯前點餐站位＝JJ 追加；家具深度排序鍵；CSS .cafe-guest bottom 對應 416−215）
+// E15 粉圓貓：4 點位、每 10 分鐘時間決定論輪換（換位不用動畫＝貓的瞬移是特性）。
+// 素材 80×68、著地線 canvas y=62（底留 6px）、畫布中心 x=40 → left=x−40、bottom=416−y−6
+const CAT_SPOTS = [
+  { x: 230, y: 124, pose: 'roll' },  // ① 吧檯檯面右段（收銀機右側空檔，COUNTER_SURFACE_Y）
+  { x: 70, y: 220, pose: 'sit' },    // ② 吧檯前地板綠凳邊（偏左避客人 x98–270）
+  { x: 450, y: 200, pose: 'groom' }, // ③ 窗邊地板曬太陽舔毛
+  { x: 350, y: 370, pose: 'roll' },  // ④ 門口展示櫃左側清空區
+] as const;
+const catSpotNow = () => Math.floor(Date.now() / 600000) % CAT_SPOTS.length;
 
 // 店長熊貓站在吧檯「裡面」（檯後工作區）：上半身露在檯面上、下半身被 counter_front.png 正面板遮住。
 // 中心底部錨定；PANDA_TOP 拉高到檯後 → feet 落檯面前緣、頭露在檯面上（E2，preview 實測值，可微調）。
@@ -129,6 +138,12 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
   const [drag, setDrag] = useState<Drag | null>(null); // 拖曳中的已擺家具
   const [hover, setHover] = useState<{ gx: number; gy: number } | null>(null); // 放置模式的落點預覽格
   const [fgOk, setFgOk] = useState(true); // 前景層（門/牆去背圖）是否存在；美術還沒出時 onError 關掉
+  // E15 粉圓貓：不受 meDone/attend 影響、開店永遠在；每分鐘重算 10 分鐘檔位
+  const [catSpot, setCatSpot] = useState(catSpotNow);
+  useEffect(() => {
+    const iv = setInterval(() => setCatSpot(catSpotNow()), 60000);
+    return () => clearInterval(iv);
+  }, []);
   const onImgLoad = (src: string) => (e: SyntheticEvent<HTMLImageElement>) => {
     const el = e.currentTarget;
     if (el.naturalWidth && aspect[src] === undefined) setAspect((a) => ({ ...a, [src]: el.naturalHeight / el.naturalWidth }));
@@ -314,12 +329,9 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
     else if (rendersInside(displayLayout[i])) insideOrder.push(i); // 依實際落點/變體分流（E7），不是依 hostType 一刀切
     else aboveCounterOrder.push(i);
   }
-  // Q 版客人深度排序（E9 修訂）：以腳底 y 當 baseline 把 aboveCounter 逐件分割成「客人後/客人前」兩批
-  const beforeGuestOrder: number[] = [];
-  const afterGuestOrder: number[] = [];
-  for (const i of aboveCounterOrder) {
-    (frontRowOf(displayLayout[i]) * CELL <= GUEST_FEET_Y ? beforeGuestOrder : afterGuestOrder).push(i);
-  }
+  // 動態實體（Q 版客人／粉圓貓）深度排序：以各自腳底 y 當 baseline，與 aboveCounter 家具逐件交錯
+  // （前緣 y ≤ 腳底的家具畫實體後面、大於的畫前面）；貓的檯面點位 y=124 也走同一條（本層已在 counter_front 後）
+  const cat = CAT_SPOTS[catSpot];
 
   return (
     <div className={`shop-wrap ${variant}`} ref={wrap} style={{ height: viewH * scale }}>
@@ -387,28 +399,52 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
         {/* 地板家具(L1)＋檯面小物(L2)：畫在吧檯正面板之上＝吧檯外家具擋住吧檯、且都畫在店長之上（店長在最後排）。E3
             Q 版客人（E9）以腳底 baseline 加入深度排序（JJ 部署回報②）：前緣 y ≤ 腳底的家具畫客人後面、
             大於的畫前面——逐件分割 aboveCounterOrder、不動 renderOrder 本身。 */}
-        {beforeGuestOrder.map(renderFurn)}
-        {user && (meDone || attend - (meDone ? 1 : 0) > 0) && (
-          <>
-            {meDone && (
-              <div className={`cafe-guest guest-me ${talk ? 'guest-hit' : ''}`} onClick={talk ? clickMyGuest : undefined} title={talk ? '點我設定一句台詞' : undefined}>
-                <img src={`/cafe/guests/${user}.png`} alt="我" draggable={false} />
-                <img className="guest-blink" src={`/cafe/guests/${user}_blink.png`} alt="" draggable={false} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-                {!!shop.guestLines?.[user] && <span className="guest-dot">💬</span>}
-                {guestBubble?.who === 'me' && <span key={guestBubble.n} className="guest-bubble">{guestBubble.text}</span>}
-              </div>
-            )}
-            {attend - (meDone ? 1 : 0) > 0 && (
-              <div className={`cafe-guest guest-peer ${talk ? 'guest-hit' : ''}`} onClick={talk ? clickPeerGuest : undefined}>
-                <img src={`/cafe/guests/${peerId}.png`} alt="對方" draggable={false} />
-                <img className="guest-blink" src={`/cafe/guests/${peerId}_blink.png`} alt="" draggable={false} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-                {!!shop.guestLines?.[peerId] && <span className="guest-dot">💬</span>}
-                {guestBubble?.who === 'peer' && <span key={guestBubble.n} className="guest-bubble">{guestBubble.text}</span>}
-              </div>
-            )}
-          </>
-        )}
-        {afterGuestOrder.map(renderFurn)}
+        {(() => {
+          // 實體（客人們＋貓）依腳底 y 與家具前緣交錯合流（都畫在 counter_front 之後的本層）
+          const guestsJsx = user && (meDone || attend - (meDone ? 1 : 0) > 0) ? (
+            <Fragment key="guests">
+              {meDone && (
+                <div className={`cafe-guest guest-me ${talk ? 'guest-hit' : ''}`} onClick={talk ? clickMyGuest : undefined} title={talk ? '點我設定一句台詞' : undefined}>
+                  <img src={`/cafe/guests/${user}.png`} alt="我" draggable={false} />
+                  <img className="guest-blink" src={`/cafe/guests/${user}_blink.png`} alt="" draggable={false} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                  {!!shop.guestLines?.[user] && <span className="guest-dot">💬</span>}
+                  {guestBubble?.who === 'me' && <span key={guestBubble.n} className="guest-bubble">{guestBubble.text}</span>}
+                </div>
+              )}
+              {attend - (meDone ? 1 : 0) > 0 && (
+                <div className={`cafe-guest guest-peer ${talk ? 'guest-hit' : ''}`} onClick={talk ? clickPeerGuest : undefined}>
+                  <img src={`/cafe/guests/${peerId}.png`} alt="對方" draggable={false} />
+                  <img className="guest-blink" src={`/cafe/guests/${peerId}_blink.png`} alt="" draggable={false} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                  {!!shop.guestLines?.[peerId] && <span className="guest-dot">💬</span>}
+                  {guestBubble?.who === 'peer' && <span key={guestBubble.n} className="guest-bubble">{guestBubble.text}</span>}
+                </div>
+              )}
+            </Fragment>
+          ) : null;
+          const catJsx = (
+            <img
+              key="cat"
+              className="cafe-cat"
+              src={`/cafe/cat/${cat.pose}.png`}
+              alt="粉圓"
+              draggable={false}
+              style={{ left: cat.x - 40, bottom: STAGE_H - cat.y - 6 }}
+            />
+          );
+          const ents = [
+            ...(guestsJsx ? [{ y: GUEST_FEET_Y, jsx: guestsJsx }] : []),
+            { y: cat.y, jsx: catJsx },
+          ].sort((a, b) => a.y - b.y);
+          const out: ReactNode[] = [];
+          let e = 0;
+          for (const i of aboveCounterOrder) {
+            const fy = frontRowOf(displayLayout[i]) * CELL;
+            while (e < ents.length && ents[e].y <= fy) out.push(ents[e++].jsx);
+            out.push(renderFurn(i));
+          }
+          while (e < ents.length) out.push(ents[e++].jsx);
+          return out;
+        })()}
 
         {/* 招牌布丁「食品サンプル展示櫃」（E8 修訂）：門口右側立櫃，木櫃→像素布丁（套口味 hue/sat）→玻璃前板。
             畫在 base-fg 之下＝底緣被前景牆遮（正確景深）、不恆亮（裝潢模式跟其他靠牆家具一樣透出）。

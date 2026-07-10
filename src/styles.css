@@ -2200,6 +2200,15 @@ img.buddy {
 }
 
 .guest-blink { opacity: 0; }
+
+/* 粉圓貓（E15）：80×68 素材 1:1 直用（codex 校準過的相對尺度，別再縮放）；貓常常一動不動＝不加 idle 動畫 */
+.cafe-cat {
+  position: absolute;
+  width: 80px;
+  height: 68px;
+  image-rendering: auto;
+  pointer-events: none;
+}
 .guest-me .guest-blink { animation: guest-blink 4.3s linear infinite; }
 .guest-peer .guest-blink { animation: guest-blink 5.1s linear infinite 1.7s; } /* 週期＋相位都錯開 */
 @keyframes guest-blink {

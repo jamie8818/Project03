@@ -436,6 +436,8 @@ z=furniture 的咖啡器材/小型展示，現實中本來就擺吧檯上，開�
 
 **QC 記錄**：四姿勢並排圖＋「店長＋客人＋粉圓」同框比例模擬＋吧檯檯面/窗邊地板兩張場景模擬，皆已過 codex 審查，結論**「可定案」**（去背乾淨、比例協調、場景融合自然；唯一提出的優化建議「`roll` 調暖」已處理）。
 
+**✅ 引擎已接手完成（2026-07-10）**：`CAT_SPOTS` 四點位照表、`spotIndex=floor(now/600000)%4`（每分鐘 interval 重算檔位）；素材 80×68 1:1 直用、`left=x−40`／`bottom=416−y−6`（著地線緩衝 6px）。繪序把 E9 客人的腳底分割泛化成「實體合流」——客人＋貓都以各自腳底 y 與 aboveCounter 家具逐件交錯（檯面點位 y=124 同一條路，本層已在 counter_front 後）；不受 meDone/attend 影響、banner/裝潢也常駐；無 idle 動畫（貓本來就常常一動不動）、pointer 穿透。可選加分（點擊ニャ）未做。preview 驗證 spot②窗邊 groom＋強制 spot⓪檯面 roll 座標皆正確。
+
 ## E16. 成就大擴充：+30 店鋪型成就＋徽章像素化重做（JJ 拍板「越多越好」，2026-07-10）
 
 **現況**：`src/lib/xp.ts` ACHIEVEMENTS 13 個學習型、emoji icon。**引擎要做**：①check 簽名擴充成可讀 ShopState（layout/stock/coins/扭蛋收集）與新計數器 ②新增 30 成就 ③icon 從 emoji 換像素徽章（素材見下、美術另批交付）④成就頁 grid 對應更新。
