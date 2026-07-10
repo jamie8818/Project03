@@ -61,6 +61,8 @@ GRID = {
     'jpcafe_seat': (3, 3), 'jpcafe_counter': (4, 2), 'jpcafe_wall': (3, 2), 'jpcafe_tabletop': (3, 3),
     # cuckoo_clock 重生：codex 判定屋頂小門的小鳥不夠清楚，單件重生強化鳥形輪廓
     'jpcafe_wallfix': (1, 1),
+    # 粉圓生態系家具 4 件（JJ 拍板，貓窩/貓跳台/貓碗/逗貓棒立架，furniture+surface 共用 view_furniture 合併一 sheet）
+    'catfurn1': (2, 2),
 }
 
 DATA = json.load(open(MANIFEST))

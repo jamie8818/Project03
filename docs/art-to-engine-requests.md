@@ -583,3 +583,57 @@ z=furniture 的咖啡器材/小型展示，現實中本來就擺吧檯上，開�
 - E19：`src/lib/cat.ts` 純函式 `petCat`（判定序＝賭氣→連摸→冷卻→擲骰）＋全常數化；`UserState.catAffection` 隨既有管道同步（含 lastPetAt/sulkUntil 兩時戳）。起始值照單亞軒 15／JJ 5（JJ 待覆核，改常數即生效）。單元測試 7 條全過（公式邊界 30%/90%、cap/floor、視窗滑出、賭氣到期恢復）。
 - E18：呼吸 scaleY 1.00–1.02/3s 掛包裹層（B/fx 幀同步呼吸）；B 幀 JS 隨機時序（groom 0.4s×6 交替+停 3–5s／roll 15–30s 隨機定格 1s／sit 5–8s 顯示 0.6s，互質時距、換位 useEffect 重置）；缺檔 onError 隱藏。摸頭：pet＝hand_pet 拍3下+爽臉 1.2s+❤ 飄升+2s 五格好感條；dodge/sulk＝撇頭 0.8s 無❤手省略；angry＝撇頭+💢；cooldown＝只拍手輕回饋。階級章常駐貓頭頂（fx 播放時讓位）。E15「點貓冒…」可選設計依單作廢。
 - preview 實測：pet/cooldown/angry（−3+賭氣300s+pets 清空）/sulk 必拒（無💢不扣分）四分支＋好感條 3/5 格＝61/100；呼吸/B 幀/階級章渲染確認。cat-person 成就改綁好感 100（Tier B 同批）。
+
+## E21. 粉圓生態系家具影響 NPC 行為：動態輪換點位＋逗貓棒被動加成（JJ 拍板，2026-07-10）
+
+**概念**：呼應 E15 粉圓常駐系統，這批新增 4 件「粉圓生態系」家具（`cat_bed`／`cat_tower`／`cat_bowl`／`teaser_stand`，見 `docs/cafe-furniture-wishlist.md`「粉圓生態系」節、`docs/cafe-catalog.json`）第一次讓**家具擺放影響 NPC（貓）行為**：擺出對應家具＝解鎖新的貓輪換點位，收回＝點位消失。純資料驅動、**不新增存檔欄位**——這 3 個點位每次都是從當下 `ShopState.layout: PlacedItem[]`（已存在）即時算出來的，跟 E15 固定 4 點位的差異只在於這幾個是動態的，不是寫死常數。
+
+**素材確認**：4 件家具素材＋manifest 已交付（front only，無需新素材，已過 codex review 皆 PASS），id 分別為 `cat_bed`／`cat_tower`／`cat_bowl`／`teaser_stand`，皆 `category:'seating'`（走一般分類頁籤、可逛可買，不進私藏轉蛋池，JJ 指定）。sHT 分別 0.72／2.27／0.55／1.86。
+
+**⚠️ `cat_scratcher` 核對結果：catalog 目前查無此 id，也查無任何「巨大貓抓板柱」惡搞家具**（已搜過 `cafe-catalog.json` 全 232 件、`cafe-furniture-wishlist.md`／`cafe-furniture-wishlist-v2.md` 全文，關鍵字「抓」「scratch」「貓抓」「scratcher」均無命中）。這件目前不存在，本節「磨爪」點位**暫無法接線**——設計先寫在下面備用，等這件家具真的生產入庫（id 待定）後，引擎只要照下面同一套模式加一行 mapping 即可，不用再回來問美術。
+
+**① 擴充輪換點位（動態＋固定合併一池）**
+
+現有 `src/components/Shop.tsx` 的 `CAT_SPOTS` 是模組級固定陣列（4 點位）＋`catSpotNow = () => Math.floor(Date.now()/600000) % CAT_SPOTS.length`。改法：
+
+```
+function furnitureCatSpots(layout: PlacedItem[]) {
+  const spots: { x: number; y: number; pose: string; scale?: number }[] = [];
+  for (const p of layout) {
+    if (p.id === 'cat_bed')   spots.push(bedSpot(p));    // pose: 'roll'
+    if (p.id === 'cat_tower') spots.push(towerSpot(p));  // pose: 'sit'
+    if (p.id === 'cat_bowl')  spots.push(bowlSpot(p));   // pose: 'sit'
+    // if (p.id === 'cat_scratcher') spots.push(scratcherSpot(p)); // pose: 'groom'，待該家具入庫
+  }
+  return spots;
+}
+const allCatSpots = [...CAT_SPOTS, ...furnitureCatSpots(layout)]; // 固定 4 ＋動態 0–3（未來磨爪入庫後 0–4）
+const catSpotNow = Math.floor(Date.now() / 600000) % allCatSpots.length;
+```
+
+`allCatSpots` 需要在 `layout` 變動時（擺放/收回家具）重新算一次——比照現有依 layout 重算其他衍生值的作法即可（不需要新的資料流，`layout` 本來就在 component 裡）。`% allCatSpots.length` 公式完全不用改，長度自然吃新的池子大小；家具收回＝該點位從池子消失，若貓當下正好站在那格，維持 JJ 說的**「下一輪換自然離開即可，不用特殊處理」**（下一次 10 分鐘 interval 重算 `catSpotNow` 時，index 對應到新池子裡別的點位，貓自然瞬移走，不用做「貓正站在被收回的家具上」的特判）。
+
+**② 各家具點位錨點公式（用現有 `frontRowOf`/`spriteHeightTiles`/`CELL` 推算，皆為 preview 起點，比照 E15 慣例、請實測微調）**
+
+座標系沿用 E15：`{x,y}` → 貓 `left = x−40`、`bottom = STAGE_H−y−6`（`y` 是「從舞台頂往下量」的 stage 座標，跟家具 `frontRowOf(p)*CELL` 同一套量法）。
+
+| 家具 | 點位名 | pose | 錨點公式 | 備註 |
+|---|---|---|---|---|
+| `cat_bed`（1×1, sHT 0.72） | 窩裡睡 | `roll` | `x = p.gx*CELL + CELL/2`　`y = frontRowOf(p)*CELL − 12` | 窩心壓痕約在矮床視覺中段，貓底錨對齊窩心而非最前緣；額外套 `scale: 0.9` 微縮塞進窩裡（JJ 指定） |
+| `cat_tower`（1×1, sHT 2.27） | 制高點 | `sit` | `x = p.gx*CELL + CELL/2`　`y = frontRowOf(p)*CELL − spriteHeightTiles*CELL + 8` | 頂平台在高聳跳台最上緣，`8px` 是平台板厚內縮估值；柱體窄，貓直接置中即可 |
+| `cat_bowl`（1×1 surface, sHT 0.55） | 碗邊 | `sit` | `x =` 該 placed `cat_bowl` 自己的 `left ± 8`（往有空間的一側偏 8px）　`y =` 沿用 `cat_bowl` 自己算 `bottom` 時用的同一個 host-y（`Shop.tsx` `renderFurn` 裡 `z==='surface'` 那段已經算好 host 桌面高度或地板退回值，直接借用，不用重寫 host 查找） | `cat_bowl` 是 surface 寄生件，可能站在任何 `surface:true` host 桌面上、吧檯檯面、或孤兒退回地板；「同 host 桌面或地面」＝直接讀它自己算出來的 y，不用另外判斷落在哪種 host |
+
+（`cat_scratcher` 待入庫後比照同一模式：`pose='groom'`，柱旁 anchor，格式同上表；建議 y 用類似 `cat_tower` 的「從頂端內縮」或依實際素材比例判斷。）
+
+**③ `teaser_stand` 被動效果：摸頭接受率 +5%**
+
+`src/lib/cat.ts` 的 E19 接受率公式 `30% + 好感×0.6%` 加一個常數：
+
+```
+const TEASER_BONUS = 0.05; // +5%，teaser_stand 擺出時疊加，cap 95%
+const rate = Math.min(0.95, 0.30 + affection * 0.006 + (hasTeaserStand ? TEASER_BONUS : 0));
+```
+
+`hasTeaserStand` 由呼叫端（有 `layout` 的地方）查 `layout.some(p => p.id === 'teaser_stand')` 傳進 `petCat`，或 `petCat` 簽名直接加一個 `boolean` 參數——沿用 E19「全做引擎常數，不寫死魔數」的原則，`TEASER_BONUS` 常數化即可。跟好感公式一起 cap 在 95%（好感 100 時 90%+5%=95%，剛好頂到 cap，數字乾淨不會超過）。
+
+**④ 存檔／範圍**：全部吃 `ShopState.layout`（已存在）＋現有 E15/E19 架構，**無新存檔欄位、無新素材**。家具被收回＝點位即時從輪換池消失（見①），不用額外處理貓的「離場」狀態。

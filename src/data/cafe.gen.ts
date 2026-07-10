@@ -385,6 +385,11 @@ export const CAFE_ITEMS: CafeItem[] = [
   { id: 'coffee_jelly', category: 'tabletop', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 1.48, name: '咖啡凍杯', sprite: '/cafe/catalog/coffee_jelly.png', price: 42, lv: 2, starter: false, flavor: '咖啡凍，苦味留給大人' },
   { id: 'sample_platter', category: 'tabletop', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.52, name: '食品サンプル拼盤', sprite: '/cafe/catalog/sample_platter.png', price: 52, lv: 3, starter: false, flavor: '蠟拼盤，飽的是眼睛' },
   { id: 'service_bell', category: 'tabletop', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.98, name: '桌上服務鈴', sprite: '/cafe/catalog/service_bell.png', price: 24, lv: 1, starter: false, flavor: '服務鈴，按下去像許願' },
+  { id: 'cat_bed', category: 'seating', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 0.72, name: '貓窩', sprite: '/cafe/catalog/cat_bed.png', price: 128, lv: 4, starter: false, flavor: '她的床，你付錢' },
+  { id: 'cat_tower', category: 'seating', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 2.27, name: '貓跳台', sprite: '/cafe/catalog/cat_tower.png', price: 150, lv: 5, starter: false, flavor: '制高點換她坐' },
+  { id: 'cat_bowl', category: 'seating', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.55, name: '貓碗', sprite: '/cafe/catalog/cat_bowl.png', price: 88, lv: 2, starter: false, flavor: '時間到自然有人來' },
+  { id: 'teaser_stand', category: 'seating', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.86, name: '逗貓棒立架', sprite: '/cafe/catalog/teaser_stand.png', price: 108, lv: 3, starter: false, flavor: '主動權在她' },
+  { id: 'cat_scratcher', category: 'seating', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.5, name: '貓抓板柱', sprite: '/cafe/catalog/cat_scratcher.png', price: 98, lv: 3, starter: false, flavor: '給誰用的？（現在知道了）' },
 ];
 
 // 開局免費擺好的家具

@@ -39,6 +39,7 @@ GRID = {
     'personal3fix': (3, 1),
     'jpcafe_seat': (3, 3), 'jpcafe_counter': (4, 2), 'jpcafe_wall': (3, 2), 'jpcafe_tabletop': (3, 3),
     'jpcafe_wallfix': (1, 1),
+    'catfurn1': (2, 2),
 }
 
 
