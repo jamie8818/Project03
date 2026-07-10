@@ -27,7 +27,7 @@
 4. ~~徽章像素化~~ ✅ 已完成：徽章牆本來就是 img＋onError 退 emoji（上輪已接，交接漏記）；本輪補了 PersonCard 頭像列佩戴徽章同款接法（Dashboard.tsx `.worn-mini`）。成就解鎖 toast 是純文字佇列，emoji 留用（美術單 E16 認可）。38 條成就素材全齊。
 5. **部署**：worker 有兩處後端改動（E14 guestLines 合併＋KV 快照備份）→ 下次部署必須 `npx wrangler deploy`。部署由美術監工統一執行，引擎不動手。最後一批（E20+E21+磨爪，前端 only）已知會美術待部署。
 6. **引擎隊列目前清空**：E5–E21 全接完、完成註記全數回填 `art-to-engine-requests.md`。等美術下一批需求或 JJ 新指示。
-7. **每日登入系統（2026-07-11，JJ 拍板後上線）**：熊貓店長來信 30 封輪替（`src/data/panda-mail.ts`）——登入即發 +15🪙、首日＋每滿 7 天送熊貓家具共 6 件、送完改發轉蛋基金 80🪙；貓顧店 streak 保護（漏一天粉圓代守、7 天冷卻，`store.ts nextStreakOf/catGuardBridges`）；首頁 streak 顯示。家具素材已開 **E22 需求單**（`engine-to-art-requests.md`），id 進 catalog 後玩家進店自動入庫（`lib/login.ts grantableGifts` 遇缺即停）。**純前端、免 wrangler deploy**。streak-7/30 徽章素材本就在庫、零改動。
+7. **每日登入系統（2026-07-11，JJ 拍板後上線）**：熊貓店長來信（`src/data/panda-mail.ts`）——**挑信看行為**（`lib/login.ts pickLetter`：第一天開場 > 缺席分級 15/10/7/5/3 天沒練（15+ 走原諒系）> 昨天沒練 > 日常 30 封輪替）；登入即發 +15🪙、首日＋每滿 7 天送熊貓家具共 6 件、送完改發轉蛋基金 80🪙；貓顧店 streak 保護（漏一天粉圓代守、7 天冷卻，`store.ts nextStreakOf/catGuardBridges`）；首頁 streak 顯示。家具素材已開 **E22 需求單**（`engine-to-art-requests.md`），id 進 catalog 後玩家進店自動入庫（`lib/login.ts grantableGifts` 遇缺即停）。**純前端、免 wrangler deploy**。streak-7/30 徽章素材本就在庫、零改動。
 
 ### 0.4 本輪新增的坑（舊坑見 §6，全部仍有效）
 - **合成 pointer 事件**：`setPointerCapture` 對假 pointerId 會 throw（Stage 已包 try/catch；測 serve3 要先 monkeypatch `Element.prototype.setPointerCapture`）；pointerdown/up 同 tick dispatch 會讀到舊 state（React 18 非同步 flush）→ down/up 之間隔 200ms。

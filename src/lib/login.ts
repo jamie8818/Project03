@@ -1,6 +1,18 @@
 // 每日登入結算（熊貓店長來信）：純函式，App 首登觸發、Shop 進店補發家具。
 import type { UserState } from '../types.ts';
-import { GIFT_COIN_FALLBACK, LOGIN_COINS, PANDA_GIFTS, giftsEarned, isGiftDay, letterFor } from '../data/panda-mail.ts';
+import { ABSENT_TIERS, GIFT_COIN_FALLBACK, LOGIN_COINS, MAIL_MISSED_YESTERDAY, PANDA_GIFTS, giftsEarned, isGiftDay, letterFor } from '../data/panda-mail.ts';
+import { daysBetween } from './dates.ts';
+
+/** 依實際行為挑信：第一天開場 > 缺席分級（幾天沒練，由重到輕）> 昨天沒練 > 日常輪替。
+ *  gap＝最後完成練習距今天數（登入時還沒練，昨天有練＝gap 1）；池內用累積天數輪替、同池不連兩天同封。 */
+export function pickLetter(s: Pick<UserState, 'lastDoneDate'>, today: string, days: number): string {
+  if (days <= 1 || !s.lastDoneDate) return letterFor(days); // 還沒開始上課＝不情勒，走日常/開場
+  const gap = daysBetween(s.lastDoneDate, today);
+  const tier = ABSENT_TIERS.find((t) => gap >= t.min);
+  if (tier) return tier.letters[days % tier.letters.length];
+  if (gap === 2) return MAIL_MISSED_YESTERDAY[days % MAIL_MISSED_YESTERDAY.length];
+  return letterFor(days);
+}
 
 export interface LoginResult {
   state: UserState;
@@ -24,7 +36,7 @@ export function applyLogin(s: UserState, today: string): LoginResult | null {
       login: { last: today, days, furn: s.login?.furn ?? 0 },
     },
     days,
-    letter: letterFor(days),
+    letter: pickLetter(s, today, days),
     coins,
     gift,
   };

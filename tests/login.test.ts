@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { catGuardBridges, completeSession, displayStreak, initState, nextStreakOf } from '../src/lib/store.ts';
-import { applyLogin, grantableGifts } from '../src/lib/login.ts';
-import { GIFT_COIN_FALLBACK, LOGIN_COINS, PANDA_GIFTS, PANDA_MAIL, PANDA_MAIL_FIRST, giftsEarned, letterFor } from '../src/data/panda-mail.ts';
+import { applyLogin, grantableGifts, pickLetter } from '../src/lib/login.ts';
+import { ABSENT_TIERS, GIFT_COIN_FALLBACK, LOGIN_COINS, MAIL_MISSED_YESTERDAY, PANDA_GIFTS, PANDA_MAIL, PANDA_MAIL_FIRST, giftsEarned, letterFor } from '../src/data/panda-mail.ts';
 import { addDays } from '../src/lib/dates.ts';
 import type { UserState } from '../src/types.ts';
 
@@ -16,6 +16,26 @@ test('熊貓信：第 1 天開場信、之後 30 封輪替', () => {
   assert.equal(letterFor(2), PANDA_MAIL[0]);
   assert.equal(letterFor(31), PANDA_MAIL[29]);
   assert.equal(letterFor(32), PANDA_MAIL[0]); // 第二輪回第一封（不會再看到開場信）
+});
+
+test('挑信看行為：缺席分級 15/10/7/5/3、昨天沒練、日常輪替', () => {
+  const days = 5; // 累積登入天數只影響池內輪替，不影響選池
+  const at = (lastDone: string) => ({ lastDoneDate: lastDone });
+  const tierOf = (min: number) => ABSENT_TIERS.find((t) => t.min === min)!.letters;
+  // 昨天有練＝日常池
+  assert.equal(pickLetter(at(addDays(TODAY, -1)), TODAY, days), letterFor(days));
+  // 昨天沒練（gap 2）＝抓現行犯池
+  assert.ok(MAIL_MISSED_YESTERDAY.includes(pickLetter(at(addDays(TODAY, -2)), TODAY, days)));
+  // 缺席分級：3-4→3 級、5-6→5 級、7-9→7 級、10-14→10 級、15+→原諒系
+  assert.ok(tierOf(3).includes(pickLetter(at(addDays(TODAY, -3)), TODAY, days)));
+  assert.ok(tierOf(3).includes(pickLetter(at(addDays(TODAY, -4)), TODAY, days)));
+  assert.ok(tierOf(5).includes(pickLetter(at(addDays(TODAY, -6)), TODAY, days)));
+  assert.ok(tierOf(7).includes(pickLetter(at(addDays(TODAY, -9)), TODAY, days)));
+  assert.ok(tierOf(10).includes(pickLetter(at(addDays(TODAY, -14)), TODAY, days)));
+  assert.ok(tierOf(15).includes(pickLetter(at(addDays(TODAY, -40)), TODAY, days)));
+  // 第一天／還沒開始上課＝不情勒
+  assert.equal(pickLetter(at(addDays(TODAY, -40)), TODAY, 1), PANDA_MAIL_FIRST);
+  assert.equal(pickLetter({ lastDoneDate: '' }, TODAY, days), letterFor(days));
 });
 
 test('每日登入：首登發零用錢＋第 1 件家具、同日冪等', () => {
