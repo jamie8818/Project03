@@ -152,3 +152,5 @@
 
 - 尺寸/類別/z 層/price/lv 由你定（是贈品，price 只影響之後想加購的人）；順序＝發放順序，第 1 件最先到玩家手上，建議把最想炫的放前面。
 - 信件彈窗用現成 `board/panel.png` 9-slice，不用新 UI 素材。
+
+**✅ 美術已交付（2026-07-11，commit `c7e4fd8`，已部署 `119e4134`、7 檔 CDN 全 200）**：6 件全入庫（catalog 239）、id 與 `panda-mail.ts` 逐一核對一致。規格：daruma＝furniture 1×1 sHT1.05／grinder＝tabletop surface 件 sHT1.34（兩輪重生壓高度，華麗件 1.35 上限內）／dakimakura＝furniture 1×1 sHT1.52／parasol_table＝furniture 1×1 sHT1.44、**surface:false**（surface 小物會坐 host 視覺頂端＝傘頂會飄空，故不開；若要開需引擎加「檯面高度另指定」欄位再說）／postbox＝furniture 1×1 sHT1.91／neon_sign＝wall 2×1 **帶 anim loop 1.4s**（`panda_neon_sign_anim.png` 亮部脈動幀，走 E20 現成機制）。全批過 codex 審 6/6 PASS（parasol 一輪 FAIL 重生後複審過）。flavor 6 句已進 `cafe-flavor.json`。引擎無待辦、掛帳自動補發即可。
