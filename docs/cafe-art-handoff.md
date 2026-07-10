@@ -58,6 +58,7 @@
 ## 0.8 ⚠️ 美術總結（2026-07-09 晚，多線並行輪；讀這節，蓋過 §0.5–0.7 的「待做」）
 
 **本輪十線全完工（監工 Fable＋Sonnet workers 並行，全過 codex 審）：**
+**➕ 0.8b 第二日總結（2026-07-10 收官）**：catalog **228 件**（台式/惡搞/喫茶30/私藏兩批，句句有 flavor 共 229 句）；**布丁 2.0**（100 味 variant×hue、10 基底 sprite、UR 稀有度＝連續出席掉落）；**粉圓貓常駐**（三姿勢/4點位/10分鐘時間決定論）；**Q 版客人完全體**（116px/吧檯前/深度排序/眨眼/自訂台詞 E14）；**成就 29 枚上線**（Tier B 9＋Tier C 2 延後）＋像素徽章 40；**app icon 布丁版接線**；E1-E17 全閉環。線上版本 68b4aafc。未做：E15 點貓ニャ、E14 像素💬、連續徽章顯示、粉圓第四姿勢。
 - ✅ **§C 吧檯拆層**（見 §0.7）＋**引擎 E4 已接**＋**內側小家電 6 件已入庫**（`hostType:'counter-inside'`：thermos_rack/shaker_station/ice_machine/coffee_scale/espresso_machine/toaster，sHT 1.83–1.91，E4 渲染路徑首批住客）。
 - ✅ **家具擴充**：22 件（wishlist v1 補齊）＋ v2 首波 15 件＋小家電 6 件＋**第二波 20 件** → **catalog 現 93 件**（seasonal 頁籤 4 件）。v2 還有 ~60 件候選可圈下一波。wave-1 六件已補向（§D-3，有向家具 23 件）；shock/no 領結轉紅、welcome 換 cheer 同源圖。**E5/E6 引擎接完＋preview 煙霧測試全過**（台詞↔pose 精確對應、六分頁籤、小家電入目錄）。
 - ✅ **§D/§D-2 四向**：18 件有向（wall/rug/surface/徑向對稱件判定免補有紀錄；cold_drip_tower 生成不穩主動放棄）。**側背視高度歸一**：引擎 aspect 渲染規則下 9 件修到 front/side 內容高比 1.00（`scripts/normalize-facing-height.py`，含 vstretch 路徑）。
