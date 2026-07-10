@@ -610,6 +610,7 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
         {/* 幽靈手示範（僅首次進裝潢）：半透明手拖一張椅子從托盤方向放到地板，循環播放 */}
         {editing && ghostDemo && variant === 'full' && (
           <div className="ghost-demo" aria-hidden>
+            <b className="coach-tip ghost-tip">點下面托盤選家具，再點地板放下</b>
             <div className="ghost-mover">
               <img className="ghost-chair" src="/cafe/catalog/chair_velvet.png" alt="" draggable={false} />
               <img

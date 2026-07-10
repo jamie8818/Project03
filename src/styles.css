@@ -2826,6 +2826,15 @@ img.buddy {
 
 /* 幽靈手示範（首次進裝潢）：半透明椅子被手拖到地板、放下、淡出、循環 */
 .ghost-demo { position: absolute; inset: 0; pointer-events: none; z-index: 7; }
+.ghost-tip { /* 示範動畫的說明標籤（JJ 回報光看手看不懂）；沿用 coach-tip 像素風、置中掛在動畫路徑上方 */
+  position: absolute;
+  left: 50%;
+  top: 205px;
+  bottom: auto;
+  transform: translateX(-50%);
+  font-size: 12px;
+  animation: coach-bob 1.6s ease-in-out infinite;
+}
 .ghost-mover { position: absolute; left: 0; top: 0; animation: ghost-move 2.8s ease-in-out infinite; }
 .ghost-chair { width: 32px; opacity: 0.75; filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.35)); }
 .ghost-hand { position: absolute; width: 22px; left: 14px; top: 14px; }
