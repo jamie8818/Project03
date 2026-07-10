@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { catGuardBridges, completeSession, displayStreak, initState, nextStreakOf } from '../src/lib/store.ts';
 import { applyLogin, grantableGifts } from '../src/lib/login.ts';
-import { GIFT_COIN_FALLBACK, LOGIN_COINS, PANDA_GIFTS, PANDA_MAIL, giftsEarned, letterFor } from '../src/data/panda-mail.ts';
+import { GIFT_COIN_FALLBACK, LOGIN_COINS, PANDA_GIFTS, PANDA_MAIL, PANDA_MAIL_FIRST, giftsEarned, letterFor } from '../src/data/panda-mail.ts';
 import { addDays } from '../src/lib/dates.ts';
 import type { UserState } from '../src/types.ts';
 
@@ -10,11 +10,12 @@ const TODAY = '2026-07-06';
 const fresh = (): UserState => initState('jj', { hira: false, kata: false }, TODAY);
 const withLogin = (days: number, furn = 0): UserState => ({ ...fresh(), login: { last: addDays(TODAY, -1), days, furn } });
 
-test('熊貓信：30 封、依累積天數輪替', () => {
+test('熊貓信：第 1 天開場信、之後 30 封輪替', () => {
   assert.equal(PANDA_MAIL.length, 30);
-  assert.equal(letterFor(1), PANDA_MAIL[0]);
-  assert.equal(letterFor(30), PANDA_MAIL[29]);
-  assert.equal(letterFor(31), PANDA_MAIL[0]); // 第二輪回第一封
+  assert.equal(letterFor(1), PANDA_MAIL_FIRST); // 第一天專屬、不進輪替
+  assert.equal(letterFor(2), PANDA_MAIL[0]);
+  assert.equal(letterFor(31), PANDA_MAIL[29]);
+  assert.equal(letterFor(32), PANDA_MAIL[0]); // 第二輪回第一封（不會再看到開場信）
 });
 
 test('每日登入：首登發零用錢＋第 1 件家具、同日冪等', () => {

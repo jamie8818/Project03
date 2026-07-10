@@ -5,6 +5,10 @@
 export const LOGIN_COINS = 15; // 每日簽到零用錢（比每日完課 50 低一級，登入≠學習）
 export const GIFT_COIN_FALLBACK = 80; // 家具送完後的家具日改發：珍藏轉蛋一抽的錢
 
+// 第 1 天專屬開場信（只出現一次；輪替 30 封從第 2 天開始）
+export const PANDA_MAIL_FIRST =
+  '歡迎第一天報到！我是熊貓店長，這間店名義上的老闆是你，精神股東是我。從今天起我每天寫一封信給你——內容大多是關懷，少數是威脅。見面禮送你一個熊貓不倒翁：它被推倒會自己站起來，希望你學日文也一樣。明天見。';
+
 export const PANDA_MAIL: string[] = [
   '你來了！不是我在說，昨天你沒唸日文的時候，店裡的咖啡自己變苦了。物理上的苦。今天請負責任地學習。',
   '我夢到你 N5 滿分，醒來枕頭上全是竹葉。熊貓感動的時候會掉竹葉，很稀有的，別浪費。',
@@ -48,8 +52,9 @@ export const PANDA_GIFTS: { id: string; name: string }[] = [
   { id: 'panda_postbox', name: '熊貓郵筒' },
 ];
 
-/** 第 days 天（1 起算）讀哪封信：30 封循環 */
-export const letterFor = (days: number): string => PANDA_MAIL[(((days - 1) % PANDA_MAIL.length) + PANDA_MAIL.length) % PANDA_MAIL.length];
+/** 第 days 天（1 起算）讀哪封信：第 1 天開場信、之後 30 封循環 */
+export const letterFor = (days: number): string =>
+  days <= 1 ? PANDA_MAIL_FIRST : PANDA_MAIL[(((days - 2) % PANDA_MAIL.length) + PANDA_MAIL.length) % PANDA_MAIL.length];
 
 /** 是否為家具/大獎日：第 1 天與其後每滿 7 天（1, 8, 15, …） */
 export const isGiftDay = (days: number): boolean => days >= 1 && (days - 1) % 7 === 0;
