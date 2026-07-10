@@ -2754,6 +2754,21 @@ img.buddy {
 .gacha-cell small { font-size: 10px; text-align: center; }
 .gacha-cell:not(.owned) small { opacity: 0.55; }
 
+/* 家具動畫幀（E20）：<id>_anim.png 疊 front 之上。loop＝steps(1) 各半週期硬切
+   （duration/負 delay 由 inline style 帶＝每件自己的 period＋座標相位）；occasional＝JS 切 .on */
+.furn-anim {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  image-rendering: auto;
+}
+.furn-anim.loop { animation: furn-flick steps(1) infinite; }
+.furn-anim.on { opacity: 1; }
+@keyframes furn-flick {
+  0%, 49.99% { opacity: 0; } /* 前半週期露 front */
+  50%, 100% { opacity: 1; } /* 後半週期蓋 anim 幀 */
+}
+
 /* ── 直覺式導引（JJ 2026-07-10）：coach mark／像素鎖／分頁搖頭／幽靈手 ── */
 /* coach mark：脈動光暈＋短標籤；宿主需 position:relative */
 .coach { position: absolute; inset: 0; pointer-events: none; }

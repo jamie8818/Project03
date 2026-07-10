@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState, type PointerEvent as RPointerEvent, type ReactNode, type SyntheticEvent } from 'react';
+import { Fragment, useEffect, useRef, useState, type CSSProperties, type PointerEvent as RPointerEvent, type ReactNode, type SyntheticEvent } from 'react';
 import type { UserId, UserState } from '../types.ts';
 import { USERS } from '../lib/store.ts';
 import { addDailyAmount, bumpDailyStreak, bumpMeta, setShopSnapshot } from '../lib/xp.ts';
@@ -69,7 +69,39 @@ const CAT_SPOTS = [
   { x: 450, y: 200, pose: 'groom' }, // ③ 窗邊地板曬太陽舔毛
   { x: 350, y: 370, pose: 'roll' },  // ④ 門口展示櫃左側清空區
 ] as const;
-const catSpotNow = () => Math.floor(Date.now() / 600000) % CAT_SPOTS.length;
+const catSpotNow = () => Math.floor(Date.now() / 600000); // 10 分鐘檔位窗號；% 池長在使用端算（E21 動態池）
+
+// E20 家具動畫幀：<id>_anim.png 疊在 front 之上（同錨點同尺寸）。
+// loop＝CSS steps(1) 硬切各半週期、負 delay 依座標定相位（多實例錯開，三個魚缸不同步游）；
+// occasional＝JS 排程（等 period×0.6–1.4 隨機 → 顯示 0.6s → 再排）。缺檔 onError 隱藏（同眨眼/貓 B 幀防呆）。
+function AnimOverlay({ it, phaseSeed, style }: { it: CafeItem; phaseSeed: number; style: CSSProperties }) {
+  const anim = it.anim!;
+  const [on, setOn] = useState(false); // occasional 專用
+  useEffect(() => {
+    if (anim.mode !== 'occasional') return;
+    const timers: number[] = [];
+    const later = (fn: () => void, ms: number) => timers.push(window.setTimeout(fn, ms));
+    const cycle = () => later(() => { setOn(true); later(() => { setOn(false); cycle(); }, 600); }, anim.period * (0.6 + Math.random() * 0.8) * 1000);
+    cycle();
+    return () => timers.forEach(clearTimeout);
+  }, [anim.mode, anim.period]);
+  const animSrc = it.sprite.replace(/\.png$/, '_anim.png');
+  const hide = (e: SyntheticEvent<HTMLImageElement>) => { e.currentTarget.style.display = 'none'; };
+  if (anim.mode === 'loop') {
+    const phase = (((phaseSeed * 2654435761) >>> 0) % 1000) / 1000 * anim.period; // 座標種子 → 0–period 穩定相位
+    return (
+      <img
+        className="furn-anim loop"
+        src={animSrc}
+        alt=""
+        draggable={false}
+        onError={hide}
+        style={{ ...style, animationDuration: `${anim.period}s`, animationDelay: `-${phase.toFixed(2)}s` }}
+      />
+    );
+  }
+  return <img className={`furn-anim ${on ? 'on' : ''}`} src={animSrc} alt="" draggable={false} onError={hide} style={style} />;
+}
 
 // 店長熊貓站在吧檯「裡面」（檯後工作區）：上半身露在檯面上、下半身被 counter_front.png 正面板遮住。
 // 中心底部錨定；PANDA_TOP 拉高到檯後 → feet 落檯面前緣、頭露在檯面上（E2，preview 實測值，可微調）。
@@ -149,6 +181,41 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
   const [catSpot, setCatSpot] = useState(catSpotNow);
   // 裝潢幽靈手示範（直覺式導引③）：首次進裝潢播「拖家具→放地板」循環，玩家一動手永久消失
   const [ghostDemo, setGhostDemo] = useState(() => !coachSeen('ghost'));
+  // sprite 視覺高度（提前定義：E21 動態點位也要用）：front＝manifest spriteHeightTiles（決定性）；
+  // 其他向＝當下那張圖的實際比例（onLoad 校正），未載入前用 front 每格高度近似
+  const spriteH = (it: CafeItem, facing?: Facing): number => {
+    if (!facing || facing === 'front') return it.spriteHeightTiles * CELL;
+    const fw = footprintDims(it, facing).w;
+    return fw * CELL * (aspect[spriteFor(it, facing).src] ?? it.spriteHeightTiles / it.w);
+  };
+  /** 檯面小物的 bottom（stage px）：嵌內側/host 桌面/吧檯檯面/孤兒落地四情況（renderFurn 與 E21 貓碗點位共用） */
+  const surfaceBottomFor = (layout: PlacedItem[], q: PlacedItem, qi: number): number => {
+    if (rendersInside(q)) return STAGE_H - COUNTER_INSIDE_Y;
+    const host = hostIndexOf(layout, qi);
+    if (host >= 0) {
+      const hp = layout[host], hit = itemById(hp.id)!;
+      return STAGE_H - (frontRowOf(hp) * CELL - spriteH(hit, hp.facing) + TABLE_INSET);
+    }
+    if (isCounterTop(q.gx, q.gy)) return STAGE_H - COUNTER_SURFACE_Y;
+    return STAGE_H - frontRowOf(q) * CELL;
+  };
+  // E21 粉圓生態系：貓家具擺出＝動態擴充輪換點位（收回即消；純 layout 導出、無新存檔欄位）
+  const catSpots: { x: number; y: number; pose: 'sit' | 'groom' | 'roll'; scale?: number }[] = [...CAT_SPOTS];
+  shop.layout.forEach((q, qi) => {
+    const fr = frontRowOf(q) * CELL;
+    if (q.id === 'cat_bed') {
+      catSpots.push({ x: q.gx * CELL + CELL / 2, y: fr - 12, pose: 'roll', scale: 0.9 }); // 窩心壓痕、微縮塞窩
+    } else if (q.id === 'cat_tower') {
+      const it = itemById(q.id);
+      if (it) catSpots.push({ x: q.gx * CELL + CELL / 2, y: fr - it.spriteHeightTiles * CELL + 8, pose: 'sit' }); // 頂平台（板厚內縮 8px）
+    } else if (q.id === 'cat_bowl') {
+      catSpots.push({ x: q.gx * CELL + CELL / 2 + 8, y: STAGE_H - surfaceBottomFor(shop.layout, q, qi), pose: 'sit' }); // 碗邊、同 host 桌面/地面
+    }
+    // cat_scratcher（磨爪 groom）：家具尚未入庫，入庫後照同模式加一行（見需求單 E21 核對註記）
+  });
+  const catSpotIdx = catSpot % catSpots.length;
+  const catPose = catSpots[catSpotIdx].pose;
+
   // E18 粉圓動畫：B 幀差分（JS 隨機時序、時距互質防同步；換位重置）＋摸頭互動 fx
   const [catB, setCatB] = useState(false);
   const [catFx, setCatFx] = useState<{ kind: 'pet' | 'dodge' | 'angry' | 'hand' | 'bar'; n: number; value: number } | null>(null);
@@ -157,7 +224,7 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
     setCatB(false);
     const timers: number[] = [];
     const later = (fn: () => void, ms: number) => { timers.push(window.setTimeout(fn, ms)); };
-    const pose = CAT_SPOTS[catSpot].pose;
+    const pose = catPose;
     if (pose === 'groom') {
       // 舔毛循環：B/A 0.4s 交替 ×3（共 2.4s）→ 停 3–5s 隨機 → 重觸發
       const cycle = () => {
@@ -181,7 +248,7 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
       later(tilt, 5000 + Math.random() * 3000);
     }
     return () => timers.forEach(clearTimeout);
-  }, [catSpot]);
+  }, [catSpot, catPose]); // 換位或動態池變動（姿勢跟著變）都重置 B 幀計時
   useEffect(() => () => catFxTimers.current.forEach(clearTimeout), []);
   const clickCat = () => {
     if (!onPetCat || catFx) return; // fx 播放中不重入（點擊仍會在下次生效；連摸視窗 60s 綽綽有餘）
@@ -217,13 +284,6 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
   const onImgLoad = (src: string) => (e: SyntheticEvent<HTMLImageElement>) => {
     const el = e.currentTarget;
     if (el.naturalWidth && aspect[src] === undefined) setAspect((a) => ({ ...a, [src]: el.naturalHeight / el.naturalWidth }));
-  };
-  // host 家具 sprite 的視覺高度（stage px）：front＝manifest spriteHeightTiles（§A，決定性）；
-  // 其他向＝當下那張圖的實際比例（onLoad 校正），未載入前先用 front 的每格高度近似
-  const spriteH = (it: CafeItem, facing?: Facing): number => {
-    if (!facing || facing === 'front') return it.spriteHeightTiles * CELL;
-    const fw = footprintDims(it, facing).w;
-    return fw * CELL * (aspect[spriteFor(it, facing).src] ?? it.spriteHeightTiles / it.w);
   };
   const viewH = variant === 'banner' ? BANNER_H : STAGE_H;
 
@@ -307,16 +367,12 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
       // E10 前牆掛件：門面槽（cols8–10）錨門頂 y341、門旁牆槽錨牆頂 y373；一律 front sprite（前牆不轉向）。
       // 高度照 footprint 自然長，超出舞台底緣自然裁切＝掛在近端牆上的透視感
       const door = p.gx >= FRONT_DOOR_COLS.min && p.gx <= FRONT_DOOR_COLS.max;
+      const fwStyle = { left: p.gx * CELL, top: door ? FRONT_DOOR_TOP_Y : FRONT_WALL_TOP_Y, width: dims.w * CELL, height: dims.h * CELL };
       return (
-        <img
-          key={`f${i}`}
-          data-i={i}
-          className={cls}
-          src={it.sprite}
-          alt={it.name}
-          draggable={false}
-          style={{ left: p.gx * CELL, top: door ? FRONT_DOOR_TOP_Y : FRONT_WALL_TOP_Y, width: dims.w * CELL, height: dims.h * CELL }}
-        />
+        <Fragment key={`f${i}`}>
+          <img data-i={i} className={cls} src={it.sprite} alt={it.name} draggable={false} style={fwStyle} />
+          {it.anim && <AnimOverlay it={it} phaseSeed={p.gx * 131 + p.gy * 97 + i} style={fwStyle} />}
+        </Fragment>
       );
     }
     if (it.z === 'furniture') {
@@ -325,60 +381,44 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
       // E11：counterTop 件擺上吧檯時改錨檯面 y（跟檯面小物同高度、counter_front 之後全露）
       const sp = spriteFor(it, p.facing);
       const bottom = rendersOnCounter(p) ? STAGE_H - COUNTER_SURFACE_Y : STAGE_H - frontRowOf(p) * CELL;
+      const fStyle: CSSProperties = { left: p.gx * CELL, bottom, width: dims.w * CELL, height: 'auto' };
       return (
-        <img
-          key={`f${i}`}
-          data-i={i}
-          className={cls}
-          src={sp.src}
-          alt={it.name}
-          draggable={false}
-          onLoad={onImgLoad(sp.src)}
-          onError={(e) => { if (!e.currentTarget.src.endsWith(it.sprite)) e.currentTarget.src = it.sprite; }} // 該向 sprite 還沒生 → 退回 front，不露破圖
-          style={{ left: p.gx * CELL, bottom, width: dims.w * CELL, height: 'auto', transform: sp.flip ? 'scaleX(-1)' : undefined }}
-        />
+        <Fragment key={`f${i}`}>
+          <img
+            data-i={i}
+            className={cls}
+            src={sp.src}
+            alt={it.name}
+            draggable={false}
+            onLoad={onImgLoad(sp.src)}
+            onError={(e) => { if (!e.currentTarget.src.endsWith(it.sprite)) e.currentTarget.src = it.sprite; }} // 該向 sprite 還沒生 → 退回 front，不露破圖
+            style={{ ...fStyle, transform: sp.flip ? 'scaleX(-1)' : undefined }}
+          />
+          {/* E20：anim 幀只對 front 向（差分幀畫的是 front；轉向/鏡像時不疊） */}
+          {it.anim && sp.src === it.sprite && !sp.flip && <AnimOverlay it={it} phaseSeed={p.gx * 131 + p.gy * 97 + i} style={fStyle} />}
+        </Fragment>
       );
     }
     if (it.z === 'surface') {
       // 檯面小物：坐在 host 的視覺桌面上（host 前緣 − host 視覺高 + 桌沿唇）；
       // 吧檯檯面用固定檯面 y；孤兒（舊存檔落地板）退回地板錨定不消失。
-      const host = hostIndexOf(displayLayout, i);
-      let bottom: number;
-      if (rendersInside(p)) {
-        // 嵌內側變體：底錨檯後工作區（跟店長同進深），下半身被 counter_front 遮＝嵌在吧檯裡（E4/E7）
-        bottom = STAGE_H - COUNTER_INSIDE_Y;
-      } else if (host >= 0) {
-        const hp = displayLayout[host], hit = itemById(hp.id)!;
-        bottom = STAGE_H - (frontRowOf(hp) * CELL - spriteH(hit, hp.facing) + TABLE_INSET);
-      } else if (isCounterTop(p.gx, p.gy)) {
-        // 檯面小物坐檯面：row 3（唯一檯面排）前緣 y=COUNTER_SURFACE_Y
-        bottom = STAGE_H - COUNTER_SURFACE_Y;
-      } else {
-        bottom = STAGE_H - frontRowOf(p) * CELL;
-      }
+      // 嵌內側/host 桌面/吧檯檯面/孤兒落地——邏輯抽 surfaceBottomFor（E21 貓碗點位共用）
+      const bottom = surfaceBottomFor(displayLayout, p, i);
+      const sStyle: CSSProperties = { left: p.gx * CELL, bottom, width: CELL, height: 'auto' };
       return (
-        <img
-          key={`f${i}`}
-          data-i={i}
-          className={cls}
-          src={it.sprite}
-          alt={it.name}
-          draggable={false}
-          style={{ left: p.gx * CELL, bottom, width: CELL, height: 'auto' }}
-        />
+        <Fragment key={`f${i}`}>
+          <img data-i={i} className={cls} src={it.sprite} alt={it.name} draggable={false} style={sStyle} />
+          {it.anim && <AnimOverlay it={it} phaseSeed={p.gx * 131 + p.gy * 97 + i} style={sStyle} />}
+        </Fragment>
       );
     }
     // rug（平貼填滿佔格）／wall（貼牆框內）
+    const rwStyle = { left: p.gx * CELL, top: p.gy * CELL, width: dims.w * CELL, height: dims.h * CELL };
     return (
-      <img
-        key={`f${i}`}
-        data-i={i}
-        className={cls}
-        src={it.sprite}
-        alt={it.name}
-        draggable={false}
-        style={{ left: p.gx * CELL, top: p.gy * CELL, width: dims.w * CELL, height: dims.h * CELL }}
-      />
+      <Fragment key={`f${i}`}>
+        <img data-i={i} className={cls} src={it.sprite} alt={it.name} draggable={false} style={rwStyle} />
+        {it.anim && <AnimOverlay it={it} phaseSeed={p.gx * 131 + p.gy * 97 + i} style={rwStyle} />}
+      </Fragment>
     );
   };
 
@@ -402,7 +442,7 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
   }
   // 動態實體（Q 版客人／粉圓貓）深度排序：以各自腳底 y 當 baseline，與 aboveCounter 家具逐件交錯
   // （前緣 y ≤ 腳底的家具畫實體後面、大於的畫前面）；貓的檯面點位 y=124 也走同一條（本層已在 counter_front 後）
-  const cat = CAT_SPOTS[catSpot];
+  const cat = catSpots[catSpotIdx];
 
   return (
     <div className={`shop-wrap ${variant}`} ref={wrap} style={{ height: viewH * scale }}>
@@ -498,7 +538,7 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
             <div
               key="cat"
               className={`cafe-cat ${talk && onPetCat ? 'cat-hit' : ''}`}
-              style={{ left: cat.x - 40, bottom: STAGE_H - cat.y - 6 }}
+              style={{ left: cat.x - 40, bottom: STAGE_H - cat.y - 6, transform: cat.scale ? `scale(${cat.scale})` : undefined, transformOrigin: 'bottom center' }}
               title={talk && onPetCat ? '摸摸粉圓' : undefined}
               onClick={talk && onPetCat ? clickCat : undefined}
             >
@@ -847,8 +887,9 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
           onEditGuestLine={() => setLineEditOpen(true)}
           catValue={me.catAffection?.value ?? AFFECTION_START[me.user]}
           onPetCat={() => {
-            // E19 摸頭判定：純函式擲骰 → 寫回 state（跟既有同步管道走）
-            const res = petCat(me.catAffection, me.user, Date.now());
+            // E19 摸頭判定：純函式擲骰 → 寫回 state（跟既有同步管道走）；E21 逗貓棒被動 +5%
+            const teaser = shop.layout.some((p) => p.id === 'teaser_stand');
+            const res = petCat(me.catAffection, me.user, Date.now(), Math.random, teaser);
             update((s) => ({ ...s, catAffection: res.next }));
             return { outcome: res.outcome, value: res.next.value };
           }}

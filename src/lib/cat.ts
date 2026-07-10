@@ -14,6 +14,8 @@ export const AFFECTION_START: Record<UserId, number> = { yaxuan: 15, jj: 5 };
 export const AFFECTION_COOLDOWN_MS = 1800e3; // 30 分內只有一次「有效摸」
 export const PET_ACCEPT_BASE = 0.3; // 好感 0 的接受率
 export const PET_ACCEPT_PER_POINT = 0.006; // 每點好感 +0.6%（好感 100 → 90%）
+export const TEASER_BONUS = 0.05; // E21：teaser_stand 擺出時的被動加成（+5%）
+export const PET_ACCEPT_CAP = 0.95; // 接受率上限（好感 100＋逗貓棒＝90%+5% 剛好頂到）
 export const PET_GAIN = 2; // 接受後好感增量
 export const ANGRY_PENALTY = 3; // 生氣扣分
 export const SPAM_WINDOW_MS = 60e3; // 連摸懲罰視窗
@@ -34,12 +36,14 @@ export const initAffection = (user: UserId): CatAffection => ({
   sulkUntil: 0,
 });
 
-/** 摸頭判定（純函式）：回傳結果分支＋新狀態。判定順序＝賭氣 → 連摸 → 冷卻 → 擲骰。 */
+/** 摸頭判定（純函式）：回傳結果分支＋新狀態。判定順序＝賭氣 → 連摸 → 冷卻 → 擲骰。
+ *  teaser＝場上擺了 teaser_stand（E21 被動 +5%，呼叫端查 layout 傳入）。 */
 export function petCat(
   cur: CatAffection | undefined,
   user: UserId,
   now: number = Date.now(),
   rng: () => number = Math.random,
+  teaser = false,
 ): { outcome: PetOutcome; next: CatAffection } {
   const a = cur ?? initAffection(user);
   const pets = [...a.pets.filter((t) => now - t < SPAM_WINDOW_MS), now];
@@ -53,7 +57,7 @@ export function petCat(
   }
   if (now - a.lastPetAt < AFFECTION_COOLDOWN_MS) return { outcome: 'cooldown', next: { ...a, pets } };
 
-  const accept = rng() < PET_ACCEPT_BASE + a.value * PET_ACCEPT_PER_POINT;
+  const accept = rng() < Math.min(PET_ACCEPT_CAP, PET_ACCEPT_BASE + a.value * PET_ACCEPT_PER_POINT + (teaser ? TEASER_BONUS : 0));
   if (!accept) return { outcome: 'dodge', next: { ...a, pets } }; // 不更新 lastPetAt＝馬上可再試
   return { outcome: 'pet', next: { ...a, pets, value: Math.min(100, a.value + PET_GAIN), lastPetAt: now } };
 }

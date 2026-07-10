@@ -94,3 +94,16 @@ test('affectionTier：四階級邊界', () => {
   assert.equal(affectionTier(75).badge, '❤❤❤');
   assert.equal(affectionTier(100).name, '家人');
 });
+
+test('E21 逗貓棒被動：+5%、與滿好感疊加剛好頂 95% cap', () => {
+  const zero: CatAffection = { value: 0, lastPetAt: 0, pets: [], sulkUntil: 0 };
+  // 好感 0＋teaser：30%+5%=35%
+  assert.equal(petCat(zero, 'jj', T0, () => 0.349, true).outcome, 'pet');
+  assert.equal(petCat(zero, 'jj', T0, () => 0.351, true).outcome, 'dodge');
+  // 好感 100＋teaser：90%+5%=95%＝cap
+  const maxed: CatAffection = { value: 100, lastPetAt: 0, pets: [], sulkUntil: 0 };
+  assert.equal(petCat(maxed, 'jj', T0, () => 0.949, true).outcome, 'pet');
+  assert.equal(petCat(maxed, 'jj', T0, () => 0.951, true).outcome, 'dodge');
+  // 沒 teaser 行為不變（90%）
+  assert.equal(petCat(maxed, 'jj', T0, () => 0.901, false).outcome, 'dodge');
+});

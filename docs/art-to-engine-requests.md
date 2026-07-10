@@ -677,3 +677,7 @@ const rate = Math.min(0.95, 0.30 + affection * 0.006 + (hasTeaserStand ? TEASER_
 `hasTeaserStand` 由呼叫端（有 `layout` 的地方）查 `layout.some(p => p.id === 'teaser_stand')` 傳進 `petCat`，或 `petCat` 簽名直接加一個 `boolean` 參數——沿用 E19「全做引擎常數，不寫死魔數」的原則，`TEASER_BONUS` 常數化即可。跟好感公式一起 cap 在 95%（好感 100 時 90%+5%=95%，剛好頂到 cap，數字乾淨不會超過）。
 
 **④ 存檔／範圍**：全部吃 `ShopState.layout`（已存在）＋現有 E15/E19 架構，**無新存檔欄位、無新素材**。家具被收回＝點位即時從輪換池消失（見①），不用額外處理貓的「離場」狀態。
+
+**✅ 引擎已接手完成（2026-07-10，E20＋E21 同批）**：
+- E20：`AnimOverlay` 元件疊 `<id>_anim.png`（renderFurn 四分支全接：furniture 僅 front 未鏡像向疊、surface/rug/wall/前牆照疊）；loop＝CSS `steps(1)` 各半週期硬切、**負 animation-delay 依 (gx,gy,index) 座標種子定相位**＝多實例錯開；occasional＝JS 排程（period×0.6–1.4 隨機等待→顯示 0.6s）；缺檔 onError 隱藏。preview 實測三缸金魚同 2.8s 週期、相位 −2.21/−1.94/−0.85s 各自游；風鈴 10s 內閃動一次。
+- E21：貓輪換池改動態＝固定 4＋layout 導出（cat_bed 窩睡 roll+scale0.9／cat_tower 頂平台 sit／cat_bowl 碗邊 sit 借 `surfaceBottomFor` 同 host 高度——該 helper 從 renderFurn surface 分支抽出共用）；`catSpotNow` 改回傳 10 分鐘窗號、`% 池長` 在使用端；B 幀計時 effect deps 加 pose（池變動姿勢跟著換也重置）。teaser_stand 被動 `TEASER_BONUS=0.05` 進 `petCat`（呼叫端查 layout 傳入、`PET_ACCEPT_CAP=0.95`），單元測試含 35%/95% cap 邊界。preview 用池長操縱驗證貓精確落 cat_tower 頂（left456/bottom154.64/sit）。cat_scratcher 未入庫、照單跳過（入庫後加一行 mapping）。npm test 120/120。
