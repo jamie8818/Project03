@@ -210,8 +210,9 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
       if (it) catSpots.push({ x: q.gx * CELL + CELL / 2, y: fr - it.spriteHeightTiles * CELL + 8, pose: 'sit' }); // 頂平台（板厚內縮 8px）
     } else if (q.id === 'cat_bowl') {
       catSpots.push({ x: q.gx * CELL + CELL / 2 + 8, y: STAGE_H - surfaceBottomFor(shop.layout, q, qi), pose: 'sit' }); // 碗邊、同 host 桌面/地面
+    } else if (q.id === 'cat_scratcher') {
+      catSpots.push({ x: q.gx * CELL + CELL / 2 + 10, y: fr, pose: 'groom' }); // 磨爪：柱旁 +10px、腳底＝前緣 baseline（美術勘誤後補）
     }
-    // cat_scratcher（磨爪 groom）：家具尚未入庫，入庫後照同模式加一行（見需求單 E21 核對註記）
   });
   const catSpotIdx = catSpot % catSpots.length;
   const catPose = catSpots[catSpotIdx].pose;
