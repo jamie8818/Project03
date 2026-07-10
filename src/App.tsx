@@ -14,6 +14,7 @@ import Dashboard from './components/Dashboard.tsx';
 import { ACHIEVEMENTS, bumpDailyStreak, levelInfo, newlyUnlocked } from './lib/xp.ts';
 import { COINS } from './data/fun.ts';
 import { setSoundOn, sfx, soundOn } from './lib/sounds.ts';
+import Coach, { PixelLock, dismissCoach, tabUnlocked, type TabId } from './components/Coach.tsx';
 
 type Tab = 'today' | 'arena' | 'kana' | 'lib' | 'stats';
 
@@ -35,6 +36,8 @@ export default function App() {
   const [toasts, setToasts] = useState<string[]>([]);
   const [sound, setSound] = useState(soundOn());
   const prevLevel = useRef<number | null>(null);
+  const [wiggle, setWiggle] = useState<TabId | null>(null); // 點鎖住分頁的搖頭回饋
+  const prevSessions = useRef<number | null>(null); // 解鎖 toast 用
 
   // 金鑰隨連結（?k=…）：有就自動登入並收進 localStorage，之後 cookie 掉了也能自我修復
   useEffect(() => {
@@ -149,6 +152,17 @@ export default function App() {
     if (state.lastDoneDate !== today || peer.lastDoneDate !== today) return;
     update((s) => bumpDailyStreak(s, 'duoDay', 'duoStreak', today, addDays(today, -1)));
   }, [state?.lastDoneDate, peer?.lastDoneDate]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // 分頁解鎖 toast（直覺式導引①）：完成第 1/2 輪的瞬間提示新分頁
+  useEffect(() => {
+    if (!state) return;
+    const n = state.sessionsDone;
+    const prev = prevSessions.current;
+    prevSessions.current = n;
+    if (prev === null) return; // 開站載入不播
+    if (prev < 1 && n >= 1) setToasts((t) => [...t, '📈 解鎖：我們的進度・五十音']);
+    if (prev < 2 && n >= 2) setToasts((t) => [...t, '⚔️ 解鎖：對戰場・教材庫']);
+  }, [state?.sessionsDone]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // 升級偵測
   useEffect(() => {
@@ -270,27 +284,32 @@ export default function App() {
       </main>
 
       <nav className="tabbar">
-        <button className={tab === 'today' ? 'on' : ''} onClick={() => { setTab('today'); setStarted(false); setCramming(false); }}>
-          <span className="tab-icon">✍️</span>今日練習
-        </button>
-        <button className={tab === 'arena' ? 'on' : ''} onClick={() => setTab('arena')}>
-          <span className="tab-icon">⚔️</span>對戰場
-        </button>
-        <button className={tab === 'kana' ? 'on' : ''} onClick={() => setTab('kana')}>
-          <span className="tab-icon">あ</span>五十音
-        </button>
-        <button className={tab === 'lib' ? 'on' : ''} onClick={() => setTab('lib')}>
-          <span className="tab-icon">📚</span>教材庫
-        </button>
-        <button
-          className={tab === 'stats' ? 'on' : ''}
-          onClick={() => {
-            setTab('stats');
-            refreshPeer();
-          }}
-        >
-          <span className="tab-icon">📈</span>我們的進度
-        </button>
+        {([
+          ['today', '✍️', '今日練習', () => { setTab('today'); setStarted(false); setCramming(false); }],
+          ['arena', '⚔️', '對戰場', () => setTab('arena')],
+          ['kana', 'あ', '五十音', () => setTab('kana')],
+          ['lib', '📚', '教材庫', () => setTab('lib')],
+          ['stats', '📈', '我們的進度', () => { setTab('stats'); refreshPeer(); }],
+        ] as [TabId, string, string, () => void][]).map(([id, icon, label, go]) => {
+          const open = tabUnlocked(state, id);
+          return (
+            <button
+              key={id}
+              className={`${tab === id ? 'on' : ''} ${open ? '' : 'locked'}`}
+              onClick={() => {
+                if (!open) { setWiggle(id); setTimeout(() => setWiggle(null), 450); return; } // 鎖著＝晃一下，不解釋（解鎖時會有 toast）
+                dismissCoach(`tab-${id}`);
+                go();
+              }}
+              data-wiggle={wiggle === id || undefined}
+            >
+              <span className="tab-icon">{icon}</span>
+              {label}
+              {!open && <PixelLock />}
+              {open && id === 'stats' && state.sessionsDone >= 1 && <Coach id="tab-stats" label="看看店" dy={-6} />}
+            </button>
+          );
+        })}
       </nav>
       {toasts.length > 0 && <div className="toast">{toasts[0]}</div>}
     </div>

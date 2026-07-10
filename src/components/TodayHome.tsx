@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { UserState } from '../types.ts';
 import { buildDailyPlan, courseProgress, masteryPct } from '../lib/course.ts';
+import Coach, { dismissCoach } from './Coach.tsx';
 
 // 「今日課程」每日固定入口：課程/掌握度雙進度＋今天的份＋開始＋一天一課衝刺。
 // 用既有主題 class（card-stage/stage-tag/goal-bar/primary/hint/tool-check）＋中性 inline 排版，不動 styles.css。
@@ -73,8 +74,9 @@ export default function TodayHome({
         <li style={{ padding: '6px 0' }}>🍮 今日一句</li>
       </ul>
 
-      <button className="primary" onClick={() => onStart(sprint)}>
+      <button className="primary" style={{ position: 'relative' }} onClick={() => { dismissCoach('start'); onStart(sprint); }}>
         {doneToday ? '再練一輪 →' : '開始今天的課 →'}
+        {!doneToday && <Coach id="start" label="從這裡開始" />}
       </button>
 
       {!plan.inKana && !doneToday && (

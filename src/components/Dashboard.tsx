@@ -5,6 +5,7 @@ import { sfx } from '../lib/sounds.ts';
 import { useState } from 'react';
 import { DEFAULT_GOAL, lessonPace, type GoalLevel } from '../lib/goal.ts';
 import { kanaPhaseEta } from '../lib/course.ts';
+import Coach, { dismissCoach } from './Coach.tsx';
 import { HIRAGANA, KATAKANA } from '../data/kana.ts';
 import { isMastered } from '../lib/srs.ts';
 import { ACHIEVEMENTS, levelInfo } from '../lib/xp.ts';
@@ -91,7 +92,10 @@ export default function Dashboard({
 
   return (
     <div className="dashboard">
-      <ShopBanner me={me} peer={peer} today={today} onOpen={() => setShopOpen(true)} />
+      <span style={{ position: 'relative', display: 'block' }}>
+        <ShopBanner me={me} peer={peer} today={today} onOpen={() => { dismissCoach('shop-banner'); setShopOpen(true); }} />
+        <Coach id="shop-banner" label="你們的店" dy={24} />
+      </span>
       <PersonCard s={me} today={today} me />
       {peer ? (
         <PersonCard s={peer} today={today} me={false} />

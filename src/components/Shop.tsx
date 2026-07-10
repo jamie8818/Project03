@@ -43,8 +43,9 @@ import {
   type CafeItem,
   type Z層,
 } from '../lib/shop.ts';
-import { DEFAULT_SHOP, fetchShop, mergeBoard, pushBoard, pushShop, type BoardMsg, type Facing, type PlacedItem, type ShopState } from '../lib/shopstate.ts';
+import { DEFAULT_SHOP, STARTER_IDS, fetchShop, mergeBoard, pushBoard, pushShop, type BoardMsg, type Facing, type PlacedItem, type ShopState } from '../lib/shopstate.ts';
 import { AFFECTION_START, affectionTier, petCat, type PetOutcome } from '../lib/cat.ts';
+import Coach, { coachSeen, dismissCoach } from './Coach.tsx';
 
 const STAGE_W = CAFE.w; // 576
 const STAGE_H = CAFE.h; // 416
@@ -146,6 +147,8 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
   const [fgOk, setFgOk] = useState(true); // 前景層（門/牆去背圖）是否存在；美術還沒出時 onError 關掉
   // E15 粉圓貓：不受 meDone/attend 影響、開店永遠在；每分鐘重算 10 分鐘檔位
   const [catSpot, setCatSpot] = useState(catSpotNow);
+  // 裝潢幽靈手示範（直覺式導引③）：首次進裝潢播「拖家具→放地板」循環，玩家一動手永久消失
+  const [ghostDemo, setGhostDemo] = useState(() => !coachSeen('ghost'));
   // E18 粉圓動畫：B 幀差分（JS 隨機時序、時距互質防同步；換位重置）＋摸頭互動 fx
   const [catB, setCatB] = useState(false);
   const [catFx, setCatFx] = useState<{ kind: 'pet' | 'dodge' | 'angry' | 'hand' | 'bar'; n: number; value: number } | null>(null);
@@ -247,6 +250,7 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
     return { gx: Math.max(0, Math.min(CAFE.cols - 1, Math.floor(sx / CELL))), gy: Math.max(0, Math.min(CAFE.rows - 1, Math.floor(sy / CELL))) };
   };
   const onPointerDown = (e: RPointerEvent<HTMLDivElement>) => {
+    if (ghostDemo) { dismissCoach('ghost'); setGhostDemo(false); } // 動手了＝示範退場
     const c = cellFromEvent(e);
     if (placing) { setHover(c); return; } // 放置托盤家具：預覽落點，放開時擺下
     // 先抓「指到的 sprite」本身（含 overhang 上半，如高腳椅座面）；抓不到再退回 footprint 格
@@ -603,16 +607,33 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
           );
         })()}
 
+        {/* 幽靈手示範（僅首次進裝潢）：半透明手拖一張椅子從托盤方向放到地板，循環播放 */}
+        {editing && ghostDemo && variant === 'full' && (
+          <div className="ghost-demo" aria-hidden>
+            <div className="ghost-mover">
+              <img className="ghost-chair" src="/cafe/catalog/chair_velvet.png" alt="" draggable={false} />
+              <img
+                className="ghost-hand"
+                src="/cafe/ui/hand_point.png"
+                alt=""
+                draggable={false}
+                onError={(e) => { if (!e.currentTarget.src.endsWith('hand_pet.png')) e.currentTarget.src = '/cafe/cat/hand_pet.png'; }}
+              />
+            </div>
+          </div>
+        )}
+
         {/* 牆上伝言板黑板（店面檢視可點，開對話面板）。畫在前景層之上＝不被門牆蓋住、點得到。 */}
         {onBoard && !editing && (
           <button
             type="button"
             className="cafe-board-btn"
             style={BOARD_BTN}
-            onClick={onBoard}
+            onClick={() => { dismissCoach('board'); onBoard(); }}
             aria-label="伝言板"
           >
             <img src="/cafe/board/wall_board.png" alt="伝言板" draggable={false} />
+            {talk && coachSeen('decorate') && <Coach id="board" label="留言給對方" dy={10} />} {/* 排在買→擺之後（教學動線） */}
           </button>
         )}
 
@@ -642,11 +663,7 @@ export function ShopBanner({ me, peer, today, onOpen }: { me: UserState; peer: U
 const SHOP_GIFT_COINS = 350; // 店長私房錢：首次進店的開店禮金（引導最後一句發放，state 旗標防重複）
 
 const INTRO = [
-  '歡迎光臨「日々喫茶」！這間店是你們兩個人共同經營的喔。',
-  '練日文賺 XP 讓店升級解鎖新貨架；打工、對決賺金幣，金幣拿去商店買家具。',
-  '買來的家具進「裝潢」模式擺進店裡：點托盤選一件→點格子放下；點店裡的家具可以搬走或收回。兩個人一起裝潢同一間店……拜託弄得可愛一點（合掌）。',
-  '牆上那塊黑板是「伝言板」——點它就能留言給對方，想寫什麼都行，用日文寫加分（我會偷看）。',
-  `啊、還有這個——我的私房錢 🪙${SHOP_GIFT_COINS}，拿去當開店資金，先去🛍商店挑點什麼吧。噓，這是我們之間的秘密。`,
+  `歡迎光臨「日々喫茶」！這間店是你們兩個人共同經營的——這是我的私房錢 🪙${SHOP_GIFT_COINS}，拿去當開店資金，先去🛍商店挑點什麼吧（噓）。`,
 ];
 
 function ShopIntro({ onDone }: { onDone: () => void }) {
@@ -852,8 +869,16 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
 
       <div className="seg" style={{ marginTop: 12 }}>
         <button className={mode === 'view' ? 'on' : ''} onClick={() => setMode('view')}>店面</button>
-        <button className={mode === 'shop' ? 'on' : ''} onClick={() => setMode('shop')}>🛍 商店</button>
-        <button className={mode === 'decorate' ? 'on' : ''} onClick={() => setMode('decorate')}>🔧 裝潢</button>
+        <button className={mode === 'shop' ? 'on' : ''} style={{ position: 'relative' }} onClick={() => { dismissCoach('shop-buy'); setMode('shop'); }}>
+          🛍 商店
+          {mode === 'view' && me.coins >= 24 && <Coach id="shop-buy" label="買家具" dy={-4} />}
+        </button>
+        <button className={mode === 'decorate' ? 'on' : ''} style={{ position: 'relative' }} onClick={() => { dismissCoach('decorate'); setMode('decorate'); }}>
+          🔧 裝潢
+          {mode === 'view' && coachSeen('shop-buy') && Object.keys(shop.stock).some((id) => (shop.stock[id] ?? 0) > 0 && !STARTER_IDS.includes(id)) && (
+            <Coach id="decorate" label="擺進店裡" dy={-4} />
+          )}
+        </button>
       </div>
 
       {mode === 'view' && <ViewPanel me={me} peer={peer} today={today} lv={lv} shop={shop} />}
