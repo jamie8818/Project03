@@ -63,6 +63,8 @@ GRID = {
     'jpcafe_wallfix': (1, 1),
     # 粉圓生態系家具 4 件（JJ 拍板，貓窩/貓跳台/貓碗/逗貓棒立架，furniture+surface 共用 view_furniture 合併一 sheet）
     'catfurn1': (2, 2),
+    # E22 每日登入週禮物：熊貓店長無厘頭家具 6 件（furniture/surface 5 件一張、wall 霓虹燈獨立）
+    'pandagift1': (3, 2), 'pandawall1': (1, 1), 'pandagift1fix': (2, 1), 'pandagift1fix2': (1, 1),
 }
 
 DATA = json.load(open(MANIFEST))

@@ -40,6 +40,7 @@ GRID = {
     'jpcafe_seat': (3, 3), 'jpcafe_counter': (4, 2), 'jpcafe_wall': (3, 2), 'jpcafe_tabletop': (3, 3),
     'jpcafe_wallfix': (1, 1),
     'catfurn1': (2, 2),
+    'pandagift1': (3, 2), 'pandawall1': (1, 1), 'pandagift1fix': (2, 1), 'pandagift1fix2': (1, 1),
 }
 
 

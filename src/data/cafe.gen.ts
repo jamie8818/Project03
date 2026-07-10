@@ -391,6 +391,12 @@ export const CAFE_ITEMS: CafeItem[] = [
   { id: 'cat_bowl', category: 'seating', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 0.55, name: '貓碗', sprite: '/cafe/catalog/cat_bowl.png', price: 88, lv: 2, starter: false, flavor: '時間到自然有人來' },
   { id: 'teaser_stand', category: 'seating', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.86, name: '逗貓棒立架', sprite: '/cafe/catalog/teaser_stand.png', price: 108, lv: 3, starter: false, flavor: '主動權在她' },
   { id: 'cat_scratcher', category: 'seating', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.5, name: '貓抓板柱', sprite: '/cafe/catalog/cat_scratcher.png', price: 98, lv: 3, starter: false, flavor: '給誰用的？（現在知道了）' },
+  { id: 'panda_daruma', category: 'seating', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.05, name: '熊貓不倒翁', sprite: '/cafe/catalog/panda_daruma.png', price: 128, lv: 3, starter: false, flavor: '推倒會自己爬起來，號稱學習意志，沒人看過它倒' },
+  { id: 'bamboo_grinder', category: 'tabletop', z: 'surface', w: 1, h: 1, surface: false, spriteHeightTiles: 1.34, name: '竹筒磨豆機', sprite: '/cafe/catalog/bamboo_grinder.png', price: 96, lv: 4, starter: false, flavor: '竹香拿鐵祕密兵器，祕密到沒人點過' },
+  { id: 'panda_dakimakura', category: 'seating', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.52, name: '店長等身抱枕', sprite: '/cafe/catalog/panda_dakimakura.png', price: 200, lv: 6, starter: false, flavor: '店長本人監修，眼神一比一，抱著有罪惡感' },
+  { id: 'bamboo_parasol_table', category: 'seating', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.44, name: '竹傘圓桌', sprite: '/cafe/catalog/bamboo_parasol_table.png', price: 220, lv: 6, starter: false, flavor: '傘頂附一隻熊貓，趕不走，算贈品' },
+  { id: 'panda_postbox', category: 'seating', z: 'furniture', w: 1, h: 1, surface: false, spriteHeightTiles: 1.91, name: '熊貓郵筒', sprite: '/cafe/catalog/panda_postbox.png', price: 150, lv: 4, starter: false, flavor: '情勒信的源頭，頭上那封是今天的' },
+  { id: 'panda_neon_sign', category: 'wall', z: 'wall', w: 2, h: 1, surface: false, spriteHeightTiles: 1.0, name: '熊貓霓虹燈', sprite: '/cafe/catalog/panda_neon_sign.png', price: 168, lv: 5, starter: false, anim: { mode: 'loop', period: 1.4 }, flavor: '本日も営業中，比老闆晚睡' },
 ];
 
 // 開局免費擺好的家具
