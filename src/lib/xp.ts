@@ -71,7 +71,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'duel-5streak', icon: '👑', name: '五連勝', desc: '對決連勝 5 場', check: (s) => (s.duel?.streak ?? 0) >= 5 },
   { id: 'song-collector', icon: '🎤', name: '歌詞收藏家', desc: '從歌詞加入 10 個單字', check: (s) => Object.keys(s.vocab ?? {}).length >= 10 },
   // ── E16 Tier A 店鋪型（讀 shopSnap；沒逛過店前一律未達成）──
-  { id: 'first-deco', icon: '🪑', name: '初擺設', desc: '第一次擺出任何家具', check: () => (shopSnap?.layout.length ?? 0) >= 1 },
+  // 開局店面本來就有 starter 家具；必須由裝潢操作寫入旗標，不能只看 layout 非空。
+  { id: 'first-deco', icon: '🪑', name: '初擺設', desc: '完成第一次家具擺設', check: (s) => metaOf(s, 'shopDecorated') >= 1 },
   { id: 'interior-designer', icon: '🛋️', name: '室內設計師', desc: '同時擺出 30 件家具', check: () => (shopSnap?.layout.length ?? 0) >= 30 },
   { id: 'shark-keeper', icon: '🦈', name: '鯊魚飼育員', desc: '同時擺出 3 隻鯊魚抱枕', check: () => placedN('shark_plush') >= 3 },
   { id: 'gacha-complete', icon: '🎰', name: '完売御礼', desc: '珍藏・私物扭蛋全收集', check: () => gachaComplete() },

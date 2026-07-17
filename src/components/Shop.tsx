@@ -12,11 +12,11 @@ import {
   CAFE_ITEMS,
   CATEGORY_LABELS,
   PLACE,
-  SHOP_ITEMS,
   Z_TOP_ROW,
   availableFacings,
   canPlace,
   canToggleInside,
+  dailyShopItems,
   footprintDims,
   frontRowOf,
   guestIndicesOf,
@@ -27,7 +27,6 @@ import {
   itemById,
   FRONT_DOOR_COLS,
   nextFacing,
-  nextItemLv,
   ownedKinds,
   PERSONAL_GACHA_COST,
   pickShopLine,
@@ -1019,8 +1018,17 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
       </div>
 
       {mode === 'view' && <ViewPanel me={me} peer={peer} today={today} lv={lv} shop={shop} />}
-      {mode === 'shop' && <ShopPanel me={me} lv={lv} shop={shop} update={update} commitShop={commitShop} />}
-      {mode === 'decorate' && <DecoratePanel me={me} attend={attend} meDone={meDone} shop={shop} saveShop={saveShop} />}
+      {mode === 'shop' && <ShopPanel me={me} today={today} shop={shop} update={update} commitShop={commitShop} />}
+      {mode === 'decorate' && (
+        <DecoratePanel
+          me={me}
+          attend={attend}
+          meDone={meDone}
+          shop={shop}
+          saveShop={saveShop}
+          onDecorated={() => update((s) => (s.meta?.shopDecorated ? s : bumpMeta(s, 'shopDecorated')))}
+        />
+      )}
 
       {boardOpen && <DengonBoard me={me} board={shop.board ?? []} onSend={sendBoard} onClose={() => setBoardOpen(false)} />}
     </div>
@@ -1150,7 +1158,6 @@ function ViewPanel({ me, peer, today, lv, shop }: { me: UserState; peer: UserSta
   const otherName = USERS.find((u) => u.id !== me.user)!.name;
   const meDone = me.lastDoneDate === today;
   const peerDone = peer?.lastDoneDate === today;
-  const nu = nextItemLv(lv);
   const ownedCount = ownedKinds(shop);
   return (
     <>
@@ -1164,26 +1171,25 @@ function ViewPanel({ me, peer, today, lv, shop }: { me: UserState; peer: UserSta
           今日開店：{me.user === 'jj' ? 'JJ' : '亞軒'} {meDone ? '✓' : '未'}｜{otherName} {peerDone ? '✓' : '未'}
           {attendance(me, peer, today) === 2 ? '——客滿！' : attendance(me, peer, today) === 1 ? '——一人開店' : '——還沒開店'}
         </p>
-        <p className="goal-note">升級解鎖商店新貨架{nu ? `（下個 Lv.${nu}）` : '（全解鎖！）'}；金幣去🛍商店買、🔧裝潢擺進店。</p>
+        <p className="goal-note">練習提升店等級；商店每天換 10 件貨，賺金幣去🛍商店買、再到🔧裝潢擺進店。</p>
       </div>
       <div className="badge-wall" style={{ marginTop: 12 }}>
         <h3>收藏（{ownedCount}/{CAFE_ITEMS.length} 件）</h3>
-        <p className="legend">練習升級解鎖貨架、賺金幣購買，越裝越豐富。點店長可以聊天。</p>
+        <p className="legend">每天逛新貨、賺金幣購買，越裝越豐富。點店長可以聊天。</p>
       </div>
     </>
   );
 }
 
-// ── 商店面板：依 category 分類購買（E6，中文名見 CATEGORY_LABELS）──
-function ShopPanel({ me, lv, shop, update, commitShop }: { me: UserState; lv: number; shop: ShopState; update: (fn: (s: UserState) => UserState) => void; commitShop: (s: ShopState) => Promise<void> }) {
-  const [tab, setTab] = useState(0);
+// ── 商店面板：一般貨架每日固定隨機 10 件；珍藏・私物保留獨立轉蛋池。──
+function ShopPanel({ me, today, shop, update, commitShop }: { me: UserState; today: string; shop: ShopState; update: (fn: (s: UserState) => UserState) => void; commitShop: (s: ShopState) => Promise<void> }) {
+  const [tab, setTab] = useState<'daily' | 'gacha'>('daily');
   const [msg, setMsg] = useState('');
   const [buying, setBuying] = useState(false);
-  const items = SHOP_ITEMS.filter((it) => it.category === CATEGORY_LABELS[tab][0]);
+  const items = dailyShopItems(today);
 
   const buy = async (item: CafeItem) => {
     if (buying) return;
-    if (lv < item.lv) { setMsg(`要店 Lv.${item.lv} 才進這件貨`); return; }
     if (me.coins < item.price) { setMsg(`金幣不夠（差 ${item.price - me.coins}）`); return; }
     // 只加庫存、不自動擺放（進裝潢托盤，讓玩家自己擺）；可重複買
     const next = addStockForUser(shop, me.user, item.id);
@@ -1207,57 +1213,48 @@ function ShopPanel({ me, lv, shop, update, commitShop }: { me: UserState; lv: nu
   return (
     <>
       <div className="coin-bar"><span className="coin-chip">🪙 {me.coins}</span></div>
-      {/* 首購教學（JJ 追加）：先框分類列「都能逛」→ 點過任一分類後指珍藏籤「用轉蛋」（同畫面接棒：
-          dismiss 綁在會觸發 re-render 的 setTab 上，珍藏 coach 的 render 條件才會重新評估） */}
-      <div className="seg" style={{ position: 'relative' }}>
-        {CATEGORY_LABELS.map(([key, label], i) => (
-          <button
-            key={key}
-            className={tab === i ? 'on' : ''}
-            style={key === 'personal' ? { position: 'relative' } : undefined}
-            onClick={() => { dismissCoach('shop-cats'); if (key === 'personal') dismissCoach('shop-gacha'); setTab(i); setMsg(''); }}
-          >
-            {label}
-            {key === 'personal' && coachSeen('shop-cats') && <Coach id="shop-gacha" label="這區用轉蛋開" dy={-4} />}
-          </button>
-        ))}
-        <Coach id="shop-cats" label="每種分類都逛得到" dy={-4} />
+      <div className="seg">
+        <button className={tab === 'daily' ? 'on' : ''} onClick={() => { setTab('daily'); setMsg(''); }}>
+          今日進貨（10）
+        </button>
+        <button className={tab === 'gacha' ? 'on' : ''} onClick={() => { setTab('gacha'); setMsg(''); }}>
+          珍藏轉蛋
+        </button>
       </div>
       {msg && <p className="hint">{msg}</p>}
-      {CATEGORY_LABELS[tab][0] === 'personal' ? (
+      {tab === 'gacha' ? (
         // E12：珍藏・私物不賣、用轉的（ガチャガチャ）
         <GachaCorner me={me} shop={shop} update={update} commitShop={commitShop} />
-      ) : items.length === 0 ? (
-        <p className="hint">這個分類目前沒有貨（之後會補上）。</p>
       ) : (
-        <div className="catalog">
-          {items.map((item) => {
-            const owned = shop.stock[item.id] ?? 0;
-            const locked = lv < item.lv;
-            return (
-              <div key={item.id} className={`cat-item ${locked ? 'locked' : ''}`}>
-                <div className="ci-preview"><img src={item.sprite} alt="" draggable={false} /></div>
-                <div className="ci-body">
-                  <b>{item.name}</b>
-                  {item.flavor && <small className="ci-flavor">{item.flavor}</small>}
-                  <small>{item.w}×{item.h} 格{owned > 0 ? `　庫存 ×${owned}` : ''}</small>
-                </div>
-                {locked ? (
-                  <span className="ci-lock">🔒 Lv.{item.lv}</span>
-                ) : (
+        <>
+          <div className="daily-stock-note">
+            <b>📦 今日進貨 10 件</b>
+            <span>{today}・台灣時間明天換貨</span>
+          </div>
+          <div className="catalog">
+            {items.map((item) => {
+              const owned = shop.stock[item.id] ?? 0;
+              return (
+                <div key={item.id} className="cat-item">
+                  <div className="ci-preview"><img src={item.sprite} alt="" draggable={false} /></div>
+                  <div className="ci-body">
+                    <b>{item.name}</b>
+                    {item.flavor && <small className="ci-flavor">{item.flavor}</small>}
+                    <small>{item.w}×{item.h} 格{owned > 0 ? `　庫存 ×${owned}` : ''}</small>
+                  </div>
                   <button className="ci-buy" onClick={() => buy(item)} disabled={buying}>🪙 {item.price}</button>
-                )}
-              </div>
-            );
-          })}
-        </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
       )}
     </>
   );
 }
 
 // ── 裝潢面板：格子擺家具＋招牌布丁 ──
-function DecoratePanel({ me, attend, meDone, shop, saveShop }: { me: UserState; attend: number; meDone: boolean; shop: ShopState; saveShop: (s: ShopState) => void }) {
+function DecoratePanel({ me, attend, meDone, shop, saveShop, onDecorated }: { me: UserState; attend: number; meDone: boolean; shop: ShopState; saveShop: (s: ShopState) => void; onDecorated: () => void }) {
   const [placing, setPlacing] = useState<string | null>(null);
   const [facing, setFacing] = useState<Facing>('front'); // 正在放的朝向（旋轉鍵）
   const [selected, setSelected] = useState<number | null>(null); // 選取的「已擺」家具 index（就地旋轉/收回）
@@ -1287,6 +1284,7 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop }: { me: UserState; 
       return { ...p, top: true };
     });
     saveShop({ ...shop, layout });
+    onDecorated();
     sfx.correct(1);
   };
   const rotatePlaced = () => {
@@ -1297,6 +1295,7 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop }: { me: UserState; 
     const next = rotateHost(shop.layout, selected, nf);
     if (!next) { sfx.wrong(); return; }
     saveShop({ ...shop, layout: next });
+    onDecorated();
     sfx.correct(1);
   };
 
@@ -1313,6 +1312,7 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop }: { me: UserState; 
     const placed = facing === 'front' ? { id: placing, gx, gy } : { id: placing, gx, gy, facing };
     const nextLayout = [...shop.layout, placed];
     saveShop({ ...shop, layout: nextLayout });
+    onDecorated();
     sfx.correct(1);
     // 還有同款庫存就保持選取、可連續擺；擺完就取消
     const remaining = (shop.stock[placing] ?? 0) - nextLayout.filter((p) => p.id === placing).length;
@@ -1356,6 +1356,7 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop }: { me: UserState; 
     const guests = new Set(guestIndicesOf(shop.layout, index));
     const layout = shop.layout.map((q, i) => (i === index ? { ...q, gx, gy } : guests.has(i) ? { ...q, gx: q.gx + dx, gy: q.gy + dy } : q));
     saveShop({ ...shop, layout });
+    onDecorated();
     sfx.correct(1);
     setSelected(index);
   };

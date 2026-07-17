@@ -126,7 +126,7 @@ export function buildDailyPlan(state: UserState, today: string, sprint = false):
     newGrammar = [];
   } else if (lessonComplete(lesson, state)) {
     // 全部課程學完 → vocab.ts 補充 deck 尾巴（此時 newV 只剩尾巴）
-    newVocab = sprint ? newV : newV.slice(0, vCap);
+    newVocab = sprint && !firstRun ? newV : newV.slice(0, vCap);
     newGrammar = [];
   } else {
     // 課程階段：新內容只從「當前課」出、不跨課搶跑（課序）；該課單字全教完才出文法
@@ -136,7 +136,7 @@ export function buildDailyPlan(state: UserState, today: string, sprint = false):
     const lessonGIds = lessonGrammarCards(lesson)
       .map((p) => grammarCardIdOf(p))
       .filter((id) => !has(state, id));
-    if (sprint) {
+    if (sprint && !firstRun) {
       newVocab = lessonVIds;
       newGrammar = lessonGIds;
     } else {
@@ -147,8 +147,8 @@ export function buildDailyPlan(state: UserState, today: string, sprint = false):
 
   // 小測：補強日考 quizFail 那課；否則當前課內容看完但還沒過→考本課
   let quizLessonNo: number | null = null;
-  if (mode === 'reinforce' && state.quizFail) quizLessonNo = state.quizFail.no;
-  else if (!kana && lessonContentTaught(lesson, state) && !(state.lessonsPassed?.includes(lesson.no) ?? false))
+  if (!firstRun && mode === 'reinforce' && state.quizFail) quizLessonNo = state.quizFail.no;
+  else if (!firstRun && !kana && lessonContentTaught(lesson, state) && !(state.lessonsPassed?.includes(lesson.no) ?? false))
     quizLessonNo = lesson.no;
   const quizLesson = quizLessonNo != null ? LESSONS.find((l) => l.no === quizLessonNo) ?? null : null;
 
@@ -161,7 +161,7 @@ export function buildDailyPlan(state: UserState, today: string, sprint = false):
     newGrammar,
     dueCount: due.length,
     light,
-    showDialog: !kana && lesson.dialog.length > 0,
+    showDialog: !firstRun && !kana && lesson.dialog.length > 0,
     dialog: lesson.dialog,
     quizLessonNo,
     quiz: quizLesson?.quiz ?? [],

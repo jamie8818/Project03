@@ -2608,6 +2608,24 @@ img.buddy {
   margin: 10px 0 6px;
 }
 
+.daily-stock-note {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin: 10px 0 8px;
+  padding: 10px 12px;
+  color: var(--ink);
+  background: var(--bg-deep);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.daily-stock-note span {
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+}
+
 .catalog {
   display: flex;
   flex-direction: column;

@@ -1,4 +1,4 @@
-// 喫茶店共同經營：店等級 = 兩人合計 XP 推進，等級解鎖商店貨架；金幣買家具、裝潢擺進店。
+// 喫茶店共同經營：店等級 = 兩人合計 XP 推進；一般貨架每日換 10 件，金幣買家具、裝潢擺進店。
 // 素材＝JJ 在 Tiled 手畫的咖啡廳，scripts/build-cafe-assets.py 切成 public/cafe/。
 // 場景邏輯座標 576×416（18×13 格 32px），資料在 data/cafe.gen.ts。
 import {
@@ -12,6 +12,7 @@ import {
 import { NAME_OVERRIDES, PRICE_OVERRIDES } from '../data/cafe-overrides.ts';
 import { SHOP_LINES_GEN, type ShopLine } from '../data/shop-lines.gen.ts';
 import type { Facing, PlacedItem, ShopState } from './shopstate.ts';
+import { hashSeed, mulberry32 } from './seeded.ts';
 export type { ShopLine } from '../data/shop-lines.gen.ts';
 
 export { BLOCKED, CAFE, CATEGORY_LABELS, PLACE, Z_RANK, Z_TOP_ROW } from '../data/cafe.gen.ts';
@@ -41,16 +42,26 @@ export function shopTitle(lv: number): string {
 
 // ── 家具目錄查詢 ──
 export const ITEM_BY_ID: Record<string, CafeItem> = Object.fromEntries(CAFE_ITEMS.map((i) => [i.id, i]));
-export const SHOP_ITEMS: CafeItem[] = CAFE_ITEMS.filter((i) => !i.starter); // 進商店販售的（排除開局贈品）
+// 一般貨架排除開局贈品與「珍藏・私物」；後者保留在不重複的專屬轉蛋池。
+export const SHOP_ITEMS: CafeItem[] = CAFE_ITEMS.filter((i) => !i.starter && i.category !== 'personal');
+export const DAILY_SHOP_SIZE = 10;
+
+/**
+ * 每日一般貨架：日期相同就拿到同一批 10 件（兩位玩家、重整頁面皆一致），隔日換 seed。
+ * 先按 id 排序，避免資料檔換行／重排意外改變當天貨單；不消耗庫存，可重複購買。
+ */
+export function dailyShopItems(today: string): CafeItem[] {
+  const rng = mulberry32(hashSeed(`daily-shop:v1:${today}`));
+  const items = [...SHOP_ITEMS].sort((a, b) => a.id.localeCompare(b.id));
+  for (let i = items.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+  return items.slice(0, DAILY_SHOP_SIZE);
+}
 
 export function itemById(id: string): CafeItem | undefined {
   return ITEM_BY_ID[id];
-}
-
-/** 下一個因升級才會解鎖的貨架等級（顯示「還差幾級」用），全解鎖回 null */
-export function nextItemLv(lv: number): number | null {
-  const lvs = SHOP_ITEMS.filter((i) => i.lv > lv).map((i) => i.lv);
-  return lvs.length ? Math.min(...lvs) : null;
 }
 
 // ── 店長在店裡的碎念（依營業狀態換話題；點熊貓會再講一句）──

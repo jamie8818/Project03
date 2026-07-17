@@ -2,8 +2,9 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   CAFE_ITEMS,
+  DAILY_SHOP_SIZE,
   SHOP_ITEMS,
-  nextItemLv,
+  dailyShopItems,
   pickShopLine,
   poseForLine,
   shopLevel,
@@ -43,14 +44,21 @@ test('咖啡廳家具目錄：id 不重複、每件有 footprint 與價/等級�
   assert.ok(CAFE_ITEMS.some((i) => i.starter), '應有開局家具');
 });
 
-test('商店販售清單排除開局贈品', () => {
+test('一般貨架排除開局贈品與珍藏轉蛋品', () => {
   assert.ok(SHOP_ITEMS.length > 0);
   assert.ok(SHOP_ITEMS.every((i) => !i.starter), '商店不該賣開局贈品');
-  assert.equal(SHOP_ITEMS.length, CAFE_ITEMS.filter((i) => !i.starter).length);
+  assert.ok(SHOP_ITEMS.every((i) => i.category !== 'personal'), '珍藏・私物只進專屬轉蛋池');
+  assert.equal(SHOP_ITEMS.length, CAFE_ITEMS.filter((i) => !i.starter && i.category !== 'personal').length);
 });
 
-test('nextItemLv：回下一個解鎖等級、全解鎖回 null', () => {
-  const first = nextItemLv(1);
-  assert.ok(first === null || first > 1);
-  assert.equal(nextItemLv(999), null);
+test('每日商店：同日固定 10 件、隔日換貨、無重複且不受舊等級欄位限制', () => {
+  const a = dailyShopItems('2026-07-06');
+  const b = dailyShopItems('2026-07-06');
+  const nextDay = dailyShopItems('2026-07-07');
+  assert.equal(a.length, DAILY_SHOP_SIZE);
+  assert.equal(new Set(a.map((i) => i.id)).size, DAILY_SHOP_SIZE);
+  assert.deepEqual(a.map((i) => i.id), b.map((i) => i.id), '同一天重整／不同玩家看到同一批');
+  assert.notDeepEqual(a.map((i) => i.id), nextDay.map((i) => i.id), '隔天更換貨單');
+  assert.ok(a.every((i) => SHOP_ITEMS.includes(i)), '只從一般貨架池抽');
+  assert.ok(a.some((i) => i.lv > 1), '舊資料的 Lv.2+ 家具也能直接出現在今日貨架');
 });

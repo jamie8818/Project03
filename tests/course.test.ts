@@ -67,6 +67,7 @@ test('buildDailyPlan：分開 cap 單字/文法、文法等單字教完、帶本
 
 test('小測門檻＋消化日/補強日：內容教完才考、達標才完課、隔天模式', () => {
   const s = initState('jj', { hira: true, kata: true }, TODAY);
+  s.sessionsDone = 1; // 非人生第一輪，才會進一般課末小測
   const l1 = LESSONS[0];
   teachLessonWords(s, 0);
   for (const p of lessonGrammarCards(l1)) s.cards[grammarCardIdOf(p)] = grade(newCard(grammarCardIdOf(p), TODAY), true, TODAY);
@@ -77,11 +78,13 @@ test('小測門檻＋消化日/補強日：內容教完才考、達標才完課�
 
   const y = '2026-07-07'; // TODAY 的前一天
   const sSprint = initState('jj', { hira: true, kata: true }, TODAY);
+  sSprint.sessionsDone = 1;
   sSprint.lastSprintDate = y;
   assert.equal(dayMode(sSprint, TODAY), 'digest');
   assert.equal(buildDailyPlan(sSprint, TODAY).newVocab.length, 0, '消化日不給新內容');
 
   const sFail = initState('jj', { hira: true, kata: true }, TODAY);
+  sFail.sessionsDone = 1;
   sFail.quizFail = { no: 1, date: y };
   assert.equal(dayMode(sFail, TODAY), 'reinforce');
   const pf = buildDailyPlan(sFail, TODAY);

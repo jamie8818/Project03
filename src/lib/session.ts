@@ -102,12 +102,16 @@ export function buildSession(
 ): SessionPlan {
   const { newIds: forcedNew, dialogLessonNo, quizLessonNo } = opts;
   const items: SessionItem[] = [];
+  const firstRun = state.sessionsDone === 0;
 
   // 歌詞加入的 v: 卡 reps 0 也算到期（沒有教學步驟，直接以複習卡形式首見）
-  const due = Object.values(state.cards)
-    .filter((c) => isDue(c, today) && (isLearning(c) || c.id.startsWith('v:')))
-    .sort((a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : a.id < b.id ? -1 : 1))
-    .slice(0, MAX_REVIEWS);
+  // 人生第一輪只走「3 張新卡＋立即測驗＋今日一句」，已知字系的種子卡也不插隊複習。
+  const due = firstRun
+    ? []
+    : Object.values(state.cards)
+        .filter((c) => isDue(c, today) && (isLearning(c) || c.id.startsWith('v:')))
+        .sort((a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : a.id < b.id ? -1 : 1))
+        .slice(0, MAX_REVIEWS);
   for (const c of due) items.push({ kind: 'flash', cardId: c.id });
 
   // 有課程計畫就用它（已配速）；否則複習壓力太大就先不加新字，避免雪球
@@ -119,17 +123,19 @@ export function buildSession(
   }
 
   // 讀本課會話 → 本課小測（新內容之後、混合測驗之前）
-  if (dialogLessonNo != null) items.push({ kind: 'dialog', lessonNo: dialogLessonNo });
-  if (quizLessonNo != null) items.push({ kind: 'minitest', lessonNo: quizLessonNo });
+  if (!firstRun && dialogLessonNo != null) items.push({ kind: 'dialog', lessonNo: dialogLessonNo });
+  if (!firstRun && quizLessonNo != null) items.push({ kind: 'minitest', lessonNo: quizLessonNo });
 
   // 混合測驗：從已學的卡挑弱的優先（ease 低、忘記多）；v: 卡沒內容就跳過（防資料缺漏）
-  const pool = Object.values(state.cards)
-    .filter((c) => isLearning(c) && !newIds.includes(c.id) && (!isWordCard(c.id) || wordInfo(c.id, state)))
-    .sort((a, b) => a.ease - b.ease || b.lapses - a.lapses)
-    .slice(0, QUIZ_ROUND_SIZE * 2);
-  const picked = shuffle(pool, rng).slice(0, QUIZ_ROUND_SIZE);
-  for (const c of picked) {
-    items.push({ kind: 'quiz', cardId: c.id, mode: pickQuizMode(c.id, state, rng) });
+  if (!firstRun) {
+    const pool = Object.values(state.cards)
+      .filter((c) => isLearning(c) && !newIds.includes(c.id) && (!isWordCard(c.id) || wordInfo(c.id, state)))
+      .sort((a, b) => a.ease - b.ease || b.lapses - a.lapses)
+      .slice(0, QUIZ_ROUND_SIZE * 2);
+    const picked = shuffle(pool, rng).slice(0, QUIZ_ROUND_SIZE);
+    for (const c of picked) {
+      items.push({ kind: 'quiz', cardId: c.id, mode: pickQuizMode(c.id, state, rng) });
+    }
   }
 
   items.push({ kind: 'phrase', idx: state.phraseIdx });

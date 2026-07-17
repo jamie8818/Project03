@@ -41,6 +41,7 @@ test('word2zh 選項：四選一含正解、干擾只從已教單字取', () => 
 
 test('歌詞單字（v: 卡）：內容從 state.vocab 解析、reps 0 也進當日複習', () => {
   const s = initState('yaxuan', { hira: false, kata: false }, TODAY);
+  s.sessionsDone = 2; // 教材庫第二輪才開；避開人生第一輪的專用短流程
   s.cards['v:故郷'] = newCard('v:故郷', TODAY);
   s.vocab['v:故郷'] = { jp: '故郷', kana: 'ふるさと', zh: '故鄉', src: '故郷' };
   assert.equal(wordInfo('v:故郷', s)!.kana, 'ふるさと');
@@ -51,6 +52,7 @@ test('歌詞單字（v: 卡）：內容從 state.vocab 解析、reps 0 也進當
 
 test('v: 卡內容缺漏時不進混合測驗（防呆）', () => {
   const s = initState('jj', { hira: true, kata: true }, TODAY);
+  s.sessionsDone = 2; // 確實走一般混合測驗路徑，不靠首輪跳過而誤過測試
   s.cards['v:幽靈'] = { id: 'v:幽靈', reps: 2, lapses: 0, ease: 2.5, ivl: 3, due: '2026-09-01' };
   const plan = buildSession(s, TODAY, rng);
   assert.ok(!plan.items.some((i) => i.kind === 'quiz' && i.cardId === 'v:幽靈'));

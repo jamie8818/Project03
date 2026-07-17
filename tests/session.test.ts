@@ -42,8 +42,26 @@ test('亞軒（都不熟）：新卡先平假名、標準日 session 是 10 教�
   assert.equal(kinds[kinds.length - 1], 'phrase');
 });
 
+test('人生第一輪固定超迷你：3 張新卡＋3 題立即測驗＋今日一句，不混入種子卡複習或其他單元', () => {
+  const s = initState('jj', { hira: true, kata: true }, TODAY); // 已知兩種假名＝有 142 張種子卡
+  for (const id of Object.keys(s.cards)) s.cards[id] = { ...s.cards[id], due: TODAY };
+  const daily = buildDailyPlan(s, TODAY, true); // 就算誤從衝刺入口進來，首次仍保持短流程
+  assert.equal(daily.newVocab.length, 3);
+  assert.equal(daily.showDialog, false);
+  assert.equal(daily.quizLessonNo, null);
+
+  const plan = buildSession(s, TODAY, rng, {
+    newIds: daily.newVocab,
+    dialogLessonNo: daily.lessonNo,
+    quizLessonNo: daily.lessonNo,
+  });
+  assert.equal(plan.dueCount, 0);
+  assert.deepEqual(plan.items.map((i) => i.kind), ['teach', 'quiz', 'teach', 'quiz', 'teach', 'quiz', 'phrase']);
+});
+
 test('到期複習有上限，複習壓力大時不加新卡', () => {
   const s = initState('jj', { hira: true, kata: true }, TODAY);
+  s.sessionsDone = 1; // 一般輪才會處理到期複習；人生第一輪另有短流程測試
   // 全部種子卡推到今天到期
   for (const id of Object.keys(s.cards)) s.cards[id] = { ...s.cards[id], due: TODAY };
   const plan = buildSession(s, TODAY, rng);

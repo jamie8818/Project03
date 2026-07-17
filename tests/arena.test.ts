@@ -70,7 +70,7 @@ test('成就判定：初陣、衝刺300、初勝利', () => {
   assert.ok(ACHIEVEMENTS.length >= 12);
 });
 
-test('E16 店鋪型成就：snapshot 缺席一律 false、餵店況後正確判定', () => {
+test('E16 店鋪型成就：開局家具不誤解鎖初擺設，實際裝潢旗標才解鎖', () => {
   const s = initState('jj', { hira: false, kata: false }, TODAY);
   s.coins = 1500;
   // 尚未餵 snapshot：店鋪型不解鎖（miser 是純 state 判定、照樣解）
@@ -92,12 +92,17 @@ test('E16 店鋪型成就：snapshot 缺席一律 false、餵店況後正確判�
     updatedAt: '',
   });
   got = newlyUnlocked(s);
-  assert.ok(got.includes('first-deco'), '擺了東西 → 初擺設');
+  assert.ok(!got.includes('first-deco'), '只有既有／開局家具，不能自動解鎖初擺設');
   assert.ok(got.includes('shark-keeper'), '3 隻鯊魚 → 鯊魚飼育員');
   assert.ok(got.includes('second-best'), '擁有第二名獎盃');
   assert.ok(!got.includes('interior-designer'), '3 件 < 30');
   assert.ok(!got.includes('gacha-complete'), 'personal 沒收齊');
   assert.ok(ACHIEVEMENTS.length >= 29, `12 學習型 + 17 店鋪型（Tier A），實際 ${ACHIEVEMENTS.length}`);
+
+  s.achievements = [...s.achievements, ...got];
+  s.meta = { ...(s.meta ?? {}), shopDecorated: 1 };
+  got = newlyUnlocked(s);
+  assert.ok(got.includes('first-deco'), '玩家完成擺放／搬移／旋轉操作後才解鎖');
 });
 
 test('normalize 補齊 R2 新欄位（舊資料相容）', () => {
