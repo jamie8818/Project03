@@ -26,7 +26,7 @@ import {
   type CafeItem,
 } from '../src/lib/shop.ts';
 import { STARTER_LAYOUT } from '../src/data/cafe.gen.ts';
-import { BOARD_MAX, DEFAULT_SHOP, STARTER_IDS, mergeBoard, mergeStock, normalizeShop, type BoardMsg, type PlacedItem } from '../src/lib/shopstate.ts';
+import { BOARD_MAX, DEFAULT_SHOP, STARTER_IDS, addStockForUser, mergeBoard, mergeStock, mergeStockState, normalizeShop, type BoardMsg, type PlacedItem } from '../src/lib/shopstate.ts';
 
 // 具體品項（來自 cafe.gen.ts 昭和喫茶目錄）
 const CHAIR = 'chair_velvet'; // 1×1 家具，非檯面 host（椅子不可放小物）
@@ -357,8 +357,20 @@ test('stockAvailable：可同款多件、擺出消耗托盤', () => {
   assert.equal(stockAvailable(none, RUG), 0, '買1擺1托盤空');
 });
 
-test('mergeStock：各鍵取大值，不掉單', () => {
+test('mergeStock：同一份單調計數取大值，不被舊請求倒退', () => {
   assert.deepEqual(mergeStock({ a: 2, b: 1 }, { a: 1, c: 3 }), { a: 2, b: 1, c: 3 });
+});
+
+test('分玩家庫存 ledger：兩人從同一舊庫存各買 1 件，總數會加 2', () => {
+  const original = normalizeShop({ stock: { [CHAIR]: 1 }, layout: [] });
+  const jjPurchase = addStockForUser(original, 'jj', CHAIR);
+  const yaxuanPurchase = addStockForUser(original, 'yaxuan', CHAIR);
+
+  const afterJj = { ...original, ...mergeStockState(original, jjPurchase) };
+  const afterBoth = mergeStockState(afterJj, yaxuanPurchase);
+  assert.equal(afterBoth.stock[CHAIR], 3);
+  assert.equal(afterBoth.stockByUser.jj?.[CHAIR], 1);
+  assert.equal(afterBoth.stockByUser.yaxuan?.[CHAIR], 1);
 });
 
 // ── 伝言板 mergeBoard（append-only union；兩人並發留言不覆蓋） ──

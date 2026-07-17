@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { UserId, UserState } from './types.ts';
-import { USERS, fetchRemote, initState, loadLocal, newer, normalize, pushRemote, pushRemoteNow, saveLocal, touch } from './lib/store.ts';
+import { USERS, fetchRemote, initState, loadLocal, newer, normalize, pushRemote, pushRemoteNow, remoteNeedsBackfill, saveLocal, touch } from './lib/store.ts';
 import { addDays, tpeToday } from './lib/dates.ts';
 import Gate from './components/Gate.tsx';
 import Onboarding from './components/Onboarding.tsx';
@@ -35,6 +35,7 @@ export default function App() {
   const [sprintMode, setSprintMode] = useState(false);
   const [cramming, setCramming] = useState(false); // 背單字（首頁入口的自選分類速記）
   const pushTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pendingPush = useRef<UserState | null>(null); // debounce 期間還沒推上雲的最新 state
   const [toasts, setToasts] = useState<string[]>([]);
   const [sound, setSound] = useState(soundOn());
   const prevLevel = useRef<number | null>(null);
@@ -77,31 +78,55 @@ export default function App() {
     const local = loadLocal(user);
     setState(local);
     fetchRemote()
-      .then((remote) => {
+      .then(async (remote) => {
         if (cancelled) return;
-        const merged = normalize(newer(remote[user] ?? null, local));
+        const remoteMine = remote[user] ?? null;
+        const merged = normalize(newer(remoteMine, local));
         if (merged) {
           saveLocal(merged);
           setState(merged);
         }
         const other = USERS.find((u) => u.id !== user)!.id;
         setPeer(remote[other] ?? null);
-        setOffline(false);
+        if (remoteNeedsBackfill(remoteMine, local) && local) {
+          try {
+            await pushRemote(local);
+            if (!cancelled) setOffline(false);
+          } catch {
+            if (!cancelled) {
+              pendingPush.current = local;
+              setOffline(true);
+            }
+          }
+        } else {
+          setOffline(false);
+        }
       })
-      .catch(() => setOffline(true))
+      .catch(() => {
+        if (cancelled) return;
+        if (local) pendingPush.current = local;
+        setOffline(true);
+      })
       .finally(() => !cancelled && setRemoteChecked(true));
     return () => {
       cancelled = true;
     };
   }, [authed, user]);
 
-  const pendingPush = useRef<UserState | null>(null); // debounce 期間還沒推上雲的最新 state
   const schedulePush = useCallback((s: UserState) => {
     pendingPush.current = s;
     if (pushTimer.current) clearTimeout(pushTimer.current);
     pushTimer.current = setTimeout(() => {
+      pushTimer.current = null;
+      const target = pendingPush.current ?? s;
       pendingPush.current = null;
-      pushRemote(s).then(() => setOffline(false)).catch(() => setOffline(true));
+      pushRemote(target)
+        .then(() => setOffline(!!pendingPush.current))
+        .catch(() => {
+          setOffline(true);
+          const pending = pendingPush.current;
+          if (!pending || pending.updatedAt < target.updatedAt) pendingPush.current = target;
+        });
     }, 1500);
   }, []);
 
@@ -204,7 +229,7 @@ export default function App() {
       .then((remote) => {
         const other = USERS.find((u) => u.id !== user)!.id;
         setPeer(remote[other] ?? null);
-        setOffline(false);
+        setOffline(!!pendingPush.current);
       })
       .catch(() => setOffline(true));
   }, [user]);

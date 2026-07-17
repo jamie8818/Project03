@@ -6,6 +6,7 @@ import { VOCAB_N5, WORD_BY_ID } from '../data/vocab.ts';
 import { newCard, isMastered, isLearning } from '../lib/srs.ts';
 import { tpeToday } from '../lib/dates.ts';
 import { speakJa, speakSeqJa, stopSpeak } from '../lib/tts.ts';
+import { isSong, type Song } from '../lib/song.ts';
 import SpeedSlider from './SpeedSlider.tsx';
 
 type Sect = 'talk' | 'song' | 'grammar' | 'words';
@@ -16,15 +17,6 @@ interface SongMeta {
   artist: string;
   file?: string; // 內建（static assets）
   kv?: boolean; // App 內加的（雲端 KV）
-}
-
-interface Song {
-  id: string;
-  title: string;
-  artist: string;
-  lines: { ruby: [string, string | null][]; zh: string }[];
-  vocab: { jp: string; kana: string; zh: string }[];
-  kv?: boolean;
 }
 
 export default function Library({ state, update }: { state: UserState; update: (fn: (s: UserState) => UserState) => void }) {
@@ -109,6 +101,7 @@ function Songs({ state, update }: { state: UserState; update: (fn: (s: UserState
   const [err, setErr] = useState('');
 
   const loadIndex = () => {
+    setErr('');
     Promise.all([
       fetch('/data/songs/index.json').then((r) => r.json()).catch(() => []),
       fetch('/api/songs').then((r) => r.json()).then((d) => d.items ?? []).catch(() => []),
@@ -126,11 +119,17 @@ function Songs({ state, update }: { state: UserState; update: (fn: (s: UserState
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const openSong = (m: SongMeta) => {
-    fetch(m.kv ? `/api/songs/${m.id}` : `/data/songs/${m.file}`)
-      .then((r) => r.json())
-      .then((s: Song) => setSong({ ...s, kv: m.kv }))
-      .catch(() => setErr('載入歌詞失敗'));
+  const openSong = async (m: SongMeta) => {
+    setErr('');
+    try {
+      const r = await fetch(m.kv ? `/api/songs/${m.id}` : `/data/songs/${m.file}`);
+      if (!r.ok) throw new Error(`song ${r.status}`);
+      const raw: unknown = await r.json();
+      if (!isSong(raw)) throw new Error('bad song');
+      setSong({ ...raw, kv: m.kv });
+    } catch {
+      setErr('載入歌詞失敗，歌曲可能已移除或登入已失效');
+    }
   };
 
   const removeSong = (id: string) => {
@@ -139,10 +138,13 @@ function Songs({ state, update }: { state: UserState; update: (fn: (s: UserState
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ id }),
-    }).then(() => {
-      setSong(null);
-      loadIndex();
-    });
+    })
+      .then((r) => {
+        if (!r.ok) throw new Error(`delete ${r.status}`);
+        setSong(null);
+        loadIndex();
+      })
+      .catch(() => setErr('移除失敗，請確認連線或重新登入'));
   };
 
   // 歌詞單字若已在 N5 牌組就用 w: 卡，否則建 v: 卡（內容存進 state.vocab）
@@ -158,12 +160,12 @@ function Songs({ state, update }: { state: UserState; update: (fn: (s: UserState
     });
   };
 
-  if (err) return <p className="hint">{err}</p>;
-  if (!index) return <p className="hint">載入中…</p>;
+  if (!index) return <p className="hint">{err || '載入中…'}</p>;
 
   if (!song) {
     return (
       <div className="list">
+        {err && <p className="hint">{err}</p>}
         <AddSong onAdded={loadIndex} />
         {pending.map((q) => (
           <div key={q.qid} className="list-item pending">
@@ -195,6 +197,7 @@ function Songs({ state, update }: { state: UserState; update: (fn: (s: UserState
         <button className="back" onClick={() => { stopSpeak(); setSong(null); }}>← 返回</button>
         <b>🎤 {song.title}</b>
       </div>
+      {err && <p className="hint">{err}</p>}
       <div className="view-tools">
         <button className="tool" onClick={() => speakSeqJa(song.lines.map((l) => l.ruby.map(([t]) => t).join('')))}>▶ 整首唸給你聽</button>
         <button className="tool" onClick={stopSpeak}>■ 停止</button>

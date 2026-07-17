@@ -1,8 +1,52 @@
 // 日々日文 Worker：密碼閘門 + KV 進度同步 + 靜態前端（沿用 finlearn 模式）
 // mergeBoard 三端共用一份（src/lib/board.ts）；wrangler 預設 esbuild bundle，TS 直接 import。
 import { mergeBoard } from '../src/lib/board.ts';
+import { cleanStockByUser, mergeStock, mergeStockByUser, mergeStockState, stockParts } from '../src/lib/stock.ts';
 
 const USERS = ['jj', 'yaxuan'];
+const stockKey = (user) => `shop-stock:${user}`;
+
+// 登入頁必須先能載入，但角色圖、歌詞與遊戲素材都含不可公開 IP，必須通過 cookie 才提供。
+// wrangler.toml 的 run_worker_first=true 讓所有靜態請求先經過這裡。
+export function isPublicShellPath(path) {
+  return path === '/'
+    || path === '/index.html'
+    || path === '/manifest.webmanifest'
+    || path === '/registerSW.js'
+    || path === '/sw.js'
+    || /^\/workbox-[a-z0-9]+\.js$/.test(path)
+    || /^\/assets\/[a-zA-Z0-9._-]+\.(?:js|css|woff2)$/.test(path)
+    || ['/favicon.png', '/icon-192.png', '/icon-512.png', '/apple-touch-icon.png'].includes(path);
+}
+
+function guestLinePatch(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+  const out = {};
+  for (const user of USERS) if (typeof value[user] === 'string') out[user] = value[user].slice(0, 20);
+  return out;
+}
+
+async function readShopStock(env, decor) {
+  const separate = await Promise.all(USERS.map((user) => env.PROGRESS.get(stockKey(user), 'json')));
+  const stockByUser = mergeStockByUser(
+    cleanStockByUser(decor && decor.stockByUser),
+    { jj: separate[0] || {}, yaxuan: separate[1] || {} },
+  );
+  return stockParts({ ...(decor || {}), stockByUser });
+}
+
+async function persistStockIncreases(env, currentByUser, incomingByUser) {
+  const writes = [];
+  for (const user of USERS) {
+    const current = currentByUser[user] || {};
+    const incoming = incomingByUser[user] || {};
+    const increased = Object.entries(incoming).some(([id, n]) => n > (current[id] || 0));
+    if (!increased) continue;
+    const merged = mergeStock(current, incoming);
+    writes.push(env.PROGRESS.put(stockKey(user), JSON.stringify(merged)));
+  }
+  await Promise.all(writes);
+}
 
 async function sha256hex(s) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
@@ -212,23 +256,21 @@ export default {
     if (path === '/api/shop' && request.method === 'GET') {
       if (!(await isAuthed(request, env))) return json({ error: 'unauthorized' }, 401);
       const [cur, own] = await Promise.all([env.PROGRESS.get('shop-decor', 'json'), env.PROGRESS.get('shop-board', 'json')]);
-      return json({ ...(cur || {}), board: mergeBoard(own, cur && cur.board) });
+      const stockState = await readShopStock(env, cur);
+      return json({ ...(cur || {}), ...stockState, board: mergeBoard(own, cur && cur.board) });
     }
     if (path === '/api/shop' && request.method === 'POST') {
       if (!(await isAuthed(request, env))) return json({ error: 'unauthorized' }, 401);
       const body = await request.json().catch(() => null);
       if (!body || typeof body !== 'object') return json({ error: 'bad body' }, 400);
       const cur = (await env.PROGRESS.get('shop-decor', 'json')) || {};
-      // stock（各家具已購數量＝花過的金幣）採「各鍵取大值」永不掉單：兩人並發購買不會互相覆蓋，
-      // 也不會因某次 push 判定為舊資料就把剛買的弄丟。舊格式 owned: string[] 先遷移成計數。
-      // 其餘（招牌/擺放）是呈現用，採 last-write-wins 新的贏。
-      const toStock = (s) => (s.stock && typeof s.stock === 'object'
-        ? s.stock
-        : (s.owned || []).reduce((m, id) => ((m[id] = (m[id] || 0) + 1), m), {}));
-      const curStock = toStock(cur);
-      const bodyStock = toStock(body);
-      const stock = { ...curStock };
-      for (const k in bodyStock) stock[k] = Math.max(stock[k] || 0, bodyStock[k]);
+      // 既有共有庫存作 base；新取得數量按玩家分 ledger，再各落獨立 KV key。
+      // 即使兩人同時都讀到 1，各自的 +1 也不會在同一個 shop-decor key 互蓋，最後仍是 3。
+      const currentStock = await readShopStock(env, cur);
+      const incomingByUser = cleanStockByUser(body.stockByUser);
+      await persistStockIncreases(env, currentStock.stockByUser, incomingByUser);
+      const mergedStock = mergeStockState({ ...cur, ...currentStock }, body);
+      const freshStock = await readShopStock(env, { ...cur, stockBase: mergedStock.stockBase, stockByUser: mergedStock.stockByUser });
       // 伝言板已移獨立 key（方案B）：舊客戶端夾帶的 board 併進 shop-board，shop-decor 本身不再存 board。
       // 注意：KV read-modify-write 非原子，兩請求「同時」寫仍可能掉一方（掉的那端同 session 再 push 會補回；
       // 真要杜絕得上 Durable Object，兩人小站先不做）。
@@ -237,8 +279,8 @@ export default {
       await env.PROGRESS.put('shop-board', JSON.stringify(board));
       const newest = !cur.updatedAt || String(body.updatedAt || '') >= cur.updatedAt ? body : cur;
       // E14 客人自訂台詞：按鍵合併（每人只寫自己的鍵；舊客戶端不帶此欄位＝保留現值不掉資料）
-      const guestLines = { ...(cur.guestLines || {}), ...(body.guestLines || {}) };
-      const merged = { ...newest, stock, guestLines };
+      const guestLines = { ...guestLinePatch(cur.guestLines), ...guestLinePatch(body.guestLines) };
+      const merged = { ...newest, ...freshStock, guestLines };
       delete merged.owned; // 清掉舊欄位
       delete merged.board; // board 不再落在 shop-decor
       const mergedJson = JSON.stringify(merged);
@@ -424,6 +466,9 @@ export default {
       return json({ ok: true });
     }
 
+    if (path.startsWith('/api/')) return json({ error: 'not found' }, 404);
+    if (request.method !== 'GET' && request.method !== 'HEAD') return json({ error: 'method not allowed' }, 405);
+    if (!isPublicShellPath(path) && !(await isAuthed(request, env))) return json({ error: 'unauthorized' }, 401);
     return env.ASSETS.fetch(request);
   },
 };

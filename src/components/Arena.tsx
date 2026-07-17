@@ -408,34 +408,49 @@ function DuelPlay({ seed, title, state, onDone }: { seed: string; title: string;
   const [picked, setPicked] = useState<string | null>(null);
   const score = useRef(0);
   const correct = useRef(0);
+  const answered = useRef(false);
+  const finished = useRef(false);
+  const timer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const advanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const q = questions[idx];
 
   useEffect(() => {
     if (questions.length === 0) return;
+    answered.current = false;
     setLeft(DUEL_SECONDS);
     setPicked(null);
     const start = Date.now();
-    const iv = setInterval(() => {
+    timer.current = setInterval(() => {
       const remain = DUEL_SECONDS - (Date.now() - start) / 1000;
       setLeft(Math.max(0, remain));
-      if (remain <= 0) {
-        clearInterval(iv);
+      if (remain <= 0 && !answered.current) {
+        answered.current = true;
+        if (timer.current) clearInterval(timer.current);
         setPicked('__timeout__');
         sfx.wrong();
-        setTimeout(() => advance(), 900);
+        advanceTimer.current = setTimeout(() => advance(), 900);
       }
     }, 100);
-    return () => clearInterval(iv);
+    return () => {
+      if (timer.current) clearInterval(timer.current);
+      if (advanceTimer.current) clearTimeout(advanceTimer.current);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idx]);
 
   const advance = () => {
-    if (idx + 1 >= questions.length) onDone(score.current, correct.current);
+    if (idx + 1 >= questions.length) {
+      if (finished.current) return;
+      finished.current = true;
+      onDone(score.current, correct.current);
+    }
     else setIdx(idx + 1);
   };
 
   const pick = (c: string) => {
-    if (picked) return;
+    if (answered.current) return;
+    answered.current = true;
+    if (timer.current) clearInterval(timer.current);
     setPicked(c);
     const ok = c === q.answer;
     if (ok) {
@@ -445,7 +460,7 @@ function DuelPlay({ seed, title, state, onDone }: { seed: string; title: string;
     } else {
       sfx.wrong();
     }
-    setTimeout(advance, ok ? 550 : 1100);
+    advanceTimer.current = setTimeout(advance, ok ? 550 : 1100);
   };
 
   if (questions.length === 0) {

@@ -2,6 +2,9 @@
 // 素材＝JJ 在 Tiled 手畫的咖啡廳，經 scripts/build-cafe-assets.py 切成 public/cafe/。
 import { CAFE_ITEMS, STARTER_LAYOUT } from '../data/cafe.gen.ts';
 import type { UserId } from '../types.ts';
+import { stockParts, type StockByUser } from './stock.ts';
+
+export { addStockForUser, mergeStock, mergeStockState } from './stock.ts';
 
 export type Facing = 'front' | 'back' | 'left' | 'right';
 
@@ -23,6 +26,8 @@ export interface PlacedItem {
 
 export interface ShopState {
   stock: Record<string, number>; // 各家具已購「數量」（共有庫存；同一件可買多個，擺出的會從托盤消耗）
+  stockBase?: Record<string, number>; // 舊共有庫存／免費初始家具；新增取得改記 stockByUser
+  stockByUser?: StockByUser; // 每位玩家各自的單調新增計數，兩人同買不會被 max 吃掉
   guestLines?: Partial<Record<'jj' | 'yaxuan', string>>; // E14：Q 版客人自訂台詞（每人一句 ≤20 字；worker 按鍵合併、各自只寫自己的鍵）
   sign: string; // 招牌布丁 id，'' = 無
   layout: PlacedItem[]; // 已擺放家具（可含重複 id）
@@ -36,32 +41,36 @@ const starterStock = (): Record<string, number> => Object.fromEntries(STARTER_ID
 
 export const DEFAULT_SHOP: ShopState = {
   stock: starterStock(),
+  stockBase: starterStock(),
+  stockByUser: {},
   sign: '',
   layout: STARTER_LAYOUT.map((p) => ({ ...p })),
   board: [],
   updatedAt: '',
 };
 
-/** 庫存合併：各鍵取較大值（計數版的「聯集」，並發購買不掉單）。 */
-export function mergeStock(a: Record<string, number> | undefined, b: Record<string, number> | undefined): Record<string, number> {
-  const out: Record<string, number> = { ...(a ?? {}) };
-  for (const [k, v] of Object.entries(b ?? {})) out[k] = Math.max(out[k] ?? 0, v);
-  return out;
-}
-
 export function normalizeShop(s: (Partial<ShopState> & { owned?: string[] }) | null): ShopState {
   const raw = s ?? {};
-  // stock 來源：新格式直接用；舊格式 owned: string[] 遷移成計數
-  let stock: Record<string, number> = {};
-  if (raw.stock && typeof raw.stock === 'object') stock = { ...raw.stock };
-  else if (Array.isArray(raw.owned)) for (const id of raw.owned) stock[id] = (stock[id] ?? 0) + 1;
+  // stockBase＋每人 ledger 算出共有總數；舊格式 stock/owned 自動遷入 base。
+  const parts = stockParts(raw);
+  const stockBase = { ...parts.stockBase };
   // 開局家具永遠至少 1（免費贈品，收回托盤後仍能再擺）
-  for (const id of STARTER_IDS) stock[id] = Math.max(stock[id] ?? 0, 1);
+  for (const id of STARTER_IDS) stockBase[id] = Math.max(stockBase[id] ?? 0, 1);
+  const withStarter = stockParts({ stockBase, stockByUser: parts.stockByUser });
   // 首次（KV 全空、沒有 layout 欄位）給預設佈置；已存在 layout（含空陣列）則尊重使用者擺放
   const layout = !s || raw.layout === undefined ? STARTER_LAYOUT.map((p) => ({ ...p })) : raw.layout;
   const board = Array.isArray(raw.board) ? raw.board : [];
   const guestLines = raw.guestLines && typeof raw.guestLines === 'object' ? { ...raw.guestLines } : {};
-  return { stock, guestLines, sign: raw.sign ?? '', layout, board, updatedAt: raw.updatedAt ?? '' };
+  return {
+    stock: withStarter.stock,
+    stockBase: withStarter.stockBase,
+    stockByUser: withStarter.stockByUser,
+    guestLines,
+    sign: raw.sign ?? '',
+    layout,
+    board,
+    updatedAt: raw.updatedAt ?? '',
+  };
 }
 
 export async function fetchShop(): Promise<ShopState> {

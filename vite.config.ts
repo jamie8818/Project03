@@ -2,6 +2,7 @@ import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { mergeBoard, type BoardMsgBase } from './src/lib/board.ts';
+import { mergeStockState, stockParts } from './src/lib/stock.ts';
 
 // 開發模式：模擬 Worker 的 /api/*（記憶體假資料，重啟即清空）
 function devApi(): Plugin {
@@ -69,19 +70,13 @@ function devApi(): Plugin {
           if (req.method === 'POST') {
             void readBody(req).then((b: Record<string, unknown>) => {
               const cur = (store['shop-decor'] as Record<string, unknown>) ?? {};
-              const toStock = (s: Record<string, unknown>): Record<string, number> =>
-                s.stock && typeof s.stock === 'object'
-                  ? (s.stock as Record<string, number>)
-                  : ((s.owned as string[]) ?? []).reduce<Record<string, number>>((m, id) => ((m[id] = (m[id] || 0) + 1), m), {});
-              const stock = { ...toStock(cur) };
-              const bs = toStock(b);
-              for (const k in bs) stock[k] = Math.max(stock[k] || 0, bs[k]);
+              const stockState = mergeStockState(cur, b);
               // 舊客戶端夾帶的 board 併進 shop-board；shop-decor 不再存 board（同 worker）
               const board = boardUnion(b.board);
               store['shop-board'] = board;
               // E14 客人自訂台詞按鍵合併（同 worker）
               const guestLines = { ...((cur.guestLines as Record<string, string>) ?? {}), ...((b.guestLines as Record<string, string>) ?? {}) };
-              const merged = { ...b, stock, guestLines };
+              const merged = { ...b, ...stockState, guestLines };
               delete (merged as Record<string, unknown>).owned;
               delete (merged as Record<string, unknown>).board;
               store['shop-decor'] = merged;
@@ -89,7 +84,8 @@ function devApi(): Plugin {
             });
             return;
           }
-          return send({ ...((store['shop-decor'] as Record<string, unknown>) ?? {}), board: boardUnion() });
+          const cur = (store['shop-decor'] as Record<string, unknown>) ?? {};
+          return send({ ...cur, ...stockParts(cur), board: boardUnion() });
         }
         if (url.startsWith('/api/board')) {
           if (req.method === 'POST') {
@@ -211,14 +207,23 @@ export default defineConfig({
         ],
       },
       workbox: {
-        // 前端 shell＋歌詞 JSON 全快取（離線可練），/api 永遠走網路（進度同步不能吃舊快取）
-        globPatterns: ['**/*.{js,css,html,png,json,woff2}'],
+        // 只預快取登入 shell；受保護的角色圖／歌詞在登入後按需快取，避免未登入 SW 繞過素材閘門。
+        globPatterns: ['**/*.{js,css,html,woff2}'],
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         navigateFallbackDenylist: [/^\/api\//],
         runtimeCaching: [
           {
             urlPattern: /\/api\/progress/,
             handler: 'NetworkOnly',
+          },
+          {
+            urlPattern: /\/(?:cafe|baito|sprites|shop|data\/songs)\//,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'nihongo-protected-assets',
+              expiration: { maxEntries: 900, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheableResponse: { statuses: [200] },
+            },
           },
         ],
       },

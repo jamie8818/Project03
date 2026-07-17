@@ -147,11 +147,12 @@ export async function fetchRemote(): Promise<Partial<Record<UserId, UserState>>>
 }
 
 export async function pushRemote(state: UserState): Promise<void> {
-  await fetch('/api/progress', {
+  const res = await fetch('/api/progress', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ user: state.user, state }),
   });
+  if (!res.ok) throw new Error(`progress push ${res.status}`);
 }
 
 /** 頁面切背景/關閉時的即刻推送：sendBeacon 在 unload 中仍保證送出（回 false＝排不進佇列，
@@ -169,6 +170,11 @@ export function newer(a: UserState | null, b: UserState | null): UserState | nul
   if (!a) return b;
   if (!b) return a;
   return a.updatedAt >= b.updatedAt ? a : b;
+}
+
+/** 開站時本機較新＝遠端尚未收到，必須主動補推，不能只在畫面選本機版本。 */
+export function remoteNeedsBackfill(remote: UserState | null, local: UserState | null): boolean {
+  return !!local && (!remote || local.updatedAt > remote.updatedAt);
 }
 
 export function summarize(s: UserState): PeerSummary {

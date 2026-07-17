@@ -44,7 +44,7 @@ import {
   type CafeItem,
   type Z層,
 } from '../lib/shop.ts';
-import { DEFAULT_SHOP, STARTER_IDS, fetchShop, mergeBoard, pushBoard, pushShop, type BoardMsg, type Facing, type PlacedItem, type ShopState } from '../lib/shopstate.ts';
+import { DEFAULT_SHOP, STARTER_IDS, addStockForUser, fetchShop, mergeBoard, mergeStockState, normalizeShop, pushBoard, pushShop, type BoardMsg, type Facing, type PlacedItem, type ShopState } from '../lib/shopstate.ts';
 import { AFFECTION_START, affectionTier, petCat, type PetOutcome } from '../lib/cat.ts';
 import Coach, { coachSeen, dismissCoach } from './Coach.tsx';
 
@@ -733,10 +733,12 @@ function fmtBoardDate(iso: string): string {
   return `${d.getMonth() + 1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-function DengonBoard({ me, board, onSend, onClose }: { me: UserState; board: BoardMsg[]; onSend: (text: string) => void; onClose: () => void }) {
+function DengonBoard({ me, board, onSend, onClose }: { me: UserState; board: BoardMsg[]; onSend: (text: string) => Promise<boolean>; onClose: () => void }) {
   const otherName = USERS.find((u) => u.id !== me.user)!.name;
   const [draft, setDraft] = useState('');
   const [sent, setSent] = useState(false); // 送出後短暫「✓ 送出！」回饋（按鈕脈動＋小提示）
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   // 新留言（含撿到對方的）就捲到底。依賴看「最後一則的時間戳」不看長度——
@@ -745,10 +747,17 @@ function DengonBoard({ me, board, onSend, onClose }: { me: UserState; board: Boa
     const el = scrollRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [board[board.length - 1]?.at]);
-  const submit = () => {
+  const submit = async () => {
     const t = draft.trim().slice(0, 60);
-    if (!t) return;
-    onSend(t);
+    if (!t || busy) return;
+    setBusy(true);
+    setError('');
+    const ok = await onSend(t);
+    setBusy(false);
+    if (!ok) {
+      setError('沒送出去，內容還留著；確認連線後再按一次');
+      return;
+    }
     setDraft('');
     setSent(true);
     inputRef.current?.focus(); // 送完保持焦點，方便連續留言
@@ -776,6 +785,7 @@ function DengonBoard({ me, board, onSend, onClose }: { me: UserState; board: Boa
         </div>
         <div className="dengon-inputbar">
           {sent && <span className="dengon-sent-toast" onAnimationEnd={() => setSent(false)}>✓ 送出！</span>}
+          {error && <span className="dengon-sent-toast">{error}</span>}
           <input
             ref={inputRef}
             className="dengon-input"
@@ -784,9 +794,10 @@ function DengonBoard({ me, board, onSend, onClose }: { me: UserState; board: Boa
             placeholder={`寫一句留給${otherName}…`}
             onChange={(e) => setDraft(e.target.value)}
             // 組字中（IME 選字）的 Enter 不送出：讓輸入法先 commit，再按一次 Enter 才留言（CJK 標準）
-            onKeyDown={(e) => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); submit(); } }}
+            onKeyDown={(e) => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); void submit(); } }}
+            disabled={busy}
           />
-          <button className={`dengon-send ${sent ? 'sent' : ''}`} onClick={submit} aria-label="留言" />
+          <button className={`dengon-send ${sent ? 'sent' : ''}`} onClick={() => void submit()} aria-label="留言" disabled={busy} />
         </div>
       </div>
     </div>
@@ -805,9 +816,21 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
   const [boardOpen, setBoardOpen] = useState(false);
   const [lineEditOpen, setLineEditOpen] = useState(false); // E14：自訂台詞編輯面板
   const [introSeen, setIntroSeen] = useState(() => localStorage.getItem('nng:shop-intro3') === '1');
+  const [loadError, setLoadError] = useState('');
+  const [syncError, setSyncError] = useState('');
+  const pendingShop = useRef<{ optimistic: ShopState; payload: ShopState } | null>(null);
+
+  const loadShopState = () => {
+    setShop(null);
+    setLoadError('');
+    fetchShop()
+      .then((s) => { setShopSnapshot(s); setShop(s); })
+      .catch(() => setLoadError('店鋪讀取失敗。為了保護原本裝潢，現在不會載入預設店或開放編輯。'));
+  };
 
   useEffect(() => {
-    fetchShop().then((s) => { setShopSnapshot(s); setShop(s); }).catch(() => setShop(DEFAULT_SHOP));
+    loadShopState();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 每日登入週禮物（熊貓店長來信）：進店補發已賺到、素材已進 catalog 的家具（照順序、遇缺即停）。
@@ -816,14 +839,16 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
     if (!shop) return;
     const gifts = grantableGifts(me, CATALOG_IDS);
     if (gifts.length === 0) return;
-    const next = { ...shop, stock: { ...shop.stock } };
-    for (const g of gifts) next.stock[g.id] = (next.stock[g.id] ?? 0) + 1;
+    let next: ShopState = shop;
+    for (const g of gifts) next = addStockForUser(next, me.user, g.id);
     pushShop(next)
       .then((res) => {
-        setShop((prev) => (prev ? { ...prev, stock: res.current?.stock ?? next.stock } : prev));
+        const merged = normalizeShop(res.current ?? next);
+        setShopSnapshot(merged);
+        setShop(merged);
         update((s) => (s.login ? { ...s, login: { ...s.login, furn: s.login.furn + gifts.length } } : s));
       })
-      .catch(() => {});
+      .catch(() => setSyncError('週禮物尚未同步，沒有入帳；下次進店會自動重試。'));
   }, [shop === null]); // eslint-disable-line react-hooks/exhaustive-deps -- 只在首次載到店況後結算一次
 
   // E16 Tier B「極簡主義」：今天完成練習且開店看時 layout 空 → 記連續日（同日冪等；斷鏈重置）
@@ -834,33 +859,61 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
 
   // 裝潢用：樂觀更新，推上去後用伺服器合併結果校正（撿到對方買的東西＋對方的留言）。
   // stock 是單調 max，直接採伺服器值；board 用 union 再合一次，避免蓋掉本地剛送、伺服器還沒收到的訊。
-  const saveShop = (next: ShopState) => {
+  const syncShop = (optimistic: ShopState, payload: ShopState = optimistic) => {
+    const pending = { optimistic, payload };
+    pendingShop.current = pending;
+    setSyncError('');
+    pushShop(payload)
+      .then((res) => {
+        const cur = res.current;
+        if (pendingShop.current === pending) {
+          pendingShop.current = null;
+          setSyncError('');
+          if (cur) {
+            setShop(cur);
+            setShopSnapshot(cur);
+          }
+          return;
+        }
+        // 較舊請求回來時只撿單調／聯集欄位，不倒退畫面上更新的 layout/sign。
+        if (cur) {
+          setShop((prev) => {
+            if (!prev) return prev;
+            return {
+              ...prev,
+              ...mergeStockState(prev, cur),
+              board: cur.board ? mergeBoard(prev.board, cur.board) : prev.board,
+            };
+          });
+        }
+      })
+      .catch(() => {
+        if (pendingShop.current === pending) setSyncError('裝潢還沒同步，畫面先保留你的修改。請重試後再離開店鋪。');
+      });
+  };
+
+  const saveShop = (next: ShopState, payload: ShopState = next) => {
     setShop(next);
     // E16 店鋪型成就：餵最新店況給 xp.ts snapshot，並輕觸 user state 讓 App 的成就偵測重評
     setShopSnapshot(next);
     update((s) => ({ ...s }));
-    pushShop(next)
-      .then((res) => {
-        const cur = res.current;
-        if (!cur) return;
-        setShop((prev) =>
-          prev ? { ...prev, stock: cur.stock ?? prev.stock, board: cur.board ? mergeBoard(prev.board, cur.board) : prev.board } : prev,
-        );
-      })
-      .catch(() => {});
+    syncShop(next, payload);
   };
 
   // 伝言板送出：樂觀 append（union）後走獨立端點只推留言（finding #1 方案B）——
   // 完全不帶 layout/sign，聊天不會用開頁當下的舊裝潢蓋掉對方剛存的新裝潢。回傳再撿對方新留言。
-  const sendBoard = (text: string) => {
-    if (!shop) return;
+  const sendBoard = async (text: string): Promise<boolean> => {
+    if (!shop) return false;
     const msg: BoardMsg = { author: me.user, text, at: new Date().toISOString() };
     const next = mergeBoard(shop.board, [msg]);
-    setShop({ ...shop, board: next });
-    pushBoard(next)
-      .then((cur) => setShop((prev) => (prev ? { ...prev, board: mergeBoard(prev.board, cur) } : prev)))
-      .catch(() => {});
-    sfx.correct(1);
+    try {
+      const cur = await pushBoard(next);
+      setShop((prev) => (prev ? { ...prev, board: mergeBoard(prev.board, cur) } : prev));
+      sfx.correct(1);
+      return true;
+    } catch {
+      return false;
+    }
   };
 
   // 購買用：先確定共有 KV 寫入成功才回來，失敗會 throw（呼叫端據此決定要不要扣金幣）。
@@ -868,11 +921,22 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
   const commitShop = async (next: ShopState): Promise<void> => {
     const res = await pushShop(next);
     const cur = res.current;
-    const merged = cur ? { ...next, stock: cur.stock ?? next.stock, board: cur.board ? mergeBoard(next.board, cur.board) : next.board } : next;
+    const merged = cur
+      ? normalizeShop({ ...cur, board: cur.board ? mergeBoard(next.board, cur.board) : next.board })
+      : next;
     setShopSnapshot(merged); // E16：購買/扭蛋後成就重評（呼叫端隨後的 update 會觸發偵測）
     setShop(merged);
   };
 
+  if (loadError) {
+    return (
+      <div className="shop-page">
+        <p className="hint">{loadError}</p>
+        <button className="primary" onClick={loadShopState}>重新讀取店鋪</button>
+        <button className="linkish" onClick={onBack}>← 返回進度</button>
+      </div>
+    );
+  }
   if (!introSeen) {
     return (
       <div className="shop-page">
@@ -895,6 +959,15 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
         <button className="back" onClick={onBack}>← 返回進度</button>
         <b>🏮 日々喫茶 Lv.{lv}「{shopTitle(lv)}」</b>
       </div>
+      {syncError && (
+        <p className="hint">
+          {syncError}{' '}
+          {pendingShop.current && <button className="linkish" style={{ display: 'inline' }} onClick={() => {
+            const pending = pendingShop.current;
+            if (pending) syncShop(pending.optimistic, pending.payload);
+          }}>重新同步</button>}
+        </p>
+      )}
 
       {mode !== 'decorate' && (
         <Stage
@@ -921,7 +994,9 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
           initial={shop.guestLines?.[me.user] ?? ''}
           onSave={(t) => {
             // 只寫自己的鍵（worker 按鍵合併），空字串＝清除台詞（💬 熄滅、對方點到顯示預設句）
-            saveShop({ ...shop, guestLines: { ...(shop.guestLines ?? {}), [me.user]: t } });
+            const next = { ...shop, guestLines: { ...(shop.guestLines ?? {}), [me.user]: t } };
+            // payload 只送自己的鍵；畫面仍保留完整兩人台詞，避免舊快照蓋回對方的新句子。
+            saveShop(next, { ...next, guestLines: { [me.user]: t } });
             setLineEditOpen(false);
             sfx.correct(1);
           }}
@@ -994,7 +1069,7 @@ function GachaCorner({ me, shop, update, commitShop }: { me: UserState; shop: Sh
   const pull = async () => {
     if (locked) return;
     const pick = pool[Math.floor(Math.random() * pool.length)]; // 均勻隨機；抽中即離池＝保底不重複
-    const next: ShopState = { ...shop, stock: { ...shop.stock, [pick.id]: (shop.stock[pick.id] ?? 0) + 1 } };
+    const next = addStockForUser(shop, me.user, pick.id);
     setMsg('');
     setSpin((d) => d + 180);
     setPhase('shake');
@@ -1111,8 +1186,8 @@ function ShopPanel({ me, lv, shop, update, commitShop }: { me: UserState; lv: nu
     if (lv < item.lv) { setMsg(`要店 Lv.${item.lv} 才進這件貨`); return; }
     if (me.coins < item.price) { setMsg(`金幣不夠（差 ${item.price - me.coins}）`); return; }
     // 只加庫存、不自動擺放（進裝潢托盤，讓玩家自己擺）；可重複買
-    const owned = (shop.stock[item.id] ?? 0) + 1;
-    const next: ShopState = { ...shop, stock: { ...shop.stock, [item.id]: owned } };
+    const next = addStockForUser(shop, me.user, item.id);
+    const owned = next.stock[item.id] ?? 0;
     // 先確定共有 KV 寫入成功，確認後才扣金幣——避免「連線失敗但金幣照扣、東西沒到手」
     setBuying(true);
     setMsg('購買中…');
