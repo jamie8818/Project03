@@ -12,9 +12,9 @@ import {
   CAFE_ITEMS,
   CATEGORY_LABELS,
   PLACE,
-  Z_TOP_ROW,
   availableFacings,
   canPlace,
+  canTarget,
   canToggleInside,
   dailyShopItems,
   footprintDims,
@@ -22,10 +22,12 @@ import {
   guestIndicesOf,
   hostIndexOf,
   isCounterTop,
+  isFrontDoorPlaced,
   isFrontWallPlaced,
+  isSurfaceGuest,
   itemAtCell,
   itemById,
-  FRONT_DOOR_COLS,
+  moveHost,
   nextFacing,
   ownedKinds,
   PERSONAL_GACHA_COST,
@@ -40,8 +42,8 @@ import {
   shopTitle,
   spriteFor,
   stockAvailable,
+  surfaceDepthOffset,
   type CafeItem,
-  type Z層,
 } from '../lib/shop.ts';
 import { DEFAULT_SHOP, STARTER_IDS, addStockForUser, fetchShop, mergeBoard, mergeStockState, normalizeShop, pushBoard, pushShop, type BoardMsg, type Facing, type PlacedItem, type ShopState } from '../lib/shopstate.ts';
 import { AFFECTION_START, affectionTier, petCat, type PetOutcome } from '../lib/cat.ts';
@@ -52,6 +54,7 @@ const STAGE_H = CAFE.h; // 416
 const CELL = CAFE.cell; // 32
 const BANNER_H = 200; // 橫幅只露上半（櫃檯＋店長）
 const FACING_LABEL: Record<Facing, string> = { front: '前', back: '後', left: '左', right: '右' };
+const FACING_ANGLE: Record<Facing, number> = { front: 0, right: 90, back: 180, left: 270 };
 const TABLE_INSET = 5; // 檯面小物坐進桌面上緣幾 px（桌沿唇厚；preview 微調）
 const COUNTER_SURFACE_Y = 124; // 吧檯檯面小物落點的 stage y（吧檯木檯面上緣；preview 微調）
 const COUNTER_INSIDE_Y = 145; // 內側小家電底錨 stage y（檯後工作區＝店長腳邊；落在 counter_front y118–202 內＝下半被正面板遮，E4）
@@ -194,7 +197,7 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
     const host = hostIndexOf(layout, qi);
     if (host >= 0) {
       const hp = layout[host], hit = itemById(hp.id)!;
-      return STAGE_H - (frontRowOf(hp) * CELL - spriteH(hit, hp.facing) + TABLE_INSET);
+      return STAGE_H - (frontRowOf(hp) * CELL - spriteH(hit, hp.facing) + TABLE_INSET) + surfaceDepthOffset(layout, qi);
     }
     if (isCounterTop(q.gx, q.gy)) return STAGE_H - COUNTER_SURFACE_Y;
     return STAGE_H - frontRowOf(q) * CELL;
@@ -308,12 +311,17 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
     const r = e.currentTarget.getBoundingClientRect();
     const sx = ((e.clientX - r.left) / r.width) * STAGE_W;
     const sy = ((e.clientY - r.top) / r.height) * STAGE_H;
-    return { gx: Math.max(0, Math.min(CAFE.cols - 1, Math.floor(sx / CELL))), gy: Math.max(0, Math.min(CAFE.rows - 1, Math.floor(sy / CELL))) };
+    // 保留場外座標：拖出去＝無效並回原位，不偷偷吸到最左／最右一格。
+    return { gx: Math.floor(sx / CELL), gy: Math.floor(sy / CELL) };
   };
   const onPointerDown = (e: RPointerEvent<HTMLDivElement>) => {
     if (ghostDemo) { dismissCoach('ghost'); setGhostDemo(false); } // 動手了＝示範退場
     const c = cellFromEvent(e);
-    if (placing) { setHover(c); return; } // 放置托盤家具：預覽落點，放開時擺下
+    if (placing) {
+      try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* 不支援 capture 時仍可點放 */ }
+      setHover(c);
+      return;
+    } // 放置托盤家具：預覽落點，放開時擺下
     // 先抓「指到的 sprite」本身（含 overhang 上半，如高腳椅座面）；抓不到再退回 footprint 格
     const hit = (e.target as HTMLElement)?.closest?.('.cafe-furn') as HTMLElement | null;
     const idx = hit?.dataset.i != null ? Number(hit.dataset.i) : itemAtCell(shop.layout, c.gx, c.gy);
@@ -346,14 +354,13 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
   const ddy = dref ? drag!.gy - dref.gy : 0;
   const shifted = new Set<number>(drag && (ddx || ddy) ? [drag.index, ...guestIndicesOf(shop.layout, drag.index)] : []);
   const displayLayout = shifted.size ? shop.layout.map((p, i) => (shifted.has(i) ? { ...p, gx: p.gx + ddx, gy: p.gy + ddy } : p)) : shop.layout;
-  const dragOk = drag && dref ? canPlace(shop.layout, dref.id, drag.gx, drag.gy, drag.index, dref.facing) : true;
+  const dragOk = drag && dref ? (ddx === 0 && ddy === 0 ? true : moveHost(shop.layout, drag.index, drag.gx, drag.gy) != null) : true;
 
   // 網格＆放置預覽的「作用中家具」＝放置中的托盤件，或拖曳中的件
   const gId = placing ?? dref?.id ?? null;
   const gFacing = placing ? placingFacing : dref?.facing;
   const gIgnore = placing ? placingIgnore : drag ? drag.index : -1;
   const gItem = gId ? itemById(gId) : undefined;
-  const gZ: Z層 | null = gItem?.z ?? null;
 
   // 逐件渲染（依 z 分流：地板家具 overhang 底錨／檯面小物抬到桌面／地毯平貼／壁飾貼牆）。
   // 抽成函式好讓吧檯正面板夾在中間分兩批畫（E3）：地毯在吧檯下、其餘家具在吧檯上。
@@ -367,12 +374,25 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
     if (isFrontWallPlaced(p)) {
       // E10 前牆掛件：門面槽（cols8–10）錨門頂 y341、門旁牆槽錨牆頂 y373；一律 front sprite（前牆不轉向）。
       // 高度照 footprint 自然長，超出舞台底緣自然裁切＝掛在近端牆上的透視感
-      const door = p.gx >= FRONT_DOOR_COLS.min && p.gx <= FRONT_DOOR_COLS.max;
+      const door = isFrontDoorPlaced(p);
       const fwStyle = { left: p.gx * CELL, top: door ? FRONT_DOOR_TOP_Y : FRONT_WALL_TOP_Y, width: dims.w * CELL, height: dims.h * CELL };
       return (
         <Fragment key={`f${i}`}>
           <img data-i={i} className={cls} src={it.sprite} alt={it.name} draggable={false} style={fwStyle} />
           {it.anim && <AnimOverlay it={it} phaseSeed={p.gx * 131 + p.gy * 97 + i} style={fwStyle} />}
+        </Fragment>
+      );
+    }
+    const drawAsSurface = it.z === 'surface' || (isSurfaceGuest(p.id) && (hostIndexOf(displayLayout, i) >= 0 || isCounterTop(p.gx, p.gy)));
+    if (drawAsSurface) {
+      // 檯面小物／小型器材：坐在 host 的視覺桌面上；落地型 surface（貓碗）走孤兒落地錨。
+      const bottom = surfaceBottomFor(displayLayout, p, i);
+      const sStyle: CSSProperties = { left: p.gx * CELL, bottom, width: dims.w * CELL, height: 'auto' };
+      const sp = spriteFor(it, p.facing);
+      return (
+        <Fragment key={`f${i}`}>
+          <img data-i={i} className={cls} src={sp.src} alt={it.name} draggable={false} style={{ ...sStyle, transform: sp.flip ? 'scaleX(-1)' : undefined }} />
+          {it.anim && sp.src === it.sprite && !sp.flip && <AnimOverlay it={it} phaseSeed={p.gx * 131 + p.gy * 97 + i} style={sStyle} />}
         </Fragment>
       );
     }
@@ -400,20 +420,16 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
         </Fragment>
       );
     }
-    if (it.z === 'surface') {
-      // 檯面小物：坐在 host 的視覺桌面上（host 前緣 − host 視覺高 + 桌沿唇）；
-      // 吧檯檯面用固定檯面 y；孤兒（舊存檔落地板）退回地板錨定不消失。
-      // 嵌內側/host 桌面/吧檯檯面/孤兒落地——邏輯抽 surfaceBottomFor（E21 貓碗點位共用）
-      const bottom = surfaceBottomFor(displayLayout, p, i);
-      const sStyle: CSSProperties = { left: p.gx * CELL, bottom, width: CELL, height: 'auto' };
+    if (it.z === 'rug') {
+      const angle = FACING_ANGLE[p.facing ?? 'front'];
+      const rugStyle: CSSProperties = { left: p.gx * CELL, top: p.gy * CELL, width: dims.w * CELL, height: dims.h * CELL };
       return (
-        <Fragment key={`f${i}`}>
-          <img data-i={i} className={cls} src={it.sprite} alt={it.name} draggable={false} style={sStyle} />
-          {it.anim && <AnimOverlay it={it} phaseSeed={p.gx * 131 + p.gy * 97 + i} style={sStyle} />}
-        </Fragment>
+        <div key={`f${i}`} data-i={i} className={cls} style={rugStyle}>
+          <img className="cafe-rug-sprite" src={it.sprite} alt={it.name} draggable={false} style={{ width: it.w * CELL, height: it.h * CELL, transform: `translate(-50%, -50%) rotate(${angle}deg)` }} />
+        </div>
       );
     }
-    // rug（平貼填滿佔格）／wall（貼牆框內）
+    // wall（貼牆框內）
     const rwStyle = { left: p.gx * CELL, top: p.gy * CELL, width: dims.w * CELL, height: dims.h * CELL };
     return (
       <Fragment key={`f${i}`}>
@@ -421,6 +437,43 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
         {it.anim && <AnimOverlay it={it} phaseSeed={p.gx * 131 + p.gy * 97 + i} style={rwStyle} />}
       </Fragment>
     );
+  };
+
+  // 放置中直接畫「最後會出現的家具」，不再只讓玩家猜 footprint 方框；前牆也使用真正門頂／牆頂錨。
+  const renderPlacementPreview = () => {
+    if (!placing || !hover) return null;
+    const it = itemById(placing);
+    if (!it) return null;
+    const p: PlacedItem = placingFacing && placingFacing !== 'front'
+      ? { id: placing, gx: hover.gx, gy: hover.gy, facing: placingFacing }
+      : { id: placing, gx: hover.gx, gy: hover.gy };
+    const ok = canPlace(shop.layout, placing, p.gx, p.gy, placingIgnore, p.facing);
+    const cls = `place-sprite-ghost ${ok ? 'ok' : 'no'}`;
+    const dims = footprintDims(it, p.facing);
+    const previewLayout = [...shop.layout, p];
+    const pi = previewLayout.length - 1;
+
+    if (isFrontWallPlaced(p)) {
+      return <img className={cls} src={it.sprite} alt="" draggable={false} style={{ left: p.gx * CELL, top: isFrontDoorPlaced(p) ? FRONT_DOOR_TOP_Y : FRONT_WALL_TOP_Y, width: dims.w * CELL, height: dims.h * CELL }} />;
+    }
+    const drawAsSurface = it.z === 'surface' || (isSurfaceGuest(p.id) && (hostIndexOf(previewLayout, pi) >= 0 || isCounterTop(p.gx, p.gy)));
+    if (drawAsSurface) {
+      const sp = spriteFor(it, p.facing);
+      return <img className={cls} src={sp.src} alt="" draggable={false} style={{ left: p.gx * CELL, bottom: surfaceBottomFor(previewLayout, p, pi), width: dims.w * CELL, height: 'auto', transform: sp.flip ? 'scaleX(-1)' : undefined }} />;
+    }
+    if (it.z === 'furniture') {
+      const sp = spriteFor(it, p.facing);
+      const bottom = rendersOnCounter(p) ? STAGE_H - COUNTER_SURFACE_Y : STAGE_H - frontRowOf(p) * CELL;
+      return <img className={cls} src={sp.src} alt="" draggable={false} style={{ left: p.gx * CELL, bottom, width: dims.w * CELL, height: 'auto', transform: sp.flip ? 'scaleX(-1)' : undefined }} />;
+    }
+    if (it.z === 'rug') {
+      return (
+        <div className={cls} style={{ left: p.gx * CELL, top: p.gy * CELL, width: dims.w * CELL, height: dims.h * CELL }}>
+          <img className="cafe-rug-sprite" src={it.sprite} alt="" draggable={false} style={{ width: it.w * CELL, height: it.h * CELL, transform: `translate(-50%, -50%) rotate(${FACING_ANGLE[p.facing ?? 'front']}deg)` }} />
+        </div>
+      );
+    }
+    return <img className={cls} src={it.sprite} alt="" draggable={false} style={{ left: p.gx * CELL, top: p.gy * CELL, width: dims.w * CELL, height: dims.h * CELL }} />;
   };
 
   // E3/E4 draw order：地毯(L0) 畫在吧檯之下、壁飾(L3) 貼後牆畫在店長之前（別蓋前景人物）、
@@ -463,7 +516,7 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
         {/* 接地陰影層：只有地板家具在 footprint 前緣畫柔邊橢圓（檯面小物在桌上、不投地影） */}
         {displayLayout.map((p, i) => {
           const it = itemById(p.id);
-          if (!it || it.z !== 'furniture') return null;
+          if (!it || it.z !== 'furniture' || rendersOnCounter(p) || (isSurfaceGuest(p.id) && hostIndexOf(displayLayout, i) >= 0)) return null;
           const fw = footprintDims(it, p.facing).w * CELL;
           const sw = fw * 0.9;
           return (
@@ -622,17 +675,21 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
 
         {/* 裝潢格線（純視覺，pointer-events 由 CSS 關掉；放置或拖曳時顯示）。
             檯面小物含吧檯左右端翹角（col 0/17），格線用整排寬度；其餘家具只到牆內 minCol..maxCol。 */}
-        {editing && gId && gZ && (() => {
+        {editing && gId && gItem && (() => {
           // 格線整排（col 0..最右）：最左/最右是地板、壁飾貼側牆、檯面翹角都在邊欄；合法性交給 canPlace
           const colStart = 0;
           const colEnd = CAFE.cols - 1;
-          const extraRows = gItem?.frontWall ? 1 : 0; // E10：frontWall 件多畫虛擬前牆列 row12
+          const rows: number[] = [];
+          if (canTarget(gId, 'backWall')) rows.push(0, 1);
+          if (canTarget(gId, 'floor') || canTarget(gId, 'table') || canTarget(gId, 'counter')) {
+            for (let row = 2; row <= PLACE.maxRow; row++) rows.push(row);
+          }
+          if (canTarget(gId, 'frontWall')) rows.push(12);
           return (
           <div className="grid-overlay">
-            {Array.from({ length: PLACE.maxRow - Z_TOP_ROW[gZ] + 1 + extraRows }).map((_, ry) =>
+            {rows.map((gy) =>
               Array.from({ length: colEnd - colStart + 1 }).map((_, cx) => {
                 const gx = cx + colStart;
-                const gy = ry + Z_TOP_ROW[gZ];
                 const ok = canPlace(shop.layout, gId, gx, gy, gIgnore, gFacing);
                 return <div key={`g${gx}-${gy}`} className={`grid-cell ${ok ? 'ok' : 'no'}`} style={{ left: gx * CELL, top: gy * CELL, width: CELL, height: CELL }} />;
               }),
@@ -644,6 +701,7 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
                 style={{ left: hover.gx * CELL, top: hover.gy * CELL, width: footprintDims(gItem, placingFacing).w * CELL, height: footprintDims(gItem, placingFacing).h * CELL }}
               />
             )}
+            {renderPlacementPreview()}
           </div>
           );
         })()}
@@ -1263,6 +1321,7 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop, onDecorated }: { me
   // 收回模式（JJ 2026-07-09：家具多了逐件選取太慢）：點什麼收什麼；undoStack 記每步前的 layout 供復原
   const [sweep, setSweep] = useState(false);
   const [undoStack, setUndoStack] = useState<PlacedItem[][]>([]);
+  const recordUndo = () => setUndoStack((st) => [...st.slice(-29), shop.layout]);
 
   const select = (id: string | null) => { setPlacing(id); setFacing('front'); setSelected(null); setSweep(false); };
   const placingItem = placing ? itemById(placing) : undefined;
@@ -1283,6 +1342,7 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop, onDecorated }: { me
       if (p.top) { const { top: _, ...rest } = p; return rest; } // 回嵌入＝拿掉旗標，存檔乾淨
       return { ...p, top: true };
     });
+    recordUndo();
     saveShop({ ...shop, layout });
     onDecorated();
     sfx.correct(1);
@@ -1294,6 +1354,7 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop, onDecorated }: { me
     // 連桌上小物一起繞 footprint 轉；桌子轉後撞件/出界則回 null（不動）
     const next = rotateHost(shop.layout, selected, nf);
     if (!next) { sfx.wrong(); return; }
+    recordUndo();
     saveShop({ ...shop, layout: next });
     onDecorated();
     sfx.correct(1);
@@ -1311,6 +1372,7 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop, onDecorated }: { me
     // 只在非 front 時記 facing（front＝預設，存檔乾淨）
     const placed = facing === 'front' ? { id: placing, gx, gy } : { id: placing, gx, gy, facing };
     const nextLayout = [...shop.layout, placed];
+    recordUndo();
     saveShop({ ...shop, layout: nextLayout });
     onDecorated();
     sfx.correct(1);
@@ -1321,27 +1383,29 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop, onDecorated }: { me
   const pickUp = (index: number) => {
     // 搬走 host 家具時，其上寄生的檯面小物一起收回托盤（別變孤兒）
     const drop = new Set([index, ...guestIndicesOf(shop.layout, index)]);
+    recordUndo();
     saveShop({ ...shop, layout: shop.layout.filter((_, i) => !drop.has(i)) });
     sfx.wrong();
   };
   const removeSelected = () => { if (selected != null) { pickUp(selected); setSelected(null); } };
   // ── 收回模式：點什麼收什麼；清空/復原都走 undoStack（存動作前的整份 layout）──
-  const enterSweep = () => { setSweep(true); setPlacing(null); setSelected(null); setUndoStack([]); };
+  const enterSweep = () => { setSweep(true); setPlacing(null); setSelected(null); };
   const sweepPick = (i: number) => {
     if (i < 0) return;
-    setUndoStack((st) => [...st, shop.layout]);
     pickUp(i);
   };
   const sweepClearAll = () => {
     if (shop.layout.length === 0) return;
-    setUndoStack((st) => [...st, shop.layout]);
+    recordUndo();
     saveShop({ ...shop, layout: [] });
     sfx.wrong();
   };
-  const sweepUndo = () => {
+  const undoLast = () => {
     const prev = undoStack[undoStack.length - 1];
     if (!prev) return;
     setUndoStack((st) => st.slice(0, -1));
+    setSelected(null);
+    setPlacing(null);
     saveShop({ ...shop, layout: prev });
     sfx.correct(1);
   };
@@ -1349,12 +1413,10 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop, onDecorated }: { me
   const moveIndexTo = (index: number, gx: number, gy: number) => {
     const p = shop.layout[index], it = p ? itemById(p.id) : undefined;
     if (!p || !it) return;
-    const fc = p.facing ?? 'front';
-    if (!canPlace(shop.layout, p.id, gx, gy, index, fc)) { sfx.wrong(); return; }
-    const dx = gx - p.gx, dy = gy - p.gy;
-    if (dx === 0 && dy === 0) return; // 原地沒動
-    const guests = new Set(guestIndicesOf(shop.layout, index));
-    const layout = shop.layout.map((q, i) => (i === index ? { ...q, gx, gy } : guests.has(i) ? { ...q, gx: q.gx + dx, gy: q.gy + dy } : q));
+    if (p.gx === gx && p.gy === gy) return; // 原地沒動
+    const layout = moveHost(shop.layout, index, gx, gy);
+    if (!layout) { sfx.wrong(); return; }
+    recordUndo();
     saveShop({ ...shop, layout });
     onDecorated();
     sfx.correct(1);
@@ -1381,13 +1443,14 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop, onDecorated }: { me
         <p className="hint">
           🧺 收回模式：<b>點店裡的家具直接收回托盤</b>
           {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={sweepClearAll}>🗑 全部清空</button>
-          {' · '}<button className="linkish" style={{ display: 'inline' }} disabled={undoStack.length === 0} onClick={sweepUndo}>↩ 復原（{undoStack.length}）</button>
+          {' · '}<button className="linkish" style={{ display: 'inline' }} disabled={undoStack.length === 0} onClick={undoLast}>↩ 復原（{undoStack.length}）</button>
           {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={() => setSweep(false)}>完成</button>
         </p>
       ) : placing ? (
         <p className="hint">
           點（或拖到）綠格放下「{placingItem?.name}」
           {canRotate && <> · <button className="linkish" style={{ display: 'inline' }} onClick={rotate}>🔄 轉向（{FACING_LABEL[facing]}）</button></>}
+          {undoStack.length > 0 && <> · <button className="linkish" style={{ display: 'inline' }} onClick={undoLast}>↩ 復原（{undoStack.length}）</button></>}
           {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={() => select(null)}>取消</button>
         </p>
       ) : selected != null ? (
@@ -1396,11 +1459,13 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop, onDecorated }: { me
           {selCanRotate && <> · <button className="linkish" style={{ display: 'inline' }} onClick={rotatePlaced}>🔄 轉向（{FACING_LABEL[selP?.facing ?? 'front']}）</button></>}
           {selCanToggleInside && <> · <button className="linkish" style={{ display: 'inline' }} onClick={toggleInside}>{selP?.top ? '⬇ 嵌進吧檯' : '⬆ 放上檯面'}</button></>}
           {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={removeSelected}>🗑 收回托盤</button>
+          {undoStack.length > 0 && <> · <button className="linkish" style={{ display: 'inline' }} onClick={undoLast}>↩ 復原（{undoStack.length}）</button></>}
           {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={() => setSelected(null)}>取消選取</button>
         </p>
       ) : (
         <p className="hint">
           點托盤家具→擺進店裡；店裡的家具直接<b>拖拉搬移</b>，點一下＝選取（可 🔄 轉向／🗑 收回），再點一下或點空白＝取消。
+          {undoStack.length > 0 && <> {' '}<button className="linkish" style={{ display: 'inline' }} onClick={undoLast}>↩ 復原（{undoStack.length}）</button></>}
           {' '}<button className="linkish" style={{ display: 'inline' }} onClick={enterSweep}>🧺 收回模式</button>
         </p>
       )}

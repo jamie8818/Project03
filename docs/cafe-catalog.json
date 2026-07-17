@@ -219,7 +219,11 @@
     "back",
     "right"
    ],
-   "counterTop": true
+   "counterTop": true,
+   "placements": [
+    "table",
+    "counter"
+   ]
   },
   {
    "id": "bottle_shelf",
@@ -260,7 +264,11 @@
     "back",
     "right"
    ],
-   "counterTop": true
+   "counterTop": true,
+   "placements": [
+    "table",
+    "counter"
+   ]
   },
   {
    "id": "register",
@@ -281,7 +289,11 @@
     "back",
     "right"
    ],
-   "counterTop": true
+   "counterTop": true,
+   "placements": [
+    "table",
+    "counter"
+   ]
   },
   {
    "id": "pendant_lamp",
@@ -647,7 +659,11 @@
     "back",
     "right"
    ],
-   "counterTop": true
+   "counterTop": true,
+   "placements": [
+    "table",
+    "counter"
+   ]
   },
   {
    "id": "copper_kettle_set",
@@ -668,7 +684,11 @@
     "back",
     "right"
    ],
-   "counterTop": true
+   "counterTop": true,
+   "placements": [
+    "table",
+    "counter"
+   ]
   },
   {
    "id": "cup_display_shelf",
@@ -755,7 +775,8 @@
    "starter": false,
    "sheet": "wall2",
    "desc": "門口垂掛的暖簾布簾，墨綠底染白字，日式喫茶常見",
-   "frontWall": true
+   "frontWall": true,
+   "frontSlot": "door"
   },
   {
    "id": "neon_coffee_sign",
@@ -971,7 +992,7 @@
   {
    "id": "glass_hanging_rack",
    "category": "counter",
-   "z": "furniture",
+   "z": "wall",
    "w": 2,
    "h": 1,
    "surface": false,
@@ -981,12 +1002,7 @@
    "lv": 3,
    "starter": false,
    "sheet": "furniture3",
-   "desc": "3 只大剪影高腳杯倒掛頂架（非成排細線杯腳），經典吧檯視覺重點",
-   "facings": [
-    "front",
-    "back",
-    "right"
-   ]
+   "desc": "3 只大剪影高腳杯倒掛頂架（非成排細線杯腳），經典吧檯視覺重點"
   },
   {
    "id": "pourover_stand",
@@ -1007,7 +1023,11 @@
     "back",
     "right"
    ],
-   "counterTop": true
+   "counterTop": true,
+   "placements": [
+    "table",
+    "counter"
+   ]
   },
   {
    "id": "vintage_fridge",
@@ -1338,7 +1358,11 @@
    "starter": false,
    "sheet": "furniture4",
    "desc": "鹹食三明治展示櫃，與甜點櫃內容區隔（不放蛋糕布丁）",
-   "counterTop": true
+   "counterTop": true,
+   "placements": [
+    "table",
+    "counter"
+   ]
   },
   {
    "id": "pudding_mold_shelf",
@@ -1354,7 +1378,11 @@
    "starter": false,
    "sheet": "furniture4",
    "desc": "一排空布丁模具展示，區隔已完成的布丁百匯",
-   "counterTop": true
+   "counterTop": true,
+   "placements": [
+    "table",
+    "counter"
+   ]
   },
   {
    "id": "fruit_shelf",
@@ -1370,7 +1398,11 @@
    "starter": false,
    "sheet": "furniture4",
    "desc": "新鮮水果原料開放層架，區隔桌上的水果盤成品",
-   "counterTop": true
+   "counterTop": true,
+   "placements": [
+    "table",
+    "counter"
+   ]
   },
   {
    "id": "floor_lamp",
@@ -3378,6 +3410,10 @@
    "sheet": "jpcafe_counter",
    "desc": "鹵素光束加熱座：黑色金屬底座、上方一圈鹵素燈環發出暖橘光束，虹吸架的高級燈版，無虹吸壺本體，純加熱座造型",
    "counterTop": true,
+   "placements": [
+    "table",
+    "counter"
+   ],
    "anim": {
     "mode": "loop",
     "period": 1.8
@@ -3670,7 +3706,10 @@
    "lv": 2,
    "starter": false,
    "sheet": "catfurn1",
-   "desc": "雙碗架貓食台：黃銅或胡桃木小支架並排兩只淺碗，一碗盛滿米黃色飼料粒、一碗透明清水，碗身外側印一枚小魚骨花紋，整體扁平貼地、高度很矮，尺寸嬌小精緻"
+   "desc": "雙碗架貓食台：黃銅或胡桃木小支架並排兩只淺碗，一碗盛滿米黃色飼料粒、一碗透明清水，碗身外側印一枚小魚骨花紋，整體扁平貼地、高度很矮，尺寸嬌小精緻",
+   "placements": [
+    "floor"
+   ]
   },
   {
    "id": "teaser_stand",

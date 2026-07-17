@@ -8,6 +8,7 @@ import {
   Z_RANK,
   Z_TOP_ROW,
   type CafeItem,
+  type PlacementTarget,
 } from '../data/cafe.gen.ts';
 import { NAME_OVERRIDES, PRICE_OVERRIDES } from '../data/cafe-overrides.ts';
 import { SHOP_LINES_GEN, type ShopLine } from '../data/shop-lines.gen.ts';
@@ -16,7 +17,7 @@ import { hashSeed, mulberry32 } from './seeded.ts';
 export type { ShopLine } from '../data/shop-lines.gen.ts';
 
 export { BLOCKED, CAFE, CATEGORY_LABELS, PLACE, Z_RANK, Z_TOP_ROW } from '../data/cafe.gen.ts';
-export type { CafeItem, Z層 } from '../data/cafe.gen.ts';
+export type { CafeItem, PlacementTarget, Z層 } from '../data/cafe.gen.ts';
 
 // 疊上手維護的命名／售價覆寫（cafe-overrides.ts，重跑切圖腳本也不會被洗掉）
 export const CAFE_ITEMS: CafeItem[] = RAW_ITEMS.map((it) => ({
@@ -77,7 +78,12 @@ export function pickShopLine(attend: number, meDone: boolean, rng: () => number 
 // 吧台右側(cols 8,9 那 6 格)其實是地板、可放家具；最左/最右整欄也是地板（非牆）。
 const counterBlocked = (gx: number, gy: number) => gy >= 2 && gy <= 4 && gx >= 0 && gx <= 7;
 
-export const zRankOf = (id: string): number => Z_RANK[ITEM_BY_ID[id]?.z ?? 'furniture'];
+export const zRankOf = (id: string): number => {
+  const it = ITEM_BY_ID[id];
+  // 貓碗這類沿用 surface 畫法、實際落地的物件，深度仍要和地板家具一起排序。
+  if (it && placementTargets(it).has('floor') && it.z === 'surface') return Z_RANK.furniture;
+  return Z_RANK[it?.z ?? 'furniture'];
+};
 
 // ── facing-aware footprint（§2）──
 // footprint w×h＝佔地深度；朝左/右時 w↔h 對調，碰撞格一起轉。
@@ -109,6 +115,8 @@ export function spriteFor(item: CafeItem, facing: Facing = 'front'): FacingSprit
 
 /** 該件實際可用的向（含單邊鏡像補出的另一側），循環順序 front→right→back→left。旋轉鍵用。 */
 export function availableFacings(item: CafeItem): Facing[] {
+  // 地毯是純俯視平面，不需要額外美術就能安全做 90° 旋轉。
+  if (item.z === 'rug') return ['front', 'right', 'back', 'left'];
   const set = new Set<Facing>(item.facings ?? ['front']);
   set.add('front');
   if (set.has('right')) set.add('left'); // 有右＝左可鏡像
@@ -133,38 +141,55 @@ export const frontRowOf = (p: PlacedItem): number => {
 // §A：改吃 manifest 的 surface:true 旗標（桌／櫃頂／開放層架 true；椅凳沙發卡座 false），
 // 取代舊的引擎端硬編白名單——新家具進 catalog 就自動生效，不用回來改這裡。
 export const isSurfaceHost = (id: string): boolean => ITEM_BY_ID[id]?.surface === true;
-export const isSurfaceGuest = (id: string): boolean => ITEM_BY_ID[id]?.z === 'surface';
+
+/** 可放位置和渲染 z 分離：避免「小型器材能放地板、卻不能放桌上」這種反直覺結果。 */
+export function placementTargets(item: CafeItem | undefined): ReadonlySet<PlacementTarget> {
+  if (!item) return new Set();
+  if (item.placements?.length) return new Set(item.placements);
+  if (item.z === 'rug' || item.z === 'furniture') {
+    return new Set<PlacementTarget>(item.counterTop ? ['table', 'counter'] : ['floor']);
+  }
+  if (item.z === 'surface') return new Set<PlacementTarget>(['table', 'counter']);
+  return new Set<PlacementTarget>(item.frontWall ? ['backWall', 'frontWall'] : ['backWall']);
+}
+
+export const canTarget = (id: string, target: PlacementTarget): boolean => placementTargets(ITEM_BY_ID[id]).has(target);
+export const isSurfaceGuest = (id: string): boolean => canTarget(id, 'table');
 
 // E4：內側小家電（嵌吧檯裡、下半身被 counter_front 遮）＝surface 件掛 hostType:'counter-inside'。
 // E7 放寬成「加法」：放置走一般 surface 規則（吧檯格＋任何 surface host 桌面都可），
 // 「嵌內側」降級成吧檯格上的渲染變體（預設嵌入、PlacedItem.top=true 切檯面全露）。
 export const isCounterInside = (it: CafeItem | undefined): boolean => it?.hostType === 'counter-inside';
-// 嵌內側變體避開店長視覺區（店長固定 cx=150≈col4.7，佔 col4/5）；放檯面（top）不受限
-const COUNTER_INSIDE_EXCLUDED_COLS = new Set([4, 5]);
+// 店長固定 cx=150≈col4.7，佔 col4/5；這兩格保留給店長，所有新放置都視為不可用。
+export const COUNTER_RESERVED_COLS = new Set([4, 5]);
 
 /** 該已擺件是否以「嵌吧檯內側」變體渲染（畫在店長後、counter_front 前，下半被面板遮）。
  *  條件＝counter-inside 件＋落在吧檯格＋非店長區 col4/5＋沒切成檯面（top）。其餘一律走一般 surface 路徑。 */
 export function rendersInside(p: PlacedItem): boolean {
-  return isCounterInside(ITEM_BY_ID[p.id]) && !p.top && isCounterTop(p.gx, p.gy) && !COUNTER_INSIDE_EXCLUDED_COLS.has(p.gx);
+  return isCounterInside(ITEM_BY_ID[p.id]) && !p.top && isCounterTop(p.gx, p.gy) && !COUNTER_RESERVED_COLS.has(p.gx);
 }
 
 /** 該已擺件可否切換嵌入⇄檯面（兩種變體都合法＝吧檯格上、非 col4/5 的 counter-inside 件） */
 export function canToggleInside(p: PlacedItem): boolean {
-  return isCounterInside(ITEM_BY_ID[p.id]) && isCounterTop(p.gx, p.gy) && !COUNTER_INSIDE_EXCLUDED_COLS.has(p.gx);
+  return isCounterInside(ITEM_BY_ID[p.id]) && isCounterTop(p.gx, p.gy) && !COUNTER_RESERVED_COLS.has(p.gx);
 }
 
 /** E11：z=furniture 的 counterTop 件目前是否擺在吧檯檯面上（渲染改錨 COUNTER_SURFACE_Y、全露） */
 export function rendersOnCounter(p: PlacedItem): boolean {
-  return !!ITEM_BY_ID[p.id]?.counterTop && isCounterTop(p.gx, p.gy);
+  return canTarget(p.id, 'counter') && isCounterTop(p.gx, p.gy);
 }
 
 // E10：前牆裝潢（門＋門旁牆掛件，frontWall:true 的 7 件）。座標編碼＝虛擬列 row 12
 // （格系最後一列，一般放置最深到 maxRow=11 不衝突）；渲染畫在 base-fg 之上、恆亮。
 export const FRONT_WALL_ROW = 12;
 export const FRONT_DOOR_COLS = { min: 8, max: 10 } as const; // 門面槽（門欄 x257–331 ≈ cols 8–10）
+export const FRONT_WALL_SEGMENTS = [{ min: 1, max: 3 }, { min: 11, max: 16 }] as const;
+export const BACK_WALL = { minCol: 1, maxCol: 16, minRow: 0, maxRow: 1 } as const;
 /** 該已擺件是否掛在前牆（渲染走門頂/牆頂錨、畫在 base-fg 之上） */
 export const isFrontWallPlaced = (p: PlacedItem): boolean =>
-  !!ITEM_BY_ID[p.id]?.frontWall && p.gy === FRONT_WALL_ROW;
+  canTarget(p.id, 'frontWall') && p.gy === FRONT_WALL_ROW;
+export const isFrontDoorPlaced = (p: PlacedItem): boolean =>
+  isFrontWallPlaced(p) && (ITEM_BY_ID[p.id]?.frontSlot ?? 'wall') === 'door';
 
 // 吧檯檯面格（虛擬 host）：純 row3 cols0–7＝吧檯唯一攤平可見的檯面（E4 拆層確認 row2 是矮櫃抽屜排
 // ＋內角柱、非平面，舊的兩格「翹角」特例已刪）。內側小家電（counter-inside）也用同一排格。
@@ -191,6 +216,20 @@ export function hostIndexOf(layout: PlacedItem[], guestIndex: number): number {
   return best;
 }
 
+/** 同一桌面前後格的視覺深度差。邏輯格仍完整保留，但後排小物會往上錯開，不再畫在完全相同的位置。 */
+export const SURFACE_DEPTH_STEP = 8;
+export function surfaceDepthOffset(layout: PlacedItem[], guestIndex: number): number {
+  const guest = layout[guestIndex];
+  const hostIndex = hostIndexOf(layout, guestIndex);
+  if (!guest || hostIndex < 0) return 0;
+  const host = layout[hostIndex];
+  const hostItem = ITEM_BY_ID[host.id];
+  if (!hostItem) return 0;
+  const depth = footprintDims(hostItem, host.facing).h;
+  const relativeRow = Math.max(0, Math.min(depth - 1, guest.gy - host.gy));
+  return (depth - 1 - relativeRow) * SURFACE_DEPTH_STEP;
+}
+
 /** 某 host（layout index）上寄生的所有小物 index（host 被搬走時一起收回，別變孤兒） */
 export function guestIndicesOf(layout: PlacedItem[], hostIndex: number): number[] {
   if (!isSurfaceHost(layout[hostIndex]?.id ?? '')) return [];
@@ -199,6 +238,23 @@ export function guestIndicesOf(layout: PlacedItem[], hostIndex: number): number[
     if (isSurfaceGuest(p.id) && hostIndexOf(layout, i) === hostIndex) out.push(i);
   });
   return out;
+}
+
+/** 把家具連同桌上小物平移；整組新位置都合法才回傳。
+ *  避免桌上有物品的展示櫃搬上固定吧檯後，留下兩件佔同一格的不合法狀態。 */
+export function moveHost(layout: PlacedItem[], index: number, gx: number, gy: number): PlacedItem[] | null {
+  const host = layout[index];
+  if (!host || (host.gx === gx && host.gy === gy)) return null;
+  if (!canPlace(layout, host.id, gx, gy, index, host.facing)) return null;
+  const dx = gx - host.gx, dy = gy - host.gy;
+  const guestIndices = guestIndicesOf(layout, index);
+  const guests = new Set(guestIndices);
+  const next = layout.map((p, i) => (
+    i === index ? { ...p, gx, gy }
+      : guests.has(i) ? { ...p, gx: p.gx + dx, gy: p.gy + dy }
+        : p
+  ));
+  return guestIndices.every((i) => canPlace(next, next[i].id, next[i].gx, next[i].gy, i, next[i].facing)) ? next : null;
 }
 
 // facing 相對 front 的順時針 90° 圈數（front→right→back→left＝0→1→2→3）
@@ -216,7 +272,7 @@ export function rotateHost(layout: PlacedItem[], index: number, newFacing: Facin
   const { w, h } = footprintDims(it, cur); // 旋轉前的佔地
   const turns = (FACING_TURNS[newFacing] - FACING_TURNS[cur] + 4) % 4; // 順時針 90° 幾次
   const guests = new Set(guestIndicesOf(layout, index));
-  return layout.map((p, i) => {
+  const next = layout.map((p, i) => {
     if (i === index) return newFacing === 'front' ? { id: p.id, gx: p.gx, gy: p.gy } : { ...p, facing: newFacing };
     if (!guests.has(i)) return p;
     // 小物相對 host 原點座標，繞原點順時針轉 turns 次（格網 W×H 每轉一次 (x,y)→(H-1-y, x)）
@@ -224,6 +280,7 @@ export function rotateHost(layout: PlacedItem[], index: number, newFacing: Facin
     for (let t = 0; t < turns; t++) { const nx = H - 1 - y; y = x; x = nx; [W, H] = [H, W]; }
     return { ...p, gx: host.gx + x, gy: host.gy + y };
   });
+  return [...guests].every((i) => canPlace(next, next[i].id, next[i].gx, next[i].gy, i, next[i].facing)) ? next : null;
 }
 
 /** 已擺家具的渲染順序（回原本 layout 的 index，由後往前）。
@@ -267,78 +324,96 @@ function footprint(id: string, gx: number, gy: number, facing?: Facing): [number
   return cells;
 }
 
+const coversCounter = (p: PlacedItem): boolean =>
+  canTarget(p.id, 'counter') && footprint(p.id, p.gx, p.gy, p.facing).every(([x, y]) => isCounterTop(x, y));
+
+const fitsSegment = (gx: number, width: number, segment: { min: number; max: number }): boolean =>
+  gx >= segment.min && gx + width - 1 <= segment.max;
+
+const coversFloor = (layout: PlacedItem[], index: number): boolean => {
+  const p = layout[index];
+  if (!p || !canTarget(p.id, 'floor') || coversCounter(p)) return false;
+  // 同時支援 floor/table 的未來品項若已寄生桌面，也不算地板佔用。
+  return !(canTarget(p.id, 'table') && hostIndexOf(layout, index) >= 0);
+};
+
 /** 某家具放在 (gx,gy) 是否合法。
- *  檯面小物（surface）＝每格都要落在檯面（surface-host 家具佔格或吧檯檯面）、且不與其他小物同格。
- *  地板類（rug/furniture）＝界內、避開固定裝置、不與「同 z 層」互相重疊（不同層可交疊）。
- *  壁飾（wall）＝可貼牆，只跟其他壁飾互斥。 */
+ *  placements 明確決定 floor/table/counter/backWall/frontWall；z 只負責繪製，不再暗中決定物理位置。 */
 export function canPlace(layout: PlacedItem[], id: string, gx: number, gy: number, ignoreIndex = -1, facing?: Facing): boolean {
   const it = ITEM_BY_ID[id];
   if (!it) return false;
+  const targets = placementTargets(it);
   const { w, h } = footprintDims(it, facing);
   const cells = footprint(id, gx, gy, facing);
 
-  if (it.z === 'surface') {
-    // 檯面小物不吃地板 minCol/maxCol（吧檯左端翹角在 col 0）；合法性只認「落在檯面（host/吧檯）」
-    // 收集其他小物佔格（別疊）＋檯面家具佔格（要落上去）
+  // 前牆不是整條隱形橫帶：暖簾只認門槽，其餘掛件只認左右兩段實牆。
+  if (gy === FRONT_WALL_ROW) {
+    if (!targets.has('frontWall')) return false;
+    const slot = it.frontSlot ?? 'wall';
+    const fits = slot === 'door'
+      ? fitsSegment(gx, w, FRONT_DOOR_COLS)
+      : FRONT_WALL_SEGMENTS.some((segment) => fitsSegment(gx, w, segment));
+    if (!fits) return false;
+    const taken = new Set<number>();
+    layout.forEach((p, i) => {
+      if (i === ignoreIndex || !isFrontWallPlaced(p)) return;
+      const pw = footprintDims(ITEM_BY_ID[p.id]!, p.facing).w;
+      for (let x = p.gx; x < p.gx + pw; x++) taken.add(x);
+    });
+    return cells.every(([x]) => !taken.has(x));
+  }
+
+  // 後牆只開放真正的牆面 rows 0–1，不再讓 39 件壁飾漂到地板中央。
+  if (targets.has('backWall')) {
+    if (gx < BACK_WALL.minCol || gx + w - 1 > BACK_WALL.maxCol) return false;
+    if (gy < BACK_WALL.minRow || gy + h - 1 > BACK_WALL.maxRow) return false;
+    const occupied = new Set<string>();
+    layout.forEach((p, i) => {
+      if (i === ignoreIndex || isFrontWallPlaced(p) || !canTarget(p.id, 'backWall')) return;
+      footprint(p.id, p.gx, p.gy, p.facing).forEach(([x, y]) => occupied.add(`${x},${y}`));
+    });
+    return cells.every(([x, y]) => !occupied.has(`${x},${y}`));
+  }
+
+  // 固定吧檯：保留店長所在 col4/5，其他格只和吧檯住客互斥。
+  if (targets.has('counter') && cells.every(([x, y]) => isCounterTop(x, y))) {
+    if (cells.some(([x]) => COUNTER_RESERVED_COLS.has(x))) return false;
+    const taken = new Set<string>();
+    layout.forEach((p, i) => {
+      if (i === ignoreIndex || !coversCounter(p)) return;
+      footprint(p.id, p.gx, p.gy, p.facing).forEach(([x, y]) => taken.add(`${x},${y}`));
+    });
+    return cells.every(([x, y]) => !taken.has(`${x},${y}`));
+  }
+
+  // 玩家擺出的桌／櫃面：小物與小型器材共用同一套檯面能力，不再由 z 判斷。
+  if (targets.has('table')) {
     const guestCells = new Set<string>();
     const hostCells = new Set<string>();
     layout.forEach((p, i) => {
       if (i === ignoreIndex) return;
       if (isSurfaceGuest(p.id)) footprint(p.id, p.gx, p.gy, p.facing).forEach(([x, y]) => guestCells.add(`${x},${y}`));
-      // E11：已放上吧檯的 counterTop 家具佔住檯面格＝小物別疊上去
-      if (ITEM_BY_ID[p.id]?.counterTop && isCounterTop(p.gx, p.gy))
-        footprint(p.id, p.gx, p.gy, p.facing).forEach(([x, y]) => guestCells.add(`${x},${y}`));
       if (isSurfaceHost(p.id)) footprint(p.id, p.gx, p.gy, p.facing).forEach(([x, y]) => hostCells.add(`${x},${y}`));
     });
-    for (const [cx, cy] of cells) {
-      if (cy > PLACE.maxRow) return false;
-      if (guestCells.has(`${cx},${cy}`)) return false;            // 別疊小物
-      if (!hostCells.has(`${cx},${cy}`) && !isCounterTop(cx, cy)) return false; // 必須有檯面
-      // counter-inside 件同樣走這條一般規則（E7 加法）：吧檯格/桌面都可放，嵌入與否是渲染變體（rendersInside）
-    }
-    return true;
+    return cells.every(([x, y]) => hostCells.has(`${x},${y}`) && !guestCells.has(`${x},${y}`));
   }
 
-  // E10 加法：frontWall 掛件落虛擬前牆列（row 12）＝一維橫帶，只跟其他前牆件比碰撞；
-  // 後牆（一般 wall 路徑）照舊可掛
-  if (it.frontWall && gy === FRONT_WALL_ROW) {
-    if (gx < PLACE.minCol || gx + w - 1 > PLACE.maxCol) return false;
-    const taken = new Set<number>();
-    layout.forEach((p, i) => {
-      if (i === ignoreIndex || !isFrontWallPlaced(p)) return;
-      const pw = footprintDims(ITEM_BY_ID[p.id]!).w;
-      for (let x = p.gx; x < p.gx + pw; x++) taken.add(x);
-    });
-    for (let x = gx; x < gx + w; x++) if (taken.has(x)) return false;
-    return true;
-  }
-
-  // 水平界限：整排 col 0..最右都可放（最左/最右是地板；壁飾貼側牆）——固定裝置改由 counterBlocked 管
+  if (!targets.has('floor')) return false;
   if (gx < 0 || gx + w - 1 > CAFE.cols - 1) return false;
-  const top = Z_TOP_ROW[it.z];
+  const top = Z_TOP_ROW[it.z === 'wall' ? 'furniture' : it.z];
   if (gy < top || gy + h - 1 > PLACE.maxRow) return false;
-
-  // E11 加法：counterTop 件（咖啡器材/小型展示，z=furniture）可整件落吧檯檯面格——
-  // 佔格衝突比照 surface 小物（別疊小物、別疊其他檯面住客），counterBlocked 對這條路不適用；地板照舊走下面一般規則
-  if (it.counterTop && cells.every(([cx, cy]) => isCounterTop(cx, cy))) {
-    const taken = new Set<string>();
-    layout.forEach((p, i) => {
-      if (i === ignoreIndex) return;
-      // 檯面住客＝surface 小物（含嵌入式小家電）＋其他已放檯面的 counterTop 家具
-      if (isSurfaceGuest(p.id) || (ITEM_BY_ID[p.id]?.counterTop && isCounterTop(p.gx, p.gy)))
-        footprint(p.id, p.gx, p.gy, p.facing).forEach(([x, y]) => taken.add(`${x},${y}`));
-    });
-    return cells.every(([cx, cy]) => !taken.has(`${cx},${cy}`));
-  }
 
   const occupied = new Set<string>();
   layout.forEach((p, i) => {
     if (i === ignoreIndex) return;
-    if (zRankOf(p.id) !== Z_RANK[it.z]) return;
+    const pit = ITEM_BY_ID[p.id];
+    if (!pit || !coversFloor(layout, i)) return;
+    // 地毯只擋地毯；家具、落地小物彼此互斥，仍可壓在地毯上。
+    if ((it.z === 'rug') !== (pit.z === 'rug')) return;
     footprint(p.id, p.gx, p.gy, p.facing).forEach(([x, y]) => occupied.add(`${x},${y}`));
   });
   for (const [cx, cy] of cells) {
-    if (it.z !== 'wall' && counterBlocked(cx, cy)) return false; // 地板類只避開左上吧台（側牆欄是地板可放）；壁飾隨處貼
+    if (counterBlocked(cx, cy)) return false;
     if (occupied.has(`${cx},${cy}`)) return false;
   }
   return true;

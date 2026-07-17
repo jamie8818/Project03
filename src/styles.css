@@ -2356,6 +2356,14 @@ img.buddy {
 .shop-stage:not(.editing) .cafe-furn { pointer-events: none; }
 .cafe-furn.z-rug { object-fit: fill; }
 .cafe-furn.z-wall { object-fit: contain; object-position: bottom; }
+.cafe-rug-sprite {
+  left: 50%;
+  top: 50%;
+  max-width: none;
+  max-height: none;
+  pointer-events: none;
+  transform-origin: center;
+}
 
 .cafe-furn.editable {
   cursor: grab;
@@ -2421,6 +2429,19 @@ img.buddy {
 .place-ghost.no {
   border-color: rgba(230, 69, 57, 0.85);
   background: rgba(230, 69, 57, 0.14);
+}
+
+/* 真家具落點預覽：尺寸、方向與錨點跟成品一致；方框只補充實際佔地。 */
+.place-sprite-ghost {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.72;
+  filter: drop-shadow(0 3px 4px rgba(40, 24, 12, 0.34));
+}
+.place-sprite-ghost.ok { opacity: 0.78; }
+.place-sprite-ghost.no {
+  opacity: 0.32;
+  filter: grayscale(0.7) sepia(0.35) hue-rotate(315deg) saturate(1.5);
 }
 
 .grid-cell {

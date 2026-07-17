@@ -1,9 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  CAFE_ITEMS,
   ITEM_BY_ID,
   availableFacings,
   canPlace,
+  canTarget,
   canToggleInside,
   FRONT_WALL_ROW,
   isFrontWallPlaced,
@@ -15,6 +17,7 @@ import {
   isSurfaceHost,
   itemAtCell,
   itemById,
+  moveHost,
   nextFacing,
   placedCount,
   renderOrder,
@@ -23,6 +26,7 @@ import {
   rotateHost,
   spriteFor,
   stockAvailable,
+  surfaceDepthOffset,
   type CafeItem,
 } from '../src/lib/shop.ts';
 import { STARTER_LAYOUT } from '../src/data/cafe.gen.ts';
@@ -30,7 +34,7 @@ import { BOARD_MAX, DEFAULT_SHOP, STARTER_IDS, addStockForUser, mergeBoard, merg
 
 // 具體品項（來自 cafe.gen.ts 昭和喫茶目錄）
 const CHAIR = 'chair_velvet'; // 1×1 家具，非檯面 host（椅子不可放小物）
-const APPL = 'grinder';       // 1×1 家具
+const APPL = 'vintage_fridge'; // 1×1 落地家具
 const TABLE = 'table_low';    // 2×1 家具，檯面 host（可放小物）
 const GUEST = 'candle';       // 1×1 檯面小物（surface）
 const RUG = 'rug_round';      // 2×2 地毯
@@ -66,9 +70,10 @@ test('canPlace：壁飾可貼牆列、家具不可', () => {
   assert.ok(!canPlace([], CHAIR, 5, 0)); // 家具不可
 });
 
-test('canPlace：最左/最右整欄是地板，壁飾與家具都可放，只有左上吧台擋家具', () => {
-  assert.ok(canPlace([], WALL, 0, 3), '壁飾貼左牆 col 0'); // poster 1×2
-  assert.ok(canPlace([], WALL, 17, 3), '壁飾貼右牆 col 17');
+test('canPlace：地板可用左右邊格；壁飾只認後牆 rows0–1，不漂到地板', () => {
+  assert.ok(canPlace([], WALL, 5, 0), '壁飾放真正後牆');
+  assert.ok(!canPlace([], WALL, 0, 0), '後牆左右保留結構邊界');
+  assert.ok(!canPlace([], WALL, 5, 3), '壁飾不能漂到地板區');
   assert.ok(canPlace([], CHAIR, 0, 7), '家具放最左欄地板（吧台下方 row 7）');
   assert.ok(canPlace([], CHAIR, 17, 7), '家具放最右欄地板');
   assert.ok(canPlace([], CHAIR, 17, 3), '最右欄 row 3 是地板（非左吧台）→ 家具可放');
@@ -95,10 +100,32 @@ test('canPlace：檯面小物不互相疊、吧檯檯面可放（④ 檯面上�
   assert.ok(!canPlace(onTable, 'vase', 10, 8)); // 同格已有小物 → 擋
   assert.ok(canPlace(onTable, 'vase', 11, 8)); // 桌上另一格 → 可
   assert.ok(canPlace([], GUEST, 3, 3)); // 吧檯檯面（COUNTER_TOP，row 3）→ 可
+  assert.ok(!canPlace([], GUEST, 4, 3)); // 店長所在 col4/5 保留，不用隱藏規則猜結果
   assert.ok(!canPlace([], GUEST, 0, 2)); // row2 舊「翹角」已除名（E4 拆層確認是抽屜排非平面）
 });
 
-test('canPlace／變體：counter-inside 小家電加法放置（E7）——吧檯格/桌面都可，嵌入是渲染變體', () => {
+test('明確 placement 能力：貓碗落地、高腳杯吊掛架上牆', () => {
+  const bowl = itemById('cat_bowl')!;
+  const rack = itemById('glass_hanging_rack')!;
+  assert.ok(canTarget(bowl.id, 'floor') && !canTarget(bowl.id, 'table'));
+  assert.ok(canPlace([], bowl.id, 10, 8), '貓碗可放地板');
+  assert.ok(!canPlace([{ id: TABLE, gx: 10, gy: 8 }], bowl.id, 10, 8), '貓碗不再被當桌上小物');
+  assert.equal(rack.z, 'wall');
+  assert.ok(canPlace([], rack.id, 5, 0), '吊掛架貼後牆');
+  assert.ok(!canPlace([], rack.id, 5, 8), '吊掛架不落地懸空');
+});
+
+test('多排桌面的前後格有不同視覺深度，不再畫在同一點', () => {
+  const layout: PlacedItem[] = [
+    { id: 'mahjong_table', gx: 10, gy: 8 },
+    { id: 'candle', gx: 10, gy: 8 },
+    { id: 'vase', gx: 10, gy: 9 },
+  ];
+  assert.ok(surfaceDepthOffset(layout, 1) > surfaceDepthOffset(layout, 2), '後排小物應往上錯開');
+  assert.notEqual(surfaceDepthOffset(layout, 1), surfaceDepthOffset(layout, 2));
+});
+
+test('canPlace／變體：counter-inside 小家電可放吧檯/桌面，店長 col4/5 保留', () => {
   // catalog 沒有的假 item 注入驗管線規則（同 E4 手法）
   const FAKE = 'test_coffee_machine';
   ITEM_BY_ID[FAKE] = {
@@ -106,10 +133,10 @@ test('canPlace／變體：counter-inside 小家電加法放置（E7）——吧�
     price: 0, lv: 1, starter: false, surface: false, spriteHeightTiles: 2, hostType: 'counter-inside',
   } as unknown as CafeItem;
   try {
-    // 放置＝一般 surface 規則（加法）：吧檯格全開放（含店長區 col4/5）、桌面也可
+    // 放置＝一般 surface 規則；店長所在 col4/5 不再用隱藏渲染規則自動換模式
     assert.ok(canPlace([], FAKE, 3, 3)); // 吧檯格 → 可
     assert.ok(canPlace([], FAKE, 0, 3)); // 吧檯最左格 → 可
-    assert.ok(canPlace([], FAKE, 4, 3)); // 店長視覺區 col4 → 可放（只是不能嵌，見下）
+    assert.ok(!canPlace([], FAKE, 4, 3)); // 店長視覺區 col4 → 明確不可放
     assert.ok(canPlace([{ id: TABLE, gx: 10, gy: 8 }], FAKE, 10, 8)); // 桌上 → 可（E7 放寬）
     assert.ok(!canPlace([], FAKE, 10, 8)); // 空地板 → 仍不可（沒檯面）
     assert.ok(!canPlace([{ id: FAKE, gx: 3, gy: 3 }], GUEST, 3, 3)); // 同格已有小家電 → 檯面小物擋
@@ -132,11 +159,13 @@ test('canPlace／變體：counter-inside 小家電加法放置（E7）——吧�
   }
 });
 
-test('canPlace／rendersOnCounter：counterTop 家具可放檯面格（E11 加法）', () => {
+test('canPlace／rendersOnCounter：小型器材只放吧檯或玩家桌面，不落地', () => {
   const G = 'grinder'; // 1×1 z=furniture counterTop:true（manifest 已標）
   assert.ok(itemById(G)?.counterTop, '前置：grinder 應標 counterTop');
   assert.ok(canPlace([], G, 3, 3), '檯面格 → 可（E11）');
-  assert.ok(canPlace([], G, 10, 8), '地板照舊可放（加法）');
+  assert.ok(!canPlace([], G, 10, 8), '小型器材不可直接落地');
+  assert.ok(canPlace([{ id: TABLE, gx: 10, gy: 8 }], G, 10, 8), '玩家桌面 → 可');
+  assert.ok(canTarget(G, 'table') && canTarget(G, 'counter') && !canTarget(G, 'floor'));
   assert.ok(!canPlace([], CHAIR, 3, 3), '非 counterTop 家具上檯面 → 仍擋（counterBlocked）');
   assert.ok(!canPlace([{ id: G, gx: 3, gy: 3 }], GUEST, 3, 3), '小物別疊在檯面上的器材');
   assert.ok(!canPlace([{ id: GUEST, gx: 3, gy: 3 }], G, 3, 3), '器材別疊在小物上');
@@ -146,21 +175,23 @@ test('canPlace／rendersOnCounter：counterTop 家具可放檯面格（E11 加�
   assert.ok(!rendersOnCounter({ id: CHAIR, gx: 3, gy: 3 }), '非 counterTop 件永不走檯面錨');
 });
 
-test('canPlace／isFrontWallPlaced：frontWall 掛件可掛前牆虛擬列 row12（E10 加法）', () => {
+test('canPlace／isFrontWallPlaced：前門與前牆各有實體槽位', () => {
   const NOREN = 'noren_curtain';
   assert.ok(itemById(NOREN)?.frontWall, '前置：noren_curtain 應標 frontWall');
   assert.ok(itemById(WALL)?.frontWall, '前置：poster 應標 frontWall');
   assert.ok(canPlace([], NOREN, 8, FRONT_WALL_ROW), '門面槽 → 可');
   assert.ok(canPlace([], WALL, 3, FRONT_WALL_ROW), '門左牆 → 可');
   assert.ok(canPlace([], WALL, 12, FRONT_WALL_ROW), '門右牆 → 可');
+  assert.ok(!canPlace([], NOREN, 1, FRONT_WALL_ROW), '暖簾不可掛普通牆面');
+  assert.ok(!canPlace([], NOREN, 10, FRONT_WALL_ROW), '暖簾不可跨出門框');
+  assert.ok(!canPlace([], WALL, 8, FRONT_WALL_ROW), '海報不可掛在門中央');
   assert.ok(canPlace([], WALL, 5, 0), '後牆照舊可掛（加法）');
   assert.ok(!canPlace([], CHAIR, 5, FRONT_WALL_ROW), '非 frontWall 件不可上前牆');
   assert.ok(!canPlace([], WALL, 0, FRONT_WALL_ROW), '出左界（minCol=1）');
   // 橫帶碰撞：只跟其他前牆件比
-  const hung: PlacedItem[] = [{ id: NOREN, gx: 8, gy: FRONT_WALL_ROW }];
-  const norenW = footprintDims(itemById(NOREN)!).w;
-  assert.ok(!canPlace(hung, WALL, 8, FRONT_WALL_ROW), '同位重疊 → 擋');
-  assert.ok(canPlace(hung, WALL, 8 + norenW, FRONT_WALL_ROW), '錯開 → 可');
+  const hung: PlacedItem[] = [{ id: WALL, gx: 1, gy: FRONT_WALL_ROW }];
+  assert.ok(!canPlace(hung, 'menu_board', 1, FRONT_WALL_ROW), '同一牆格重疊 → 擋');
+  assert.ok(canPlace(hung, 'menu_board', 2, FRONT_WALL_ROW), '同段牆面錯開 → 可');
   assert.ok(isFrontWallPlaced({ id: NOREN, gx: 8, gy: FRONT_WALL_ROW }));
   assert.ok(!isFrontWallPlaced({ id: WALL, gx: 5, gy: 0 }), '後牆的 poster 不算前牆件');
   assert.ok(!isFrontWallPlaced({ id: CHAIR, gx: 5, gy: FRONT_WALL_ROW }), '非 frontWall 件永不算');
@@ -228,6 +259,25 @@ test('availableFacings / nextFacing：旋轉鍵循環 front→right→back→lef
 
   const dir = itemById('booth_corner')!;
   assert.deepEqual(availableFacings(dir), ['front', 'right', 'back', 'left']);
+
+  const runner = itemById('rug_runner_narrow')!;
+  assert.deepEqual(availableFacings(runner), ['front', 'right', 'back', 'left'], '純俯視地毯不需新素材即可四向旋轉');
+  assert.deepEqual(footprintDims(runner, 'right'), { w: 1, h: 4 });
+});
+
+test('全目錄 239 件：每件至少有一個合法落點，牆飾不會落到地板', () => {
+  for (const it of CAFE_ITEMS) {
+    let legal = false;
+    for (let gy = 0; gy < 13 && !legal; gy++) {
+      for (let gx = 0; gx < 18 && !legal; gx++) legal = canPlace([], it.id, gx, gy);
+    }
+    assert.ok(legal, `${it.id} 應至少有一個合法落點`);
+    if (canTarget(it.id, 'backWall')) assert.ok(!canPlace([], it.id, 10, 8), `${it.id} 不可漂在地板中央`);
+    if (it.counterTop) {
+      assert.ok(canTarget(it.id, 'table') && canTarget(it.id, 'counter'), `${it.id} 應能放桌面與吧檯`);
+      assert.ok(!canTarget(it.id, 'floor'), `${it.id} 是檯面器材，不應直接落地`);
+    }
+  }
 });
 
 test('rotateHost：桌子連小物一起轉、小物仍在桌上（②③）', () => {
@@ -272,6 +322,19 @@ test('rotateHost：非 host 家具單純轉向（無小物邏輯）', () => {
   const next = rotateHost(layout, 0, 'right')!;
   assert.equal(next[0].facing, 'right');
   assert.equal(next.length, 1);
+});
+
+test('moveHost：桌與桌上物整組搬移；若新位置讓小物重疊吧檯則整組拒絕', () => {
+  const layout: PlacedItem[] = [
+    { id: 'table_low', gx: 10, gy: 8 },
+    { id: 'candle', gx: 10, gy: 8 },
+  ];
+  const moved = moveHost(layout, 0, 12, 8)!;
+  assert.ok(moved);
+  assert.deepEqual([moved[0].gx, moved[0].gy], [12, 8]);
+  assert.deepEqual([moved[1].gx, moved[1].gy], [12, 8]);
+  assert.equal(hostIndexOf(moved, 1), 0, '搬完仍綁在原展示櫃上');
+  assert.equal(moveHost(layout, 0, 3, 3), null, '固定吧檯同格不能再疊展示櫃＋桌上物');
 });
 
 test('itemAtCell：回覆蓋該格最上層家具（拖曳抓取），小物優先於其下的桌', () => {

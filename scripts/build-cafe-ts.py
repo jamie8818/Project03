@@ -70,6 +70,7 @@ def main():
     L.append("import type { Facing, PlacedItem } from '../lib/shopstate.ts';")
     L.append('')
     L.append("export type Z層 = 'rug' | 'furniture' | 'surface' | 'wall';")
+    L.append("export type PlacementTarget = 'floor' | 'table' | 'counter' | 'backWall' | 'frontWall';")
     L.append('')
     L.append('export interface CafeItem {')
     L.append('  id: string;')
@@ -87,7 +88,9 @@ def main():
     L.append('  facings?: Facing[]; // 實際畫了哪些向；省略＝front 單向（旋轉 no-op）。back/right 加檔 <id>_back/_right.png，left 缺則引擎鏡像 right')
     L.append("  hostType?: 'counter-inside'; // E4：吧檯內側小家電（嵌吧檯裡、下半身被 counter_front 遮）；省略＝一般家具/小物")
     L.append("  frontWall?: boolean; // E10：可掛門/門旁前牆（畫在 base-fg 之上）；省略＝只能掛後牆")
-    L.append("  counterTop?: boolean; // E11：z=furniture 但可放吧檯檯面格（加法，地板照舊可放）")
+    L.append("  counterTop?: boolean; // E11：z=furniture 的小型檯面器材；預設只放玩家桌面／固定吧檯，不直接落地")
+    L.append("  placements?: PlacementTarget[]; // 明確指定可放位置；省略時由 z/counterTop/frontWall 套安全預設")
+    L.append("  frontSlot?: 'wall' | 'door'; // 前牆件的實體槽位；暖簾只准門，其餘預設牆面")
     L.append("  anim?: { mode: 'loop' | 'occasional'; period: number }; // E20：疊 <id>_anim.png 動畫；loop=固定週期雙態交替，occasional=隨機間隔短暫顯示；省略＝靜態無動畫")
     L.append('  flavor: string; // 一句話 flavor 文案（docs/cafe-flavor.json 來源，查無 id 則為空字串；引擎端空字串該行不渲染）')
     L.append('}')
@@ -122,6 +125,10 @@ def main():
         host = f", hostType: '{it['hostType']}'" if it.get('hostType') else ''
         host += ', frontWall: true' if it.get('frontWall') else ''
         host += ', counterTop: true' if it.get('counterTop') else ''
+        if it.get('placements'):
+            host += ", placements: [" + ", ".join(f"'{p}'" for p in it['placements']) + "]"
+        if it.get('frontSlot'):
+            host += f", frontSlot: '{it['frontSlot']}'"
         if it.get('anim'):
             a = it['anim']
             host += f", anim: {{ mode: '{a['mode']}', period: {a['period']} }}"
