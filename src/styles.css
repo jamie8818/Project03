@@ -3850,13 +3850,15 @@ img.buddy {
   left: 297px;
   top: 43px;
   z-index: 8;
-  width: 42px;
-  height: 34px;
+  /* 場景會隨螢幕縮放；90px 可讓 320px 寬手機仍保有約 44px 的實際觸控區。
+     熱區只往伝言板外側（右下）延伸，信封視覺尺寸維持不變。 */
+  width: 90px;
+  height: 90px;
   padding: 0;
   border: 0;
   background: transparent;
   transform: rotate(3deg);
-  transform-origin: 50% 15%;
+  transform-origin: 21px 5px;
   filter: drop-shadow(0 2px 2px rgba(31, 17, 7, 0.48));
   -webkit-tap-highlight-color: transparent;
 }
@@ -3874,7 +3876,10 @@ img.buddy {
 
 .cafe-mission-envelope {
   position: absolute;
-  inset: 0 0 7px;
+  left: 0;
+  top: 0;
+  width: 42px;
+  height: 27px;
   overflow: hidden;
   border: 2px solid #7a492a;
   background: #f2dfb5;
@@ -3909,8 +3914,8 @@ img.buddy {
 .cafe-mission-btn > b {
   position: absolute;
   left: 5px;
-  right: 0;
-  bottom: -1px;
+  top: 27px;
+  width: 37px;
   color: #f4e4bb;
   font-size: 8px;
   line-height: 1;
