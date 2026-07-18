@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { UserState } from '../types.ts';
-import { STATION_MISSION, STATION_MISSION_ID } from '../data/missions.ts';
+import { MISSION_CATALOG, missionForDate } from '../data/missions.ts';
 import { completeMission, missionDoneToday } from '../lib/missions.ts';
 import { sfx } from '../lib/sounds.ts';
 import { speakJa, stopSpeak } from '../lib/tts.ts';
@@ -23,8 +23,9 @@ export default function StationMission({ state, today, update, onExit }: Props) 
   const [wrongOnCurrent, setWrongOnCurrent] = useState(false);
   const [firstTryCorrect, setFirstTryCorrect] = useState(0);
   const [finalScore, setFinalScore] = useState(0);
-  const doneToday = missionDoneToday(state, STATION_MISSION_ID, today);
-  const question = STATION_MISSION.questions[questionIndex];
+  const mission = missionForDate(today);
+  const doneToday = missionDoneToday(state, mission.id, today);
+  const question = mission.questions[questionIndex];
 
   useEffect(() => {
     const before = document.body.style.overflow;
@@ -66,7 +67,7 @@ export default function StationMission({ state, today, update, onExit }: Props) 
   const advanceQuestion = () => {
     if (pick !== question.correct) return;
     const nextCorrect = firstTryCorrect + (wrongOnCurrent ? 0 : 1);
-    if (questionIndex + 1 < STATION_MISSION.questions.length) {
+    if (questionIndex + 1 < mission.questions.length) {
       setFirstTryCorrect(nextCorrect);
       setQuestionIndex((i) => i + 1);
       setPick(null);
@@ -74,7 +75,7 @@ export default function StationMission({ state, today, update, onExit }: Props) 
       return;
     }
     setFinalScore(nextCorrect);
-    update((s) => completeMission(s, STATION_MISSION_ID, today, nextCorrect));
+    update((s) => completeMission(s, mission.id, today, nextCorrect));
     sfx.clear();
     setPhase('result');
   };
@@ -89,12 +90,12 @@ export default function StationMission({ state, today, update, onExit }: Props) 
   };
 
   return (
-    <div className={`mission-overlay phase-${phase}`} role="dialog" aria-modal="true" aria-label="今日委託：車站問月台">
+    <div className={`mission-overlay phase-${phase}`} role="dialog" aria-modal="true" aria-label={`今日委託：${mission.title}`}>
       <div className="mission-page">
         <header className="mission-head">
           <div>
             <small>本日の依頼</small>
-            <b>{STATION_MISSION.jpTitle}</b>
+            <b>{mission.jpTitle}</b>
           </div>
           <button className="mission-close" onClick={leave} aria-label="離開委託">あとで</button>
         </header>
@@ -102,12 +103,13 @@ export default function StationMission({ state, today, update, onExit }: Props) 
         {phase === 'brief' && (
           <main className="mission-letter-wrap">
             <section className="mission-letter">
-              <span className="mission-letter-kicker">今日のお願い</span>
-              <h1>{STATION_MISSION.title}</h1>
-              <p className="mission-request">{STATION_MISSION.request}</p>
+              <span className="mission-letter-kicker">今日のお願い · {mission.theme}</span>
+              <h1>{mission.title}</h1>
+              <p className="mission-request">{mission.request}</p>
+              <p className="mission-catalog-note">日常情境 {MISSION_CATALOG.length} 種輪替中</p>
               <div className="mission-shop-line">
                 <img src="/cafe/shopkeeper/idle.png" alt="熊貓店長" draggable={false} />
-                <p>{STATION_MISSION.shopLine}</p>
+                <p>{mission.shopLine}</p>
               </div>
               {doneToday && <p className="mission-done-note">本日完了　今日は已完成，可以再練一次。</p>}
               <button className="mission-primary" onClick={() => { sfx.unlock(); setPhase('prep'); }}>
@@ -119,11 +121,11 @@ export default function StationMission({ state, today, update, onExit }: Props) 
         )}
 
         {phase === 'prep' && (() => {
-          const card = STATION_MISSION.lesson[lessonIndex];
+          const card = mission.lesson[lessonIndex];
           return (
             <main className="mission-prep">
-              <div className="mission-progress" aria-label={`準備 ${lessonIndex + 1} / ${STATION_MISSION.lesson.length}`}>
-                {STATION_MISSION.lesson.map((_, i) => <i key={i} className={i <= lessonIndex ? 'on' : ''} />)}
+              <div className="mission-progress" aria-label={`準備 ${lessonIndex + 1} / ${mission.lesson.length}`}>
+                {mission.lesson.map((_, i) => <i key={i} className={i <= lessonIndex ? 'on' : ''} />)}
               </div>
               <p className="mission-eyebrow">出発前の準備</p>
               <section className="lesson-ticket">
@@ -132,16 +134,16 @@ export default function StationMission({ state, today, update, onExit }: Props) 
                 <span>{card.kana}</span>
                 <p>{card.zh}</p>
               </section>
-              <p className="mission-hint">點「音」聽一次，記住這張車票上的關鍵字。</p>
+              <p className="mission-hint">點「音」聽一次，先抓住這個情境的關鍵詞。</p>
               <button
                 className="mission-primary"
                 onClick={() => {
-                  if (lessonIndex + 1 < STATION_MISSION.lesson.length) setLessonIndex((i) => i + 1);
+                  if (lessonIndex + 1 < mission.lesson.length) setLessonIndex((i) => i + 1);
                   else setPhase('prep-check');
                   sfx.tick();
                 }}
               >
-                {lessonIndex + 1 < STATION_MISSION.lesson.length ? '下一張車票' : '來試一次'}
+                {lessonIndex + 1 < mission.lesson.length ? '下一張提示' : '來試一次'}
               </button>
             </main>
           );
@@ -150,9 +152,9 @@ export default function StationMission({ state, today, update, onExit }: Props) 
         {phase === 'prep-check' && (
           <main className="mission-prep mission-prep-check">
             <p className="mission-eyebrow">出発前の確認</p>
-            <h2>哪一句是在問月台？</h2>
+            <h2>{mission.prepPrompt}</h2>
             <div className="mission-choice-list compact">
-              {STATION_MISSION.prepChoices.map((choice, i) => (
+              {mission.prepChoices.map((choice, i) => (
                 <button
                   key={choice.label}
                   className={`mission-ticket-choice ${prepPick === i ? (i === 0 ? 'correct' : 'wrong') : ''}`}
@@ -165,12 +167,12 @@ export default function StationMission({ state, today, update, onExit }: Props) 
             {prepPick != null && (
               <div className={`mission-feedback ${prepPick === 0 ? 'good' : 'bad'}`} aria-live="polite">
                 <b>{prepPick === 0 ? '答對，準備完了' : '答錯，但這句也有用'}</b>
-                <span>{STATION_MISSION.prepChoices[prepPick].explain}</span>
-                {prepPick === 0 && <small>{STATION_MISSION.phraseKana}</small>}
+                <span>{mission.prepChoices[prepPick].explain}</span>
+                {prepPick === 0 && <small>{mission.phraseKana}</small>}
               </div>
             )}
             <button className="mission-primary" disabled={prepPick !== 0} onClick={() => { setPhase('travel'); sfx.unlock(); }}>
-              車站へ出発
+              出発
             </button>
           </main>
         )}
@@ -180,7 +182,7 @@ export default function StationMission({ state, today, update, onExit }: Props) 
             <div className="travel-card">
               <span>日々喫茶</span>
               <i><b>●</b><b>●</b><b>●</b></i>
-              <span>駅</span>
+              <span>{mission.destinationLabel}</span>
               <strong>出発</strong>
             </div>
           </main>
@@ -189,12 +191,12 @@ export default function StationMission({ state, today, update, onExit }: Props) 
         {(phase === 'play' || phase === 'result') && (
           <main className="mission-play">
             <div className="mission-round-head">
-              <span>{phase === 'result' ? '依頼完了' : `実戦 ${questionIndex + 1} / ${STATION_MISSION.questions.length}`}</span>
+              <span>{phase === 'result' ? '依頼完了' : `実戦 ${questionIndex + 1} / ${mission.questions.length}`}</span>
               {phase === 'play' && <button onClick={() => speakJa(question.line)}>▶ 聞く</button>}
             </div>
 
             <section className="station-postcard">
-              <img className="station-bg" src="/cafe/missions/station-platform-v1.png" alt="黃昏的日本車站月台" draggable={false} />
+              <img className="station-bg" src={mission.image} alt={mission.imageAlt} draggable={false} />
               <img className="station-player" src={`/cafe/guests/${state.user}.png`} alt="玩家角色" draggable={false} />
               {phase === 'result' && <div className="mission-stamp">依頼<br />完了</div>}
             </section>
@@ -233,16 +235,16 @@ export default function StationMission({ state, today, update, onExit }: Props) 
                   </div>
                 )}
                 <button className="mission-primary" disabled={pick !== question.correct} onClick={advanceQuestion}>
-                  {questionIndex + 1 < STATION_MISSION.questions.length ? '下一步' : '完成委託'}
+                  {questionIndex + 1 < mission.questions.length ? '下一步' : '完成委託'}
                 </button>
               </>
             ) : (
               <section className="mission-result">
                 <p className="mission-eyebrow">今日の依頼、完了。</p>
-                <h2>{finalScore} / {STATION_MISSION.questions.length}</h2>
-                <p>{finalScore === STATION_MISSION.questions.length ? '三題一次通過。你有成功留在東京都。' : '任務完成。答錯的地方已經比搭錯車便宜。'}</p>
-                <small>V1 測試版不發正式金幣、XP 或家具。</small>
-                {finalScore < STATION_MISSION.questions.length && <button className="mission-text-btn" onClick={restart}>再練一次</button>}
+                <h2>{finalScore} / {mission.questions.length}</h2>
+                <p>{finalScore === mission.questions.length ? mission.perfectLine : mission.retryLine}</p>
+                <small>今日委託是情境練習，不發正式金幣、XP 或家具。</small>
+                {finalScore < mission.questions.length && <button className="mission-text-btn" onClick={restart}>再練一次</button>}
                 <button className="mission-primary" onClick={leave}>回到喫茶店</button>
               </section>
             )}

@@ -47,7 +47,7 @@ import {
 } from '../lib/shop.ts';
 import { DEFAULT_SHOP, STARTER_IDS, addStockForUser, fetchShop, mergeBoard, mergeStockState, normalizeShop, pushBoard, pushShop, type BoardMsg, type Facing, type PlacedItem, type ShopState } from '../lib/shopstate.ts';
 import { AFFECTION_START, affectionTier, petCat, type PetOutcome } from '../lib/cat.ts';
-import { STATION_MISSION_ID } from '../data/missions.ts';
+import { missionForDate } from '../data/missions.ts';
 import { missionDoneToday } from '../lib/missions.ts';
 import Coach, { coachSeen, dismissCoach } from './Coach.tsx';
 
@@ -136,7 +136,7 @@ interface StageProps {
   onItem?: (index: number) => void; // 點一下已擺家具＝選取切換（index<0＝點空白處取消選取）
   onMove?: (index: number, gx: number, gy: number) => void; // 拖曳：把第 index 件搬到 (gx,gy)
   onBoard?: () => void; // 點牆上伝言板黑板（僅店面檢視模式；有給才畫可點黑板）
-  onMission?: () => void; // 點伝言板上的今日委託信（V1 車站情境）
+  onMission?: () => void; // 點伝言板上的今日委託信（日常情境每日輪替）
   missionDone?: boolean; // 今日委託是否已完成（信封改蓋章、不再晃動）
   onEditGuestLine?: () => void; // E14：點自己的 Q 版客人 → 開自訂台詞編輯（有給才可點）
   onPetCat?: () => { outcome: PetOutcome; value: number } | null; // E18/E19：摸粉圓（好感判定在 ShopPage，回分支＋新好感值）
@@ -1054,7 +1054,7 @@ export function ShopPage({ me, peer, today, update, onBack, onMission }: { me: U
           talk
           onBoard={() => setBoardOpen(true)}
           onMission={mode === 'view' ? onMission : undefined}
-          missionDone={missionDoneToday(me, STATION_MISSION_ID, today)}
+          missionDone={missionDoneToday(me, missionForDate(today).id, today)}
           onEditGuestLine={() => setLineEditOpen(true)}
           catValue={me.catAffection?.value ?? AFFECTION_START[me.user]}
           onPetCat={() => {
