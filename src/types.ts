@@ -13,6 +13,12 @@ export interface CardState {
   due: string; // 到期日 YYYY-MM-DD（台北時區）
 }
 
+export interface MissionProgress {
+  date: string;
+  bestScore: number;
+  plays: number;
+}
+
 export interface UserState {
   user: UserId;
   createdAt: string;
@@ -53,6 +59,7 @@ export interface UserState {
   login?: { last: string; days: number; furn: number }; // 每日登入：最後簽到日/累積天數/已入庫熊貓家具數（lib/login.ts）
   catGuardAt?: string; // 貓顧店：上次粉圓幫忙護 streak 的日期（7 天冷卻，lib/store.ts）
   quizFail?: { no: number; date: string }; // 最後一次小測沒過的課與日期（隔天＝補強日）
+  missions?: Record<string, MissionProgress>; // 情境委託：每個任務的當日最佳與累計遊玩次數
 }
 
 export interface KanaInfo {

@@ -11,6 +11,7 @@ import { isMastered } from '../lib/srs.ts';
 import { ACHIEVEMENTS, levelInfo } from '../lib/xp.ts';
 import Buddy from './Buddy.tsx';
 import { ShopBanner, ShopPage } from './Shop.tsx';
+import StationMission from './StationMission.tsx';
 
 function masteryCount(s: UserState, prefixes: string[]): number {
   return Object.values(s.cards).filter((c) => prefixes.some((p) => c.id.startsWith(p)) && isMastered(c)).length;
@@ -86,6 +87,7 @@ export default function Dashboard({
 }) {
   const [gachaGot, setGachaGot] = useState<Pudding[] | null>(null);
   const [shopOpen, setShopOpen] = useState(false);
+  const [missionOpen, setMissionOpen] = useState(false);
   const [pudTab, setPudTab] = useState<'all' | Rarity>('all'); // E17：圖鑑 100 味的稀有度篩選
   const goal = me.goal ?? DEFAULT_GOAL;
   // 目標編輯（等級 N5/N4＋達成日）；null＝非編輯中
@@ -94,7 +96,15 @@ export default function Dashboard({
   if (shopOpen) {
     return (
       <div className="dashboard">
-        <ShopPage me={me} peer={peer} today={today} update={update} onBack={() => setShopOpen(false)} />
+        <ShopPage
+          me={me}
+          peer={peer}
+          today={today}
+          update={update}
+          onBack={() => setShopOpen(false)}
+          onMission={() => setMissionOpen(true)}
+        />
+        {missionOpen && <StationMission state={me} today={today} update={update} onExit={() => setMissionOpen(false)} />}
       </div>
     );
   }

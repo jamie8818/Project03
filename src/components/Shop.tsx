@@ -47,6 +47,8 @@ import {
 } from '../lib/shop.ts';
 import { DEFAULT_SHOP, STARTER_IDS, addStockForUser, fetchShop, mergeBoard, mergeStockState, normalizeShop, pushBoard, pushShop, type BoardMsg, type Facing, type PlacedItem, type ShopState } from '../lib/shopstate.ts';
 import { AFFECTION_START, affectionTier, petCat, type PetOutcome } from '../lib/cat.ts';
+import { STATION_MISSION_ID } from '../data/missions.ts';
+import { missionDoneToday } from '../lib/missions.ts';
 import Coach, { coachSeen, dismissCoach } from './Coach.tsx';
 
 const STAGE_W = CAFE.w; // 576
@@ -134,6 +136,8 @@ interface StageProps {
   onItem?: (index: number) => void; // 點一下已擺家具＝選取切換（index<0＝點空白處取消選取）
   onMove?: (index: number, gx: number, gy: number) => void; // 拖曳：把第 index 件搬到 (gx,gy)
   onBoard?: () => void; // 點牆上伝言板黑板（僅店面檢視模式；有給才畫可點黑板）
+  onMission?: () => void; // 點伝言板上的今日委託信（V1 車站情境）
+  missionDone?: boolean; // 今日委託是否已完成（信封改蓋章、不再晃動）
   onEditGuestLine?: () => void; // E14：點自己的 Q 版客人 → 開自訂台詞編輯（有給才可點）
   onPetCat?: () => { outcome: PetOutcome; value: number } | null; // E18/E19：摸粉圓（好感判定在 ShopPage，回分支＋新好感值）
   catValue?: number; // 目前好感值（頭頂階級章；不給＝不顯示）
@@ -143,7 +147,7 @@ interface StageProps {
 type Drag = { index: number; grabDx: number; grabDy: number; gx: number; gy: number; moved: boolean; startX: number; startY: number };
 const DRAG_THRESHOLD = 6; // 移動超過幾 px 才算「拖曳」，否則當「點一下」（避免觸控輕點誤判成搬移）
 
-function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, placing, placingFacing, placingIgnore = -1, selectedIndex, onCell, onItem, onMove, onBoard, onEditGuestLine, onPetCat, catValue, onPandaTalk }: StageProps) {
+function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, placing, placingFacing, placingIgnore = -1, selectedIndex, onCell, onItem, onMove, onBoard, onMission, missionDone, onEditGuestLine, onPetCat, catValue, onPandaTalk }: StageProps) {
   const wrap = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   // 台詞帶序號 n：同句被連抽兩次時 key 仍變、泡泡動畫照樣重播（泡泡＝顯示幾秒自動淡出）
@@ -739,6 +743,19 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
           </button>
         )}
 
+        {/* 今日委託信：釘在伝言板右下角，獨立熱區；完成後蓋章、不再提示晃動。 */}
+        {onMission && !editing && (
+          <button
+            type="button"
+            className={`cafe-mission-btn ${missionDone ? 'done' : 'new'}`}
+            onClick={() => { sfx.unlock(); onMission(); }}
+            aria-label={missionDone ? '今日委託已完成，可以再練一次' : '查看今日委託'}
+          >
+            <span className="cafe-mission-envelope"><i /></span>
+            <b>{missionDone ? '完了' : '依頼'}</b>
+          </button>
+        )}
+
         {talk && !guestBubble && <span className="shop-bubble" key={line.n}>{line.t.text}</span>}
         {!meDone && !editing && <span className="shop-closed-sign">準備中</span>}
       </div>
@@ -866,7 +883,7 @@ function DengonBoard({ me, board, onSend, onClose }: { me: UserState; board: Boa
 type Mode = 'view' | 'shop' | 'decorate';
 
 // ── 全頁：檢視／商店／裝潢 ──
-export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; peer: UserState | null; today: string; update: (fn: (s: UserState) => UserState) => void; onBack: () => void }) {
+export function ShopPage({ me, peer, today, update, onBack, onMission }: { me: UserState; peer: UserState | null; today: string; update: (fn: (s: UserState) => UserState) => void; onBack: () => void; onMission: () => void }) {
   const lv = shopLevel(me.xp + (peer?.xp ?? 0));
   const attend = attendance(me, peer, today);
   const meDone = me.lastDoneDate === today;
@@ -1036,6 +1053,8 @@ export function ShopPage({ me, peer, today, update, onBack }: { me: UserState; p
           user={me.user}
           talk
           onBoard={() => setBoardOpen(true)}
+          onMission={mode === 'view' ? onMission : undefined}
+          missionDone={missionDoneToday(me, STATION_MISSION_ID, today)}
           onEditGuestLine={() => setLineEditOpen(true)}
           catValue={me.catAffection?.value ?? AFFECTION_START[me.user]}
           onPetCat={() => {
