@@ -2962,6 +2962,44 @@ img.buddy {
 }
 
 /* ── 裝潢托盤 ── */
+.deco-command-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 8px;
+  min-height: 46px;
+}
+
+.deco-command-copy {
+  min-width: 0;
+}
+
+.deco-command-row .hint {
+  margin: 5px 0 0;
+}
+
+.deco-undo {
+  min-width: 78px;
+  margin-top: 5px;
+  padding: 5px 8px;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink-soft);
+  font-size: 12px;
+  white-space: nowrap;
+  box-shadow: 0 2px 0 var(--line);
+}
+
+.deco-undo:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+.deco-undo:disabled {
+  opacity: 0.4;
+}
+
 .deco-tray {
   display: flex;
   flex-wrap: wrap;

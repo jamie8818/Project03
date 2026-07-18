@@ -1406,7 +1406,8 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop, onDecorated }: { me
     const prev = undoStack[undoStack.length - 1];
     if (!prev) return;
     setUndoStack((st) => st.slice(0, -1));
-    setSelected(null);
+    // 搬移／旋轉後復原時保留原家具選取，方便接著微調；只有該 index 不存在才取消。
+    setSelected((index) => index != null && prev[index] ? index : null);
     setPlacing(null);
     saveShop({ ...shop, layout: prev });
     sfx.correct(1);
@@ -1441,36 +1442,37 @@ function DecoratePanel({ me, attend, meDone, shop, saveShop, onDecorated }: { me
         onItem={sweep ? sweepPick : selectPlaced}
         onMove={sweep ? undefined : moveIndexTo}
       />
-      {sweep ? (
-        <p className="hint">
-          🧺 收回模式：<b>點店裡的家具直接收回托盤</b>
-          {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={sweepClearAll}>🗑 全部清空</button>
-          {' · '}<button className="linkish" style={{ display: 'inline' }} disabled={undoStack.length === 0} onClick={undoLast}>↩ 復原（{undoStack.length}）</button>
-          {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={() => setSweep(false)}>完成</button>
-        </p>
-      ) : placing ? (
-        <p className="hint">
-          點（或拖到）綠格放下「{placingItem?.name}」
-          {canRotate && <> · <button className="linkish" style={{ display: 'inline' }} onClick={rotate}>🔄 轉向（{FACING_LABEL[facing]}）</button></>}
-          {undoStack.length > 0 && <> · <button className="linkish" style={{ display: 'inline' }} onClick={undoLast}>↩ 復原（{undoStack.length}）</button></>}
-          {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={() => select(null)}>取消</button>
-        </p>
-      ) : selected != null ? (
-        <p className="hint">
-          選取「{selItem?.name}」·直接拖它搬位置
-          {selCanRotate && <> · <button className="linkish" style={{ display: 'inline' }} onClick={rotatePlaced}>🔄 轉向（{FACING_LABEL[selP?.facing ?? 'front']}）</button></>}
-          {selCanToggleInside && <> · <button className="linkish" style={{ display: 'inline' }} onClick={toggleInside}>{selP?.top ? '⬇ 嵌進吧檯' : '⬆ 放上檯面'}</button></>}
-          {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={removeSelected}>🗑 收回托盤</button>
-          {undoStack.length > 0 && <> · <button className="linkish" style={{ display: 'inline' }} onClick={undoLast}>↩ 復原（{undoStack.length}）</button></>}
-          {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={() => setSelected(null)}>取消選取</button>
-        </p>
-      ) : (
-        <p className="hint">
-          點托盤家具→擺進店裡；店裡的家具直接<b>拖拉搬移</b>，點一下＝選取（可 🔄 轉向／🗑 收回），再點一下或點空白＝取消。
-          {undoStack.length > 0 && <> {' '}<button className="linkish" style={{ display: 'inline' }} onClick={undoLast}>↩ 復原（{undoStack.length}）</button></>}
-          {' '}<button className="linkish" style={{ display: 'inline' }} onClick={enterSweep}>🧺 收回模式</button>
-        </p>
-      )}
+      <div className="deco-command-row">
+        <div className="deco-command-copy">
+          {sweep ? (
+            <p className="hint">
+              🧺 收回模式：<b>點店裡的家具直接收回托盤</b>
+              {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={sweepClearAll}>🗑 全部清空</button>
+              {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={() => setSweep(false)}>完成</button>
+            </p>
+          ) : placing ? (
+            <p className="hint">
+              點（或拖到）綠格放下「{placingItem?.name}」
+              {canRotate && <> · <button className="linkish" style={{ display: 'inline' }} onClick={rotate}>🔄 轉向（{FACING_LABEL[facing]}）</button></>}
+              {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={() => select(null)}>取消</button>
+            </p>
+          ) : selected != null ? (
+            <p className="hint">
+              選取「{selItem?.name}」·直接拖它搬位置
+              {selCanRotate && <> · <button className="linkish" style={{ display: 'inline' }} onClick={rotatePlaced}>🔄 轉向（{FACING_LABEL[selP?.facing ?? 'front']}）</button></>}
+              {selCanToggleInside && <> · <button className="linkish" style={{ display: 'inline' }} onClick={toggleInside}>{selP?.top ? '⬇ 嵌進吧檯' : '⬆ 放上檯面'}</button></>}
+              {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={removeSelected}>🗑 收回托盤</button>
+              {' · '}<button className="linkish" style={{ display: 'inline' }} onClick={() => setSelected(null)}>取消選取</button>
+            </p>
+          ) : (
+            <p className="hint">
+              點托盤家具→擺進店裡；店裡的家具直接<b>拖拉搬移</b>，點一下＝選取（可 🔄 轉向／🗑 收回），再點一下或點空白＝取消。
+              {' '}<button className="linkish" style={{ display: 'inline' }} onClick={enterSweep}>🧺 收回模式</button>
+            </p>
+          )}
+        </div>
+        <button className="deco-undo" disabled={undoStack.length === 0} onClick={undoLast}>↩ 復原 <b>{undoStack.length}</b></button>
+      </div>
 
       <div className="seg" style={{ marginTop: 8 }}>
         {([['furn', '家具'], ['sign', '招牌']] as const).map(([k, l]) => (
