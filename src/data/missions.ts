@@ -6,12 +6,14 @@ export interface MissionLessonCard {
 
 export interface MissionChoice {
   label: string;
-  sub?: string;
+  explain: string;
 }
 
 export interface MissionQuestion {
   speaker: '站員' | '任務';
   line: string;
+  lineKana?: string;
+  audioOnly?: boolean;
   prompt: string;
   choices: MissionChoice[];
   correct: number;
@@ -35,38 +37,50 @@ export const STATION_MISSION = {
   phraseKana: 'しんじゅくゆき は なんばんせん ですか？',
   phraseZh: '開往新宿的是幾號月台？',
   prepChoices: [
-    { label: '新宿行きは何番線ですか？', sub: '開往新宿的是幾號月台？' },
-    { label: '新宿行きはいくらですか？', sub: '開往新宿的票多少錢？' },
-    { label: '新宿行きは何時ですか？', sub: '開往新宿的是幾點？' },
+    { label: 'しんじゅくゆきは なんばんせんですか？', explain: '「なんばんせん」是在問幾號月台。' },
+    { label: 'しんじゅくゆきは いくらですか？', explain: '「いくら」是在問多少錢，買票時會用到。' },
+    { label: 'しんじゅくゆきは なんじですか？', explain: '「なんじ」是在問幾點，想確認發車時間時會用到。' },
   ] satisfies MissionChoice[],
   questions: [
     {
       speaker: '站員',
       line: '新宿行きは3番線です。',
-      prompt: '站員請你去哪一個月台？',
-      choices: [{ label: '1番線' }, { label: '2番線' }, { label: '3番線' }],
+      lineKana: 'しんじゅくゆき は さんばんせん です。',
+      audioOnly: true,
+      prompt: '先按「聞く」，只靠聲音判斷該去哪一個月台。',
+      choices: [
+        { label: '①', explain: '你選的是一號月台；站員說的是「さんばんせん（三號月台）」。' },
+        { label: '②', explain: '你選的是二號月台；站員說的是「さんばんせん（三號月台）」。' },
+        { label: '③', explain: '「さん」是三，「ばんせん」是月台；合起來就是三號月台。' },
+      ],
       correct: 2,
-      explain: '「3番線」就是三號月台。',
+      explain: '「さん」是三，「ばんせん」是月台；「さんばんせん」就是三號月台。',
     },
     {
       speaker: '任務',
       line: '駅員さんに聞いてみよう。',
-      prompt: '想問「開往新宿的是幾號月台？」哪一句最自然？',
+      prompt: '想問「開往新宿的是幾號月台？」哪一句最合適？',
       choices: [
-        { label: '新宿行きは何番線ですか？' },
-        { label: '新宿行きはいくらですか？' },
-        { label: '新宿行きは何時ですか？' },
+        { label: 'しんじゅくゆきは なんばんせんですか？', explain: '「なんばんせん」是幾號月台，正好是在問搭車位置。' },
+        { label: 'しんじゅくゆきは いくらですか？', explain: '「いくら」是「多少錢」，這句是在問票價。' },
+        { label: 'しんじゅくゆきは なんじですか？', explain: '「なんじ」是「幾點」，這句是在問時間。' },
       ],
       correct: 0,
-      explain: '「何番線」問月台；「いくら」問價錢；「何時」問時間。',
+      explain: '「なんばんせん」問月台；「いくら」問價錢；「なんじ」問時間。',
     },
     {
       speaker: '站員',
       line: '新宿行きは2番線に変更になりました。',
-      prompt: '月台臨時變更，現在應該去哪裡？',
-      choices: [{ label: '1番線' }, { label: '2番線' }, { label: '3番線' }],
+      lineKana: 'しんじゅくゆき は にばんせん に へんこうになりました。',
+      audioOnly: true,
+      prompt: '剛才是三號月台；再聽一次廣播，現在要改去哪裡？',
+      choices: [
+        { label: '①', explain: '你選的是一號月台；廣播裡的「にばんせん」是二號月台。' },
+        { label: '②', explain: '「にばんせん」是二號月台；「へんこうになりました」表示已經變更。' },
+        { label: '③', explain: '三號是原本的月台；「にばんせんに へんこう」表示已改到二號。' },
+      ],
       correct: 1,
-      explain: '「変更になりました」表示已經變更，現在要去二號月台。',
+      explain: '「にばんせん」是二號月台；「へんこうになりました」表示已經變更。',
     },
   ] satisfies MissionQuestion[],
 } as const;

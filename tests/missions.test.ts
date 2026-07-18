@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { initState } from '../src/lib/store.ts';
 import { completeMission, missionDoneToday } from '../src/lib/missions.ts';
+import { STATION_MISSION } from '../src/data/missions.ts';
 
 const TODAY = '2026-07-18';
 const ID = 'station-platform';
@@ -26,4 +27,19 @@ test('同日重玩保留最佳分，跨日重新計當日最佳', () => {
   state = completeMission(state, ID, '2026-07-19', 1);
   assert.deepEqual(state.missions?.[ID], { date: '2026-07-19', bestScore: 1, plays: 3 });
   assert.equal(missionDoneToday(state, ID, TODAY), false);
+});
+
+test('車站題不靠重複漢字洩漏答案，且每個選項都有作答解析', () => {
+  assert.equal(STATION_MISSION.questions[0].audioOnly, true);
+  assert.equal(STATION_MISSION.questions[2].audioOnly, true);
+  assert.ok(STATION_MISSION.prepChoices.every((choice) => choice.explain.length > 0));
+
+  for (const question of STATION_MISSION.questions) {
+    assert.ok(question.explain.length > 0);
+    assert.ok(question.choices.every((choice) => choice.explain.length > 0));
+    if (question.audioOnly) {
+      assert.ok(question.lineKana.length > 0);
+      assert.ok(question.choices.every((choice) => !choice.label.includes('番線')));
+    }
+  }
 });

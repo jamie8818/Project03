@@ -4229,6 +4229,25 @@ img.buddy {
 .mission-feedback.good { color: #4d5d2d; border-color: #819050; background: #e5e2bb; }
 .mission-feedback.bad { color: #8e392f; border-color: #ad6657; background: #efd2ba; }
 
+.station-dialogue > b.audio-challenge {
+  color: #74552f;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.mission-answer-reveal {
+  display: grid;
+  gap: 2px;
+  margin: -2px -3px 5px;
+  padding: 7px 9px;
+  color: #51371f;
+  border-bottom: 1px dashed currentColor;
+  background: rgba(255, 249, 220, 0.58);
+}
+
+.mission-answer-reveal b { font-size: 14px; }
+.mission-answer-reveal small { font-size: 11px; font-weight: 700; opacity: 0.78; }
+
 .mission-travel {
   display: grid;
   place-items: center;

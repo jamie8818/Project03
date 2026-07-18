@@ -159,15 +159,14 @@ export default function StationMission({ state, today, update, onExit }: Props) 
                   onClick={() => choosePrep(i)}
                 >
                   <b>{choice.label}</b>
-                  <small>{choice.sub}</small>
                 </button>
               ))}
             </div>
-            {prepPick != null && prepPick !== 0 && <p className="mission-feedback bad">「何番線」才是在問幾號月台。再選一次。</p>}
-            {prepPick === 0 && (
-              <div className="mission-feedback good">
-                <b>準備完了</b>
-                <span>{STATION_MISSION.phraseKana}</span>
+            {prepPick != null && (
+              <div className={`mission-feedback ${prepPick === 0 ? 'good' : 'bad'}`} aria-live="polite">
+                <b>{prepPick === 0 ? '答對，準備完了' : '答錯，但這句也有用'}</b>
+                <span>{STATION_MISSION.prepChoices[prepPick].explain}</span>
+                {prepPick === 0 && <small>{STATION_MISSION.phraseKana}</small>}
               </div>
             )}
             <button className="mission-primary" disabled={prepPick !== 0} onClick={() => { setPhase('travel'); sfx.unlock(); }}>
@@ -205,7 +204,9 @@ export default function StationMission({ state, today, update, onExit }: Props) 
                 <section className="station-dialogue">
                   <span>{question.speaker}</span>
                   <button onClick={() => speakJa(question.line)} aria-label="播放這句日文">音</button>
-                  <b>{question.line}</b>
+                  <b className={question.audioOnly ? 'audio-challenge' : ''}>
+                    {question.audioOnly ? '♪ 先聽聲音，作答後公布字幕' : question.line}
+                  </b>
                   <p>{question.prompt}</p>
                 </section>
                 <div className={`mission-choice-list ${question.choices.length === 3 && question.choices.every((c) => c.label.length <= 4) ? 'ticket-row' : ''}`}>
@@ -220,8 +221,15 @@ export default function StationMission({ state, today, update, onExit }: Props) 
                   })}
                 </div>
                 {pick != null && (
-                  <div className={`mission-feedback ${pick === question.correct ? 'good' : 'bad'}`}>
-                    {pick === question.correct ? question.explain : '不是這一張。看看句子裡的關鍵字，再選一次。'}
+                  <div className={`mission-feedback ${pick === question.correct ? 'good' : 'bad'}`} aria-live="polite">
+                    {question.audioOnly && (
+                      <span className="mission-answer-reveal">
+                        <b>{question.line}</b>
+                        {question.lineKana && <small>{question.lineKana}</small>}
+                      </span>
+                    )}
+                    <b>{pick === question.correct ? '答對，意思也一起收下' : '答錯，但這個意思先收下'}</b>
+                    <span>{pick === question.correct ? question.explain : question.choices[pick].explain}</span>
                   </div>
                 )}
                 <button className="mission-primary" disabled={pick !== question.correct} onClick={advanceQuestion}>
