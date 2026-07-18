@@ -507,6 +507,8 @@ function Stage({ shop, attend, meDone, user, talk, variant = 'full', editing, pl
         onPointerMove={editing ? onPointerMove : undefined}
         onPointerUp={editing ? onPointerUp : undefined}
         onPointerCancel={editing ? () => { setDrag(null); setHover(null); } : undefined}
+        onContextMenu={editing ? (e) => e.preventDefault() : undefined}
+        onDragStart={editing ? (e) => e.preventDefault() : undefined}
       >
         {/* 手畫咖啡廳背景（地板＋牆＋固定裝置；E4 拆層＝不含吧檯）＋吧檯本體（上緣＋抽屜排＋內角柱，
             恆亮背景層、不進 renderOrder、無 footprint——吧檯是跟 base 等級的固定裝置，不跟家具比深度） */}

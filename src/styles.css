@@ -2093,6 +2093,16 @@ img.buddy {
   image-rendering: pixelated;
 }
 
+/* 裝潢模式把圖片當遊戲物件：手機長按時不可跳出「儲存圖片」或文字選取選單。 */
+.shop-stage.editing,
+.shop-stage.editing img,
+.shop-stage.editing .cafe-furn {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
 .shop-stage .sp {
   position: absolute;
   display: block;
